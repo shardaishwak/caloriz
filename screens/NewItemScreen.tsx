@@ -7,6 +7,10 @@ import SearchInput from "../components/SearchInput";
 import fcd from "../api/fcd";
 import ItemCard from "../components/ItemCard";
 import { ScrollView } from "react-native-gesture-handler";
+import nutritionix from "../api/nutritionix";
+import colors from "../colors";
+import Svg, { Path, Rect } from "react-native-svg";
+import Searching_Svg from "../components/Searching_svg";
 
 const NewItemScreen = (props) => {
   const { dispatch } = useGlobal();
@@ -16,7 +20,8 @@ const NewItemScreen = (props) => {
   const Search = async (query) => {
     if (!query) return;
     setLoading(true);
-    const response = await fcd.search(query, 5, 0);
+    const response = await nutritionix.search(query);
+    console.log(response);
     setResults(response);
     setLoading(false);
   };
@@ -27,43 +32,53 @@ const NewItemScreen = (props) => {
       style={{
         flex: 1,
         backgroundColor: "#fff",
-        paddingTop: Platform.OS === "android" ? 25 : 0,
+        //paddingTop: Platform.OS === "android" ? 25 : 0,
       }}
     >
       <Header navigation={props.navigation} page="Breakfast" small="Today" />
 
-      <ScrollView style={{}}>
+      <ScrollView>
         <SearchInput
-          placeholder="Enter a name"
+          placeholder="Search for a product"
           onSearch={Search}
           loading={loading}
         />
-        <Text
-          style={{
-            fontFamily: "Inter-Medium",
-            marginHorizontal: 20,
-            fontSize: 20,
-            textAlign: "center",
-          }}
-        >
-          Results
-        </Text>
-        <View
-          style={{
-            flex: 1,
-            flexDirection: "row",
-            flexWrap: "wrap",
-            justifyContent: "space-between",
-            marginTop: 20,
-            marginBottom: 20,
-            marginHorizontal: 20,
-            borderRadius: 25,
-          }}
-        >
-          {results.length > 0 &&
-            results &&
-            results.map((data) => <ItemCard data={data} />)}
-        </View>
+        {results.length > 0 && (
+          <Text
+            style={{
+              fontSize: 15,
+              fontFamily: "Inter",
+              color: colors.app.dark_300,
+              marginHorizontal: 20,
+              textAlign: "center",
+            }}
+          >
+            Results
+          </Text>
+        )}
+        {results.length > 0 ? (
+          <View
+            style={{
+              margin: 20,
+            }}
+          >
+            {results.map((data) => (
+              <ItemCard data={data} />
+            ))}
+          </View>
+        ) : (
+          <View
+            style={{
+              flex: 1,
+              alignItems: "center",
+              justifyContent: "center",
+              height: "100%",
+              marginTop: 100,
+            }}
+          >
+            <Searching_Svg />
+          </View>
+        )}
       </ScrollView>
     </SafeAreaView>
   );

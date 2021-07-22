@@ -8,6 +8,7 @@ const LoadFonts = async () => {
     Inter: require("./assets/static/Inter-Regular.ttf"),
     "Inter-Medium": require("./assets/static/Inter-Medium.ttf"),
     "Inter-Bold": require("./assets/static/Inter-Bold.ttf"),
+    "Inter-Semibold": require("./assets/static/Inter-SemiBold.ttf"),
   });
 };
 

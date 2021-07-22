@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import { Ionicons } from "@expo/vector-icons";
-import ItemCard from "./ItemCard";
+import colors from "../colors";
 
 const SearchInput = (props: {
   placeholder: string;
@@ -29,7 +29,8 @@ const SearchInput = (props: {
             paddingTop: 12.5,
             paddingBottom: 12.5,
             borderWidth: 2,
-            borderColor: "#21212115",
+            borderColor: colors.app.dark_100,
+            backgroundColor: colors.app.dark_100,
             borderRadius: 15,
           }}
         >
@@ -43,11 +44,12 @@ const SearchInput = (props: {
               fontSize: 15,
               width: "85%",
               fontFamily: "Inter-Medium",
+              color: colors.app.dark_500,
             }}
           />
           <TouchableNativeFeedback onPress={() => props.onSearch(text)}>
             {props.loading ? (
-              <ActivityIndicator size={20} color="#212121" />
+              <ActivityIndicator size={20} color={colors.app.dark_500} />
             ) : (
               <Ionicons name="md-search" size={20} />
             )}

@@ -3,6 +3,7 @@ import { TouchableWithoutFeedback } from "react-native";
 import { StyleSheet, Text } from "react-native";
 import { View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import colors from "../colors";
 
 const Card = ({
   title,
@@ -20,14 +21,33 @@ const Card = ({
   t_c: number;
 }) => {
   const [open, setOpen] = useState<boolean>(false);
+  const calories = 200;
   return (
     <View style={{ margin: 20, marginBottom: 10 }}>
       <TouchableWithoutFeedback onPress={() => setOpen(!open)}>
         <View style={styles.container}>
           <View>
-            <Text style={{ fontSize: 22.5, fontFamily: "Inter-Medium" }}>
-              {title}
-            </Text>
+            <View
+              style={{
+                alignItems: "center",
+                flexDirection: "row",
+                justifyContent: "space-between",
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 22.5,
+                  fontFamily: "Inter-Medium",
+                  color: colors.app.dark_500,
+                }}
+              >
+                {title}
+              </Text>
+              <Ionicons
+                name={open ? "chevron-up" : "chevron-down"}
+                size={22.5}
+              />
+            </View>
 
             <View
               style={{
@@ -38,54 +58,75 @@ const Card = ({
             >
               <Text
                 style={{
-                  color: "#21212170",
-                  marginRight: 7,
-                  fontFamily: "Poppins",
+                  paddingVertical: 6,
+                  paddingHorizontal: 10,
+                  backgroundColor: colors.app.dark_100,
+                  color:
+                    calories < 250
+                      ? colors.app.green_200
+                      : calories >= 250 && calories < 600
+                      ? colors.app.yellow_100
+                      : colors.app.red_100, // fcbe11 // ff2400"#32cd32", // fcbe11 // ff2400
+
+                  borderRadius: 5,
+                  fontFamily: "Inter-Medium",
+                  fontSize: 15,
+                  marginRight: 10,
                 }}
               >
-                {t_kcal} kcal
+                {calories} kcal
               </Text>
               <Text
                 style={{
-                  color: "#21212170",
-                  marginRight: 7,
-                  marginLeft: 7,
-
-                  fontFamily: "Poppins",
+                  paddingVertical: 6,
+                  paddingHorizontal: 10,
+                  backgroundColor: colors.app.dark_100,
+                  color: colors.tailwind.gray._500,
+                  borderRadius: 5,
+                  fontFamily: "Inter-Medium",
+                  fontSize: 15,
+                  marginRight: 10,
                 }}
               >
                 {t_p}g
               </Text>
               <Text
                 style={{
-                  color: "#21212170",
-                  marginRight: 7,
-                  marginLeft: 7,
-                  fontFamily: "Poppins",
+                  paddingVertical: 6,
+                  paddingHorizontal: 10,
+                  backgroundColor: colors.app.dark_100,
+                  color: colors.tailwind.gray._500,
+                  borderRadius: 5,
+                  fontFamily: "Inter-Medium",
+                  fontSize: 15,
+                  marginRight: 10,
                 }}
               >
                 {t_f}g
               </Text>
               <Text
                 style={{
-                  color: "#21212170",
-                  marginRight: 7,
-                  marginLeft: 7,
-                  fontFamily: "Poppins",
+                  paddingVertical: 6,
+                  paddingHorizontal: 10,
+                  backgroundColor: colors.app.dark_100,
+                  color: colors.tailwind.gray._500,
+                  borderRadius: 5,
+                  fontFamily: "Inter-Medium",
+                  fontSize: 15,
+                  marginRight: 10,
                 }}
               >
                 {t_c}g
               </Text>
             </View>
           </View>
-          <Ionicons name={open ? "chevron-up" : "chevron-down"} size={22.5} />
+          {open && (
+            <View style={{ marginTop: 20 }}>
+              <Text>{props.children}</Text>
+            </View>
+          )}
         </View>
       </TouchableWithoutFeedback>
-      {open && (
-        <View>
-          <Text>{props.children}</Text>
-        </View>
-      )}
     </View>
   );
 };
@@ -93,12 +134,9 @@ const Card = ({
 const styles = StyleSheet.create({
   container: {
     padding: 20,
-    borderColor: "#21212115",
+    borderColor: colors.app.dark_100,
     borderRadius: 25,
-    borderWidth: 2,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    borderWidth: 3,
   },
 });
 

@@ -1,33 +1,59 @@
 import React from "react";
 import { Text, View } from "react-native";
 import { AnimatedCircularProgress } from "react-native-circular-progress";
+import colors from "../colors";
 
 const Progress = ({
   percent,
-  value,
   title,
+  color,
+  value,
 }: {
   percent: number;
-  value: number;
   title: string;
+  color: string;
+  value: string;
 }) => {
   return (
-    <View style={{ marginRight: 10, alignItems: "center", marginLeft: 10 }}>
+    <View
+      style={{
+        marginHorizontal: 10,
+        flexDirection: "row",
+        alignItems: "center",
+      }}
+    >
       <AnimatedCircularProgress
-        size={60}
-        width={7}
-        backgroundWidth={5}
+        size={35}
+        width={4}
+        backgroundWidth={4}
         fill={percent}
-        tintColor="#212121"
-        tintColorSecondary="#eee"
-        backgroundColor="#eee"
-        arcSweepAngle={240}
-        rotation={240}
+        tintColor={color}
+        backgroundColor={colors.app.dark_100}
         lineCap="round"
+        rotation={0}
       >
-        {() => <Text>{value}</Text>}
+        {() => <Text></Text>}
       </AnimatedCircularProgress>
-      <Text>{title}</Text>
+      <View style={{ marginLeft: 10 }}>
+        <Text
+          style={{
+            fontSize: 15,
+            fontFamily: "Inter-Medium",
+            color: colors.app.dark_500,
+          }}
+        >
+          {title}
+        </Text>
+        <Text
+          style={{
+            fontFamily: "Inter",
+            color: colors.app.dark_300,
+            fontSize: 11,
+          }}
+        >
+          {value} left
+        </Text>
+      </View>
     </View>
   );
 };
