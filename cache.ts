@@ -1,5 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Font from "expo-font";
+import { ADD_NEW_DATE } from "./global/provider";
 
 // Load all the fonts
 const LoadFonts = async () => {
@@ -15,8 +16,9 @@ const LoadFonts = async () => {
 // Load local data
 const LoadData = async () => {};
 
-const LoadCache = async () => {
+const LoadCache = async (global) => {
   await LoadFonts();
+  global.dispatch({ type: ADD_NEW_DATE });
 
   console.log("Cached");
 };

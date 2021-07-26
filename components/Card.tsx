@@ -21,7 +21,6 @@ const Card = ({
   t_c: number;
 }) => {
   const [open, setOpen] = useState<boolean>(false);
-  const calories = 200;
   return (
     <View style={{ margin: 20, marginBottom: 10 }}>
       <TouchableWithoutFeedback onPress={() => setOpen(!open)}>
@@ -39,6 +38,7 @@ const Card = ({
                   fontSize: 22.5,
                   fontFamily: "Inter-Medium",
                   color: colors.app.dark_500,
+                  textTransform: "capitalize",
                 }}
               >
                 {title}
@@ -62,9 +62,9 @@ const Card = ({
                   paddingHorizontal: 10,
                   backgroundColor: colors.app.dark_100,
                   color:
-                    calories < 250
+                    t_kcal < 250
                       ? colors.app.green_200
-                      : calories >= 250 && calories < 600
+                      : t_kcal >= 250 && t_kcal < 600
                       ? colors.app.yellow_100
                       : colors.app.red_100, // fcbe11 // ff2400"#32cd32", // fcbe11 // ff2400
 
@@ -74,7 +74,7 @@ const Card = ({
                   marginRight: 10,
                 }}
               >
-                {calories} kcal
+                {t_kcal.toFixed(1)} kcal
               </Text>
               <Text
                 style={{
@@ -88,7 +88,7 @@ const Card = ({
                   marginRight: 10,
                 }}
               >
-                {t_p}g
+                {t_p.toFixed(1)}g
               </Text>
               <Text
                 style={{
@@ -102,7 +102,7 @@ const Card = ({
                   marginRight: 10,
                 }}
               >
-                {t_f}g
+                {t_f.toFixed(1)}g
               </Text>
               <Text
                 style={{
@@ -116,7 +116,7 @@ const Card = ({
                   marginRight: 10,
                 }}
               >
-                {t_c}g
+                {t_c.toFixed(1)}g
               </Text>
             </View>
           </View>

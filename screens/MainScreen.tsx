@@ -1,24 +1,24 @@
 import React from "react";
-import {
-  Platform,
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
+
 import { useGlobal } from "../global/provider";
+import { todayDate } from "../global/actions";
+import { AppDate, CommonItem } from "../interface";
+
+import NewItemButton from "../components/NewItemButton";
+import Progress from "../components/Progress";
 import Header from "../components/Header";
 import Card from "../components/Card";
-import NewItemButton from "../components/NewItemButton";
+
 import colors from "../colors";
-import Progress from "../components/Progress";
 
 const MainScreen = (props) => {
   const { state } = useGlobal();
 
   const target = 2000;
   const current = 1684;
+
+  const today_data = state.data[todayDate()] as AppDate;
 
   return (
     <SafeAreaView style={styles.container}>
@@ -76,14 +76,45 @@ const MainScreen = (props) => {
             value={"58g"}
           />
         </View>
-        <Card title="Breakfast" t_kcal={290} t_p={19.6} t_c={0.5} t_f={12}>
-          <Text>Breakfast data</Text>
-        </Card>
+        <RenderCards
+          cards_to_show={["breakfast", "lunch"]}
+          today_data={today_data}
+        />
       </ScrollView>
       <NewItemButton navigation={props.navigation} />
     </SafeAreaView>
   );
 };
+
+const RenderCards = ({ cards_to_show, today_data }) => (
+  <View>
+    {cards_to_show.map((a) => {
+      let total_calories = 0;
+      let total_fat = 0;
+      let total_protein = 0;
+      let total_sugar = 0;
+
+      today_data[a].forEach((a: CommonItem) => {
+        total_calories += a.calories * a.quantity;
+        total_fat += a.fat * a.quantity;
+        total_protein += a.protein * a.quantity;
+        total_sugar += a.sugars * a.quantity;
+      });
+      console.log(total_calories);
+      return (
+        <Card
+          title={a}
+          t_kcal={total_calories}
+          t_p={total_fat}
+          t_c={total_protein}
+          t_f={total_sugar}
+        >
+          <Text>{a} data</Text>
+        </Card>
+      );
+    })}
+  </View>
+);
 
 const styles = StyleSheet.create({
   container: {

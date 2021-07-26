@@ -1,29 +1,55 @@
-import React from "react";
-import { useState } from "react";
-import { SafeAreaView, Platform, View, Text } from "react-native";
-import Header from "../components/Header";
-import { useGlobal } from "../global/provider";
-import SearchInput from "../components/SearchInput";
-import fcd from "../api/fcd";
-import ItemCard from "../components/ItemCard";
+import React, { useState } from "react";
+import { SafeAreaView, View, Text } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
+
+import Header from "../components/Header";
+import SearchInput from "../components/SearchInput";
+import ItemCard from "../components/ItemCard";
+import Searching_Svg from "../components/Searching_svg";
+import ItemModal from "../components/ItemModal";
+
+import { useGlobal } from "../global/provider";
 import nutritionix from "../api/nutritionix";
 import colors from "../colors";
-import Svg, { Path, Rect } from "react-native-svg";
-import Searching_Svg from "../components/Searching_svg";
+import { SearchCommonItem } from "../interface";
 
 const NewItemScreen = (props) => {
   const { dispatch } = useGlobal();
-  const [results, setResults] = useState<Array<any>>([]);
+  const [results, setResults] = useState<Array<SearchCommonItem>>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
+  const [modal, setModal] = useState<boolean>(false);
+  const [modalItemID, setModalItemID] = useState<string>();
+
   const Search = async (query) => {
-    if (!query) return;
-    setLoading(true);
-    const response = await nutritionix.search(query);
-    console.log(response);
-    setResults(response);
-    setLoading(false);
+    try {
+      if (!query) return;
+      setLoading(true);
+      const response = (await nutritionix.search(query))?.common?.map(
+        (a) =>
+          ({
+            food_name: a.food_name,
+            calories: a.nf_calories,
+            serving_unit: a.serving_unit,
+            serving_qty: a.serving_qty,
+          } as SearchCommonItem)
+      ) as Array<SearchCommonItem>;
+      setResults(response);
+      setLoading(false);
+    } catch (error) {
+      console.log(error.message);
+      setLoading(false);
+    }
+  };
+
+  const CloseModal = () => {
+    setModal(false);
+    setModalItemID("");
+  };
+  // Use cacheing for storing data and then retrieve the same data fastly using the asyncstorage
+  const OpenModal = (food_name) => {
+    setModalItemID(food_name);
+    setModal(true);
   };
 
   console.log(results);
@@ -63,7 +89,11 @@ const NewItemScreen = (props) => {
             }}
           >
             {results.map((data) => (
-              <ItemCard data={data} />
+              <ItemCard
+                data={data}
+                key={data.food_name}
+                onPress={() => OpenModal(data.food_name)}
+              />
             ))}
           </View>
         ) : (
@@ -78,6 +108,9 @@ const NewItemScreen = (props) => {
           >
             <Searching_Svg />
           </View>
+        )}
+        {modal && modalItemID && (
+          <ItemModal visible={modal} onDismiss={CloseModal} ID={modalItemID} />
         )}
       </ScrollView>
     </SafeAreaView>

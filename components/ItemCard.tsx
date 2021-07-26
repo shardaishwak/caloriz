@@ -6,16 +6,19 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
-import { Feather } from "@expo/vector-icons";
+import { AntDesign } from "@expo/vector-icons";
 import colors from "../colors";
+import { SearchCommonItem } from "../interface";
 
-const ItemCard = ({ data }) => {
-  const calories = data.nf_calories;
-  const title = data.food_name;
-  const serving_qty = data.serving_qty;
-  const serving_unit = data.serving_unit;
+const ItemCard = ({
+  data,
+  onPress,
+}: {
+  data: SearchCommonItem;
+  onPress: any;
+}) => {
   return (
-    <TouchableWithoutFeedback>
+    <TouchableWithoutFeedback onPress={onPress}>
       <View
         style={{
           padding: 20,
@@ -49,7 +52,7 @@ const ItemCard = ({ data }) => {
                 fontFamily: "Inter-Medium",
               }}
             >
-              {title}
+              {data.food_name}
               <Text
                 style={{
                   color: "#21212160",
@@ -58,14 +61,14 @@ const ItemCard = ({ data }) => {
                 }}
               >
                 {" "}
-                {serving_qty} {serving_unit}
+                {data.serving_qty} {data.serving_unit}
               </Text>
             </Text>
           </View>
-          <Feather name="star" size={20} />
+          <AntDesign name="staro" size={20} />
         </View>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          {calories && (
+          {data.calories && (
             <View
               style={{
                 flexDirection: "row",
@@ -75,16 +78,16 @@ const ItemCard = ({ data }) => {
                 marginTop: 10,
               }}
             >
-              {calories && (
+              {data.calories && (
                 <Text
                   style={{
                     paddingVertical: 6,
                     paddingHorizontal: 10,
                     backgroundColor: colors.app.dark_100,
                     color:
-                      calories < 250
+                      data.calories < 250
                         ? colors.app.green_100
-                        : calories >= 250 && calories < 600
+                        : data.calories >= 250 && data.calories < 600
                         ? colors.app.yellow_100
                         : colors.app.red_100, // fcbe11 // ff2400"#32cd32", // fcbe11 // ff2400
 
@@ -94,7 +97,7 @@ const ItemCard = ({ data }) => {
                     marginRight: 10,
                   }}
                 >
-                  {calories} kcal
+                  {data.calories} kcal
                 </Text>
               )}
             </View>

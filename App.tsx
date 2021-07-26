@@ -2,20 +2,32 @@ import React from "react";
 
 import { SafeAreaView, StatusBar, Text, View } from "react-native";
 import LoadCache from "./cache";
-import GlobalProvider from "./global/provider";
+import GlobalProvider, { ADD_NEW_DATE, useGlobal } from "./global/provider";
 import Navigation from "./navigation";
 import { Svg, Path } from "react-native-svg";
 
 // Main navigation roots
 
-class App extends React.Component {
+const Default = (props) => (
+  <GlobalProvider>
+    <App />
+  </GlobalProvider>
+);
+
+const App = () => {
+  const global = useGlobal();
+  return <AppImpl global={global} />;
+};
+
+class AppImpl extends React.Component<{ global }> {
   state = {
     _cacheLoaded: false,
     _error: null,
   };
   async componentDidMount() {
     try {
-      await LoadCache();
+      await LoadCache(this.props.global);
+
       this.setState({ _error: null, _cacheLoaded: true });
     } catch (error) {
       this.setState({ _error: error.message, _cacheLoaded: true });
@@ -36,10 +48,10 @@ class App extends React.Component {
         </SafeAreaView>
       );
     return (
-      <GlobalProvider>
+      <>
         <StatusBar backgroundColor={"#fff"} animated barStyle="dark-content" />
         <Navigation />
-      </GlobalProvider>
+      </>
     );
   }
 }
@@ -61,4 +73,4 @@ const SplashScreen = () => (
   </Svg>
 );
 
-export default App;
+export default Default;
