@@ -7,6 +7,7 @@ import { AppDate } from "../interface";
 // retirve initial data form the storage through a function which runs in the cahce
 
 const isDate = (state, date) => state.data[date];
+
 const addTodayDate = (state, action) => {
   const date = new Date();
   const id_date =
@@ -20,6 +21,16 @@ const addTodayDate = (state, action) => {
     data: {
       ...state.data,
       [id_date]: defaultDate,
+    },
+  };
+};
+
+const addTodayData = (state, action) => {
+  return {
+    ...state,
+    data: {
+      ...state.data,
+      [todayDate()]: action.payload,
     },
   };
 };
@@ -69,6 +80,8 @@ const defaultDate: AppDate = {
   },
 };
 
+export const setDefaultDate = () => defaultDate;
+
 export const todayDate = () => {
   const date = new Date();
   const id_date =
@@ -77,6 +90,14 @@ export const todayDate = () => {
   return id_date;
 };
 
+export const updateData = async (date, state, dispatch) => {
+  try {
+    await AsyncStorage.setItem(date, state.data[date]);
+    dispatch();
+  } catch (error) {
+    console.log(error.message);
+  }
+};
 /// Local
 
 export default {
@@ -84,4 +105,5 @@ export default {
   addFood,
   removeFood,
   defaultDate,
+  addTodayData,
 };

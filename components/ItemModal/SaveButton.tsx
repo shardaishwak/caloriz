@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { Pressable, Text, View } from "react-native";
+import { ActivityIndicator, Pressable, Text, View } from "react-native";
 import colors from "../../colors";
 
-const SaveButton = ({ onSave }: { onSave: any }) => {
+const SaveButton = ({ onSave, loading }: { onSave: any; loading: boolean }) => {
   const [is_pressing, set_is_pressing] = useState<boolean>(false);
   return (
     <View
@@ -19,19 +19,24 @@ const SaveButton = ({ onSave }: { onSave: any }) => {
             backgroundColor: colors.app.green_100,
             borderRadius: 15,
             elevation: is_pressing ? 0 : 5,
+
+            paddingVertical: 15,
           }}
         >
-          <Text
-            style={{
-              fontFamily: "Inter-Semibold",
-              color: "#fff",
-              paddingVertical: 15,
-              fontSize: 17.5,
-              textAlign: "center",
-            }}
-          >
-            Save
-          </Text>
+          {loading ? (
+            <ActivityIndicator size={28} color={"#ffffff"} />
+          ) : (
+            <Text
+              style={{
+                fontFamily: "Inter-Semibold",
+                color: "#fff",
+                fontSize: 17.5,
+                textAlign: "center",
+              }}
+            >
+              Save
+            </Text>
+          )}
         </View>
       </Pressable>
     </View>

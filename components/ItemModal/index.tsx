@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { ScrollView, StyleSheet } from "react-native";
 import { View, Modal, Text } from "react-native";
+import uuid from "react-native-uuid";
 
 import SaveButton from "./SaveButton";
 import Cards from "./Cards";
@@ -10,14 +11,16 @@ import { ADD_FOOD, useGlobal } from "../../global/provider";
 import nutritionix from "../../api/nutritionix";
 import { CommonItem } from "../../interface";
 import { todayDate } from "../../global/actions";
+import db from "../../global/db";
 
 const ItemModal = ({ ID, visible, onDismiss }) => {
-  const { dispatch } = useGlobal();
+  const { dispatch, state } = useGlobal();
   const [quantity, set_quantity] = useState<number>(0);
   const [type, set_type] = useState<string>();
 
   const [loading, setLoading] = useState<boolean>(false);
   const [result, set_result] = useState<any>();
+  const [saveItemLoading, setSaveItemLoading] = useState<boolean>(false);
 
   useEffect(() => {
     if (!ID) onDismiss();
@@ -33,15 +36,15 @@ const ItemModal = ({ ID, visible, onDismiss }) => {
     setLoading(false);
   };
 
-  const AddNewItem = () => {
-    console.log(result);
+  const AddNewItem = async () => {
+    setSaveItemLoading(true);
     const data: CommonItem = {
       calories: result.nf_calories || 0,
       carbohydrates: result.nf_total_carbohydrate || 0,
       fat: result.nf_total_fat || 0,
       consumed_at: Date.now(),
       food_name: result.food_name,
-      id: Date.now(),
+      id: uuid.v4(),
       potassium: result.nf_potassium || 0,
       protein: result.nf_protein || 0,
       saturated_fat: result.nf_saturated_fat || 0,
@@ -54,11 +57,15 @@ const ItemModal = ({ ID, visible, onDismiss }) => {
       dietary_fiber: result.nf_dietary_fiber || 0,
       quantity: quantity || 1,
     };
-    console.log(data);
+    // Save to the database
+    await db.addItem(state, todayDate(), "breakfast", data);
+    // Save to local state
     dispatch({
       type: ADD_FOOD,
       payload: { date: todayDate(), field: "breakfast", data },
     });
+    setSaveItemLoading(false);
+    onDismiss();
   };
   if (loading) return <Text></Text>;
   return (
@@ -93,7 +100,7 @@ const ItemModal = ({ ID, visible, onDismiss }) => {
                   type={result.serving_unit as string}
                 />
                 <Cards data={result} />
-                <SaveButton onSave={AddNewItem} />
+                <SaveButton onSave={AddNewItem} loading={saveItemLoading} />
               </ScrollView>
             </View>
           </View>

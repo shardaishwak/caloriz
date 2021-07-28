@@ -52,7 +52,7 @@ const NewItemScreen = (props) => {
     setModal(true);
   };
 
-  console.log(results);
+  // console.log(results); All the search items
   return (
     <SafeAreaView
       style={{

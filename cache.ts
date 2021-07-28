@@ -1,6 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Font from "expo-font";
-import { ADD_NEW_DATE } from "./global/provider";
+import { setDefaultDate, todayDate } from "./global/actions";
+import { ADD_NEW_DATE, ADD_TODAY_DATA } from "./global/provider";
 
 // Load all the fonts
 const LoadFonts = async () => {
@@ -14,11 +15,26 @@ const LoadFonts = async () => {
 };
 
 // Load local data
-const LoadData = async () => {};
+
+const LoadData = async (dispatch) => {
+  const is_data = JSON.parse(await AsyncStorage.getItem(todayDate()));
+  console.log(1, is_data);
+  //await AsyncStorage.setItem(todayDate(), JSON.stringify(setDefaultDate()));
+  // See there is already some data for today
+  if (Object.keys(is_data).length === 0) {
+    console.log("New date");
+    // Create a new field for the data
+    await AsyncStorage.setItem(todayDate(), JSON.stringify(setDefaultDate()));
+    dispatch({ type: ADD_NEW_DATE });
+  } else {
+    console.log("loading date");
+    dispatch({ type: ADD_TODAY_DATA, payload: is_data });
+  }
+};
 
 const LoadCache = async (global) => {
   await LoadFonts();
-  global.dispatch({ type: ADD_NEW_DATE });
+  await LoadData(global.dispatch);
 
   console.log("Cached");
 };

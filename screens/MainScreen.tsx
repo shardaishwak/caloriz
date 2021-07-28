@@ -18,7 +18,7 @@ const MainScreen = (props) => {
   const target = 2000;
   const current = 1684;
 
-  const today_data = state.data[todayDate()] as AppDate;
+  const today_data = (state.data[todayDate()] as AppDate) || [];
 
   return (
     <SafeAreaView style={styles.container}>
@@ -94,13 +94,12 @@ const RenderCards = ({ cards_to_show, today_data }) => (
       let total_protein = 0;
       let total_sugar = 0;
 
-      today_data[a].forEach((a: CommonItem) => {
+      today_data[a]?.forEach((a: CommonItem) => {
         total_calories += a.calories * a.quantity;
         total_fat += a.fat * a.quantity;
         total_protein += a.protein * a.quantity;
         total_sugar += a.sugars * a.quantity;
       });
-      console.log(total_calories);
       return (
         <Card
           title={a}
@@ -108,6 +107,7 @@ const RenderCards = ({ cards_to_show, today_data }) => (
           t_p={total_fat}
           t_c={total_protein}
           t_f={total_sugar}
+          key={a}
         >
           <Text>{a} data</Text>
         </Card>

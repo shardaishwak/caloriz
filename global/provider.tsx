@@ -5,11 +5,15 @@ import GlobalContext from "./context";
 export const ADD_NEW_DATE = "ADD_NEW_DATE";
 export const ADD_FOOD = "ADD_FOOD";
 export const REMOVE_FOOD = "REMOVE_FOOD";
+export const ADD_TODAY_DATA = "ADD_TODAY_DATA";
 
 const reducer = (state, action) => {
+  console.log("ACTION: " + action.type);
   switch (action.type) {
     case ADD_NEW_DATE:
       return actions.addTodayDate(state, action);
+    case ADD_TODAY_DATA:
+      return actions.addTodayData(state, action);
     case ADD_FOOD:
       return actions.addFood(state, action);
     case REMOVE_FOOD:

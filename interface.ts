@@ -20,7 +20,7 @@ export interface FoodNutrients {
 
 export interface CommonItem extends SearchCommonItem, FoodNutrients {
   consumed_at: Date | string | number;
-  id: string | number; // uuid
+  id: string | number | number[]; // uuid
   serving_weight_grams: number;
   quantity: number;
 }
