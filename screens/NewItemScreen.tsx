@@ -15,6 +15,7 @@ import { SearchCommonItem } from "../interface";
 
 const NewItemScreen = (props) => {
   const { dispatch } = useGlobal();
+  const session = props.route.params.session || "breakfast";
   const [results, setResults] = useState<Array<SearchCommonItem>>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -61,7 +62,7 @@ const NewItemScreen = (props) => {
         //paddingTop: Platform.OS === "android" ? 25 : 0,
       }}
     >
-      <Header navigation={props.navigation} page="Breakfast" small="Today" />
+      <Header navigation={props.navigation} page={session} small="Today" />
 
       <ScrollView>
         <SearchInput
@@ -110,7 +111,7 @@ const NewItemScreen = (props) => {
           </View>
         )}
         {modal && modalItemID && (
-          <ItemModal visible={modal} onDismiss={CloseModal} ID={modalItemID} />
+          <ItemModal visible={modal} onDismiss={CloseModal} ID={modalItemID} session={session}/>
         )}
       </ScrollView>
     </SafeAreaView>

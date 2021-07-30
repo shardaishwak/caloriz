@@ -120,11 +120,7 @@ const Card = ({
               </Text>
             </View>
           </View>
-          {open && (
-            <View style={{ marginTop: 20 }}>
-              <Text>{props.children}</Text>
-            </View>
-          )}
+          {open && <View style={{ marginTop: 10 }}>{props.children}</View>}
         </View>
       </TouchableWithoutFeedback>
     </View>

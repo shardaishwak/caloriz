@@ -13,7 +13,7 @@ import { CommonItem } from "../../interface";
 import { todayDate } from "../../global/actions";
 import db from "../../global/db";
 
-const ItemModal = ({ ID, visible, onDismiss }) => {
+const ItemModal = ({ ID, visible, onDismiss, session }) => {
   const { dispatch, state } = useGlobal();
   const [quantity, set_quantity] = useState<number>(0);
   const [type, set_type] = useState<string>();
@@ -58,11 +58,11 @@ const ItemModal = ({ ID, visible, onDismiss }) => {
       quantity: quantity || 1,
     };
     // Save to the database
-    await db.addItem(state, todayDate(), "breakfast", data);
+    await db.addItem(state, todayDate(), session, data);
     // Save to local state
     dispatch({
       type: ADD_FOOD,
-      payload: { date: todayDate(), field: "breakfast", data },
+      payload: { date: todayDate(), field: session, data },
     });
     setSaveItemLoading(false);
     onDismiss();

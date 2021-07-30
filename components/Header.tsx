@@ -37,6 +37,7 @@ const Header = (props: {
               fontSize: 19,
               fontFamily: "Inter",
               color: colors.app.dark_600,
+              textTransform: "capitalize",
             }}
           >
             {props.page}

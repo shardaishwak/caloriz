@@ -1,9 +1,14 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Font from "expo-font";
 import { setDefaultDate, todayDate } from "./global/actions";
-import { ADD_NEW_DATE, ADD_TODAY_DATA } from "./global/provider";
+import db from "./global/db";
+import { ADD_NEW_DATE, ADD_DATA } from "./global/provider";
 
 // Load all the fonts
+/**
+ * @description Load all custom fonts
+ * @param null
+ */
 const LoadFonts = async () => {
   await Font.loadAsync({
     Poppins: require("./assets/static/Poppins-Regular.ttf"),
@@ -14,24 +19,32 @@ const LoadFonts = async () => {
   });
 };
 
-// Load local data
-
+/**
+ * @description Run cache -> fetch local data + add state + fonts
+ * @param dispatch (update state)
+ */
 const LoadData = async (dispatch) => {
-  const is_data = JSON.parse(await AsyncStorage.getItem(todayDate()));
-  console.log(1, is_data);
+  // Retieve daily record.
+  const is_data = await db.retrieveRouteine(todayDate());
+  console.log("DB: ", is_data);
+
   //await AsyncStorage.setItem(todayDate(), JSON.stringify(setDefaultDate()));
-  // See there is already some data for today
-  if (Object.keys(is_data).length === 0) {
-    console.log("New date");
-    // Create a new field for the data
-    await AsyncStorage.setItem(todayDate(), JSON.stringify(setDefaultDate()));
-    dispatch({ type: ADD_NEW_DATE });
+  // Check if a daily record is present, create new if not
+  if (!is_data || Object.keys(is_data).length === 0) {
+    // Create a new daily record [db]
+    await db.initializeRouteine(todayDate());
+    // Create a new daily record [state]
+    dispatch({ type: ADD_NEW_DATE, date: todayDate() });
   } else {
-    console.log("loading date");
-    dispatch({ type: ADD_TODAY_DATA, payload: is_data });
+    // load daily record to state
+    dispatch({ type: ADD_DATA, payload: is_data, date: todayDate() });
   }
 };
 
+/**
+ * @description Initialize the cache on first app render
+ * @param global (dispatch)
+ */
 const LoadCache = async (global) => {
   await LoadFonts();
   await LoadData(global.dispatch);
