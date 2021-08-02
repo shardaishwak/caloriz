@@ -288,40 +288,6 @@ const Item = ({
   );
 };
 
-const AddButton = ({ navigation, session }) => {
-  return (
-    <View style={{ marginTop: 20, marginBottom: 0 }}>
-      <Pressable
-        onPress={() =>
-          navigation.navigate("newitem", {
-            session,
-          })
-        }
-      >
-        <View
-          style={{
-            borderColor: colors.app.green_100,
-            borderWidth: 1,
-            borderRadius: 7.5,
-            paddingVertical: 7.5,
-          }}
-        >
-          <Text
-            style={{
-              fontFamily: "Inter-Medium",
-              color: colors.app.green_100,
-              fontSize: 15,
-              textAlign: "center",
-            }}
-          >
-            Add Food
-          </Text>
-        </View>
-      </Pressable>
-    </View>
-  );
-};
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,

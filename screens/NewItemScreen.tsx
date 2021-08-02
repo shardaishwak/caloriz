@@ -11,10 +11,9 @@ import ItemModal from "../components/ItemModal";
 import { useGlobal } from "../global/provider";
 import nutritionix from "../api/nutritionix";
 import colors from "../colors";
-import { SearchCommonItem } from "../interface";
+import { CommonItem, SearchCommonItem } from "../interface";
 
 const NewItemScreen = (props) => {
-  const { dispatch } = useGlobal();
   const session = props.route.params.session || "breakfast";
   const [results, setResults] = useState<Array<SearchCommonItem>>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -22,6 +21,11 @@ const NewItemScreen = (props) => {
   const [modal, setModal] = useState<boolean>(false);
   const [modalItemID, setModalItemID] = useState<string>();
 
+  /**
+   * @description Search all the common food items by name
+   * @param query
+   * @returns promise
+   */
   const Search = async (query) => {
     try {
       if (!query) return;
@@ -29,6 +33,7 @@ const NewItemScreen = (props) => {
       const response = (await nutritionix.search(query))?.common?.map(
         (a) =>
           ({
+            // Choose only the interested fields
             food_name: a.food_name,
             calories: a.nf_calories,
             serving_unit: a.serving_unit,
@@ -47,7 +52,6 @@ const NewItemScreen = (props) => {
     setModal(false);
     setModalItemID("");
   };
-  // Use cacheing for storing data and then retrieve the same data fastly using the asyncstorage
   const OpenModal = (food_name) => {
     setModalItemID(food_name);
     setModal(true);
@@ -84,44 +88,59 @@ const NewItemScreen = (props) => {
           </Text>
         )}
         {results.length > 0 ? (
-          <View
-            style={{
-              margin: 20,
-            }}
-          >
-            {results.map((data) => (
-              <ItemCard
-                data={data}
-                key={data.food_name}
-                onPress={() => OpenModal(data.food_name)}
-              />
-            ))}
-          </View>
+          <SearchResultRender OpenModal={OpenModal} items={results} />
         ) : (
-          <View
-            style={{
-              flex: 1,
-              alignItems: "center",
-              justifyContent: "center",
-              height: "100%",
-              marginTop: 100,
-            }}
-          >
-            <Searching_Svg />
-          </View>
+          <Illustration />
         )}
         {modal && modalItemID && (
-          <ItemModal visible={modal} onDismiss={CloseModal} ID={modalItemID} session={session}/>
+          <ItemModal
+            visible={modal}
+            onDismiss={CloseModal}
+            ID={modalItemID}
+            session={session}
+          />
         )}
       </ScrollView>
     </SafeAreaView>
   );
 };
 
-const FavouritesList = () => {
-  const {state: {favourites}} = useGlobal();
+const Illustration = () => (
+  <View
+    style={{
+      flex: 1,
+      alignItems: "center",
+      justifyContent: "center",
+      height: "100%",
+      marginTop: 100,
+    }}
+  >
+    <Searching_Svg />
+  </View>
+);
 
-  return 
-}
+const SearchResultRender = ({
+  items,
+  OpenModal,
+}: {
+  items: Array<any>;
+  OpenModal: Function;
+}) => {
+  return (
+    <View
+      style={{
+        margin: 20,
+      }}
+    >
+      {items.map((data) => (
+        <ItemCard
+          data={data}
+          key={data.food_name}
+          onPress={() => OpenModal(data.food_name)}
+        />
+      ))}
+    </View>
+  );
+};
 
 export default NewItemScreen;
