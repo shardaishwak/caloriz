@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Pressable,
   SafeAreaView,
@@ -49,10 +49,65 @@ const MainScreen = (props) => {
   });
   console.log(progress_data);
 
+  return (
+    <SafeAreaView style={styles.container}>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <Header navigation={props.navigation} />
+        <Calorimeter target={target} current={current} />
+        <Progresses progress_data={progress_data} />
+        <RenderCards
+          sessions={["breakfast", "lunch"]}
+          date_data={date_data}
+          navigation={props.navigation}
+          date={date}
+        />
+      </ScrollView>
+    </SafeAreaView>
+  );
+};
+
+const Calorimeter = ({
+  target,
+  current,
+}: {
+  target: number;
+  current: number;
+}) => {
+  return (
+    <View style={{ alignItems: "center", marginTop: 20, marginBottom: 20 }}>
+      <Text
+        style={{
+          fontSize: 15,
+          fontFamily: "Inter",
+          color: colors.app.dark_300,
+        }}
+      >
+        Calories left
+      </Text>
+      <Text
+        style={{
+          fontSize: 45,
+          fontFamily: "Inter",
+          color: colors.app.dark_500,
+        }}
+      >
+        <Text style={{ fontFamily: "Inter-Bold" }}>
+          {(target - current)
+            .toFixed(0)
+            .toString()
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+        </Text>{" "}
+        kcal
+      </Text>
+    </View>
+  );
+};
+
+const Progresses = ({ progress_data }) => {
   const user_mass = 55; // add it to state;
   const total_fat_to_consume = user_mass * 0.4;
-  const total_protein_to_consume = user_mass * 0.8;
-  const total_carbs_to_consume = user_mass * 0.5;
+  const total_protein_to_consume = user_mass * 1; // based on total_calories_daily consumption
+  const total_carbs_to_consume = user_mass * 0.5; // based on total_calories_daily/8;
 
   // 0.4g per mass is the prescribed journal fat
   const fat_perc = Math.round((100 * progress_data.fat) / total_fat_to_consume);
@@ -64,94 +119,52 @@ const MainScreen = (props) => {
   const protein_perc = Math.round(
     (100 * progress_data.fat) / total_protein_to_consume
   );
-
-  console.log(fat_perc, carb_perc, protein_perc);
-
   return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <Header navigation={props.navigation} />
-        <View style={{ alignItems: "center", marginTop: 20, marginBottom: 20 }}>
-          <Text
-            style={{
-              fontSize: 15,
-              fontFamily: "Inter",
-              color: colors.app.dark_300,
-            }}
-          >
-            Calories left
-          </Text>
-          <Text
-            style={{
-              fontSize: 45,
-              fontFamily: "Inter",
-              color: colors.app.dark_500,
-            }}
-          >
-            <Text style={{ fontFamily: "Inter-Bold" }}>
-              {(target - current)
-                .toFixed(0)
-                .toString()
-                .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-            </Text>{" "}
-            kcal
-          </Text>
-        </View>
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
-            paddingHorizontal: 20,
-            marginVertical: 10,
-            marginBottom: 40,
-          }}
-        >
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            <Progress
-              percent={carb_perc > 100 ? 100 : carb_perc}
-              title={"Carbs"}
-              color={colors.app.purple_100}
-              value={
-                (total_carbs_to_consume > progress_data.carbohydrates
-                  ? (
-                      total_carbs_to_consume - progress_data.carbohydrates
-                    ).toFixed(1)
-                  : 0) + "g"
-              }
-            />
-            <Progress
-              percent={fat_perc > 100 ? 100 : fat_perc}
-              title={"Fat"}
-              color={colors.app.orange_100}
-              value={
-                (total_fat_to_consume > progress_data.fat
-                  ? (total_fat_to_consume - progress_data.fat).toFixed(1)
-                  : 0) + "g"
-              }
-            />
-            <Progress
-              percent={protein_perc > 100 ? 100 : protein_perc}
-              title={"Protein"}
-              color={colors.app.blue_100}
-              value={
-                (total_protein_to_consume > progress_data.protein
-                  ? (total_protein_to_consume - progress_data.protein).toFixed(
-                      1
-                    )
-                  : 0) + "g"
-              }
-            />
-          </ScrollView>
-        </View>
-        <RenderCards
-          sessions={["breakfast", "lunch"]}
-          date_data={date_data}
-          navigation={props.navigation}
-          date={date}
+    <View
+      style={{
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
+        paddingHorizontal: 20,
+        marginVertical: 10,
+        marginBottom: 40,
+      }}
+    >
+      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+        <Progress
+          percent={carb_perc > 100 ? 100 : carb_perc}
+          title={"Carbs"}
+          color={colors.app.purple_100}
+          value={
+            (total_carbs_to_consume > progress_data.carbohydrates
+              ? (total_carbs_to_consume - progress_data.carbohydrates).toFixed(
+                  1
+                )
+              : 0) + "g"
+          }
+        />
+        <Progress
+          percent={fat_perc > 100 ? 100 : fat_perc}
+          title={"Fat"}
+          color={colors.app.orange_100}
+          value={
+            (total_fat_to_consume > progress_data.fat
+              ? (total_fat_to_consume - progress_data.fat).toFixed(1)
+              : 0) + "g"
+          }
+        />
+        <Progress
+          percent={protein_perc > 100 ? 100 : protein_perc}
+          title={"Protein"}
+          color={colors.app.blue_100}
+          value={
+            (total_protein_to_consume > progress_data.protein
+              ? (total_protein_to_consume - progress_data.protein).toFixed(1)
+              : 0) + "g"
+          }
         />
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
 
