@@ -90,18 +90,41 @@ const removeFood = (state, { payload: { date, field, id } }) => {
   };
 };
 
+/* ===================== FAVORITE ===========================*/
+const initializeFavourites = (state, { data }) => {
+  return {
+    ...state,
+    favourites: data,
+  };
+};
+
+const setFavourite = (state, { item }) => {
+  return {
+    ...state,
+    favourites: [...state.favourites, item],
+  };
+};
+
+const removeFavourites = (state, { food_name, calories }) => {
+  const favourites = state.favourites;
+  const index = favourites.findIndex(
+    (a) => a.food_name === food_name && a.calories === calories
+  );
+  favourites.splice(index, 1);
+  return {
+    ...state,
+    favourites,
+  };
+};
+
 // Default routeine data model
 const defaultDate: AppDate = {
   breakfast: [], // | Array<BrandedItem>
-  second_break_fast: [],
+  second_breakfast: [],
   lunch: [],
   snack: [],
   dinner: [],
   dessert: [],
-  total_fat: 0,
-  total_calories: 0,
-  total_proteins: 0,
-  total_sugars: 0,
   water: {
     cup_size: null,
     cup_qty: 0,
@@ -132,4 +155,7 @@ export default {
   removeFood,
   defaultDate,
   addData,
+  initializeFavourites,
+  setFavourite,
+  removeFavourites,
 };

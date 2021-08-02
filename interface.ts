@@ -27,20 +27,26 @@ export interface CommonItem extends SearchCommonItem, FoodNutrients {
 
 export interface AppDate {
   breakfast: Array<CommonItem>; // | Array<BrandedItem>
-  second_break_fast: Array<CommonItem>;
+  second_breakfast: Array<CommonItem>;
   lunch: Array<CommonItem>;
   snack: Array<CommonItem>;
   dinner: Array<CommonItem>;
   dessert: Array<CommonItem>;
-  total_fat: number;
-  total_calories: number;
-  total_proteins: number;
-  total_sugars: number;
+
   water: {
     cup_size: number;
     cup_qty: number;
   };
 }
+
+export const Fields = [
+  "breakfast",
+  "second_breakfast",
+  "lunch",
+  "snack",
+  "dinner",
+  "dessert",
+];
 
 /**
  *

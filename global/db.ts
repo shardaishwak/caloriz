@@ -1,5 +1,8 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { CommonItem } from "../interface";
 import { setDefaultDate } from "./actions";
+
+/** ============================ ITEM ================================ */
 
 /**
  * @description Retrieve daily routine data
@@ -49,9 +52,44 @@ const deleteItem = async (state, date, field, id) => {
   );
 };
 
+/** ================================ FAVOURITE ================================== */
+
+/**
+ * @description Get the list of all the starred items
+ * @returns favourites list
+ */
+const getFavourites = async () =>
+  (JSON.parse(await AsyncStorage.getItem("favourites")) ||
+    []) as Array<CommonItem>;
+
+/**
+ * @description Add an item to the favourite list
+ * @param item: CommonItem
+ */
+const addFavourite = async (item: CommonItem) => {
+  const favourites = await getFavourites();
+  favourites.push(item);
+  await AsyncStorage.setItem("favourites", JSON.stringify(favourites));
+};
+
+/**
+ * @description Remove an item from favourite list
+ * @param id (item)
+ */
+const removeFavourite = async (food_name, calories) => {
+  const favourites = await getFavourites();
+  const index = favourites.findIndex(
+    (a) => a.food_name === food_name && a.calories === calories
+  );
+  favourites.splice(index, 1);
+  await AsyncStorage.setItem("favourites", JSON.stringify(favourites));
+};
 export default {
   addItem,
   deleteItem,
   retrieveRouteine,
   initializeRouteine,
+  getFavourites,
+  addFavourite,
+  removeFavourite,
 };

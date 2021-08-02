@@ -65,7 +65,6 @@ const ItemCard = ({
               </Text>
             </Text>
           </View>
-          <AntDesign name="staro" size={20} />
         </View>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           {data.calories && (

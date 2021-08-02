@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import { CommonItem } from "../interface";
 import actions from "./actions";
 import GlobalContext from "./context";
 
@@ -6,6 +7,9 @@ export const ADD_NEW_DATE = "ADD_NEW_DATE";
 export const ADD_FOOD = "ADD_FOOD";
 export const REMOVE_FOOD = "REMOVE_FOOD";
 export const ADD_DATA = "ADD_DATA";
+export const INITIALIZE_FAVOURITES = "INITIALIZE_FAVOURITES";
+export const SET_FAVOURITE = "SET_FAVORITE";
+export const REMOVE_FAVOURITE = "REMOVE_FAVOURITE";
 
 const reducer = (state, action) => {
   console.log("ACTION: " + action.type);
@@ -18,6 +22,12 @@ const reducer = (state, action) => {
       return actions.addFood(state, action);
     case REMOVE_FOOD:
       return actions.removeFood(state, action);
+    case INITIALIZE_FAVOURITES:
+      return actions.initializeFavourites(state, action);
+    case SET_FAVOURITE:
+      return actions.setFavourite(state, action);
+    case REMOVE_FAVOURITE:
+      return actions.removeFavourites(state, action);
 
     default:
       break;
@@ -28,6 +38,7 @@ const reducer = (state, action) => {
 class GlobalProvider extends React.Component<{}, {}> {
   state = {
     data: {},
+    favourites: [],
   };
   _reducer = reducer;
   dispatch = (action) => this.setState(this._reducer(this.state, action));
@@ -46,6 +57,10 @@ class GlobalProvider extends React.Component<{}, {}> {
   }
 }
 
-export const useGlobal = () => useContext<{ state; dispatch }>(GlobalContext);
+export const useGlobal = () =>
+  useContext<{
+    state: { data: Object; favourites: Array<CommonItem> };
+    dispatch;
+  }>(GlobalContext);
 
 export default GlobalProvider;

@@ -7,7 +7,7 @@ import SaveButton from "./SaveButton";
 import Cards from "./Cards";
 import Inputs from "./Inputs";
 import TopNotch from "./TopNotch";
-import { ADD_FOOD, useGlobal } from "../../global/provider";
+import { ADD_FOOD, SET_FAVOURITE, useGlobal } from "../../global/provider";
 import nutritionix from "../../api/nutritionix";
 import { CommonItem } from "../../interface";
 import { todayDate } from "../../global/actions";
@@ -21,6 +21,25 @@ const ItemModal = ({ ID, visible, onDismiss, session }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [result, set_result] = useState<any>();
   const [saveItemLoading, setSaveItemLoading] = useState<boolean>(false);
+  const data: CommonItem = result && {
+    calories: result.nf_calories || 0,
+    carbohydrates: result.nf_total_carbohydrate || 0,
+    fat: result.nf_total_fat || 0,
+    consumed_at: Date.now(),
+    food_name: result.food_name,
+    id: uuid.v4(),
+    potassium: result.nf_potassium || 0,
+    protein: result.nf_protein || 0,
+    saturated_fat: result.nf_saturated_fat || 0,
+    serving_qty: result.serving_qty || 0,
+    serving_unit: result.serving_unit || 0,
+    serving_weight_grams: result.serving_weight_grams || 0,
+    sodium: result.nf_sodium || 0,
+    sugars: result.nf_sugars || 0,
+    cholesterol: result.nf_cholesterol || 0,
+    dietary_fiber: result.nf_dietary_fiber || 0,
+    quantity: quantity || 1,
+  };
 
   useEffect(() => {
     if (!ID) onDismiss();
@@ -38,25 +57,7 @@ const ItemModal = ({ ID, visible, onDismiss, session }) => {
 
   const AddNewItem = async () => {
     setSaveItemLoading(true);
-    const data: CommonItem = {
-      calories: result.nf_calories || 0,
-      carbohydrates: result.nf_total_carbohydrate || 0,
-      fat: result.nf_total_fat || 0,
-      consumed_at: Date.now(),
-      food_name: result.food_name,
-      id: uuid.v4(),
-      potassium: result.nf_potassium || 0,
-      protein: result.nf_protein || 0,
-      saturated_fat: result.nf_saturated_fat || 0,
-      serving_qty: result.serving_qty || 0,
-      serving_unit: result.serving_unit || 0,
-      serving_weight_grams: result.serving_weight_grams || 0,
-      sodium: result.nf_sodium || 0,
-      sugars: result.nf_sugars || 0,
-      cholesterol: result.nf_cholesterol || 0,
-      dietary_fiber: result.nf_dietary_fiber || 0,
-      quantity: quantity || 1,
-    };
+
     // Save to the database
     await db.addItem(state, todayDate(), session, data);
     // Save to local state
@@ -66,6 +67,11 @@ const ItemModal = ({ ID, visible, onDismiss, session }) => {
     });
     setSaveItemLoading(false);
     onDismiss();
+  };
+
+  const setFavourite = async () => {
+    await db.addFavourite(result);
+    dispatch({ type: SET_FAVOURITE, item: data });
   };
   if (loading) return <Text></Text>;
   return (
@@ -92,7 +98,11 @@ const ItemModal = ({ ID, visible, onDismiss, session }) => {
             <View>
               <ScrollView showsVerticalScrollIndicator={false}>
                 {/**Children data */}
-                <TopNotch food_name={result.food_name} />
+                <TopNotch
+                  food_name={data.food_name}
+                  onStarClick={setFavourite}
+                  calories={data.calories}
+                />
                 <Inputs
                   onQuantityChange={(e) => set_quantity(e)}
                   onTypeChange={(e) => set_type(e)}

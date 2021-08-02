@@ -4,6 +4,8 @@ import { StyleSheet, Text } from "react-native";
 import { View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import colors from "../colors";
+import { LinearGradient } from "expo-linear-gradient";
+import { StackNavigationHelpers } from "@react-navigation/stack/lib/typescript/src/types";
 
 const Card = ({
   title,
@@ -11,6 +13,8 @@ const Card = ({
   t_p,
   t_f,
   t_c,
+  navigation,
+  session,
   ...props
 }: {
   title: string;
@@ -19,12 +23,14 @@ const Card = ({
   t_p: number;
   t_f: number;
   t_c: number;
+  navigation: StackNavigationHelpers;
+  session: string;
 }) => {
   const [open, setOpen] = useState<boolean>(false);
   return (
     <View style={{ margin: 20, marginBottom: 10 }}>
-      <TouchableWithoutFeedback onPress={() => setOpen(!open)}>
-        <View style={styles.container}>
+      <View style={styles.container}>
+        <TouchableWithoutFeedback onPress={() => setOpen(!open)}>
           <View>
             <View
               style={{
@@ -33,20 +39,41 @@ const Card = ({
                 justifyContent: "space-between",
               }}
             >
+              <View style={{ alignItems: "center", flexDirection: "row" }}>
+                <Ionicons
+                  name={open ? "chevron-up" : "chevron-down"}
+                  size={20}
+                />
+                <Text
+                  style={{
+                    fontSize: 20,
+                    fontFamily: "Inter-Medium",
+                    marginLeft: 10,
+                    color: colors.app.dark_600,
+                    textTransform: "capitalize",
+                  }}
+                >
+                  {title}
+                </Text>
+              </View>
               <Text
                 style={{
-                  fontSize: 22.5,
                   fontFamily: "Inter-Medium",
-                  color: colors.app.dark_500,
-                  textTransform: "capitalize",
+                  fontSize: 18,
+                  color: colors.app.dark_600,
                 }}
               >
-                {title}
+                {t_kcal.toFixed(1)}{" "}
+                <Text
+                  style={{
+                    fontFamily: "Inter",
+                    fontSize: 12,
+                    color: colors.tailwind.gray._400,
+                  }}
+                >
+                  kcal
+                </Text>
               </Text>
-              <Ionicons
-                name={open ? "chevron-up" : "chevron-down"}
-                size={22.5}
-              />
             </View>
 
             <View
@@ -54,75 +81,123 @@ const Card = ({
                 flexDirection: "row",
                 alignItems: "center",
                 marginTop: 10,
+                justifyContent: "space-between",
               }}
             >
-              <Text
-                style={{
-                  paddingVertical: 6,
-                  paddingHorizontal: 10,
-                  backgroundColor: colors.app.dark_100,
-                  color:
-                    t_kcal < 250
-                      ? colors.app.green_200
-                      : t_kcal >= 250 && t_kcal < 600
-                      ? colors.app.yellow_100
-                      : colors.app.red_100, // fcbe11 // ff2400"#32cd32", // fcbe11 // ff2400
-
-                  borderRadius: 5,
-                  fontFamily: "Inter-Medium",
-                  fontSize: 15,
-                  marginRight: 10,
-                }}
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                  <View
+                    style={{
+                      width: 20,
+                      height: 20,
+                      borderRadius: 999,
+                      borderWidth: 3,
+                      borderColor: colors.app.orange_100,
+                    }}
+                  ></View>
+                  <Text
+                    style={{
+                      paddingVertical: 6,
+                      paddingHorizontal: 10,
+                      color: colors.tailwind.gray._400,
+                      fontFamily: "Inter",
+                      fontSize: 15,
+                      marginRight: 10,
+                    }}
+                  >
+                    {t_p.toFixed(1)}g
+                  </Text>
+                </View>
+                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                  <View
+                    style={{
+                      width: 20,
+                      height: 20,
+                      borderRadius: 999,
+                      borderWidth: 3,
+                      borderColor: colors.app.purple_100,
+                    }}
+                  ></View>
+                  <Text
+                    style={{
+                      paddingVertical: 6,
+                      paddingHorizontal: 10,
+                      color: colors.tailwind.gray._400,
+                      fontFamily: "Inter",
+                      fontSize: 15,
+                      marginRight: 10,
+                    }}
+                  >
+                    {t_f.toFixed(1)}g
+                  </Text>
+                </View>
+                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                  <View
+                    style={{
+                      width: 20,
+                      height: 20,
+                      borderRadius: 999,
+                      borderWidth: 3,
+                      borderColor: colors.app.blue_100,
+                    }}
+                  ></View>
+                  <Text
+                    style={{
+                      paddingVertical: 6,
+                      paddingHorizontal: 10,
+                      color: colors.tailwind.gray._400,
+                      fontFamily: "Inter",
+                      fontSize: 15,
+                      marginRight: 10,
+                    }}
+                  >
+                    {t_c.toFixed(1)}g
+                  </Text>
+                </View>
+              </View>
+              <TouchableWithoutFeedback
+                onPress={() =>
+                  navigation.navigate("newitem", {
+                    session,
+                  })
+                }
               >
-                {t_kcal.toFixed(1)} kcal
-              </Text>
-              <Text
-                style={{
-                  paddingVertical: 6,
-                  paddingHorizontal: 10,
-                  backgroundColor: colors.app.dark_100,
-                  color: colors.tailwind.gray._500,
-                  borderRadius: 5,
-                  fontFamily: "Inter-Medium",
-                  fontSize: 15,
-                  marginRight: 10,
-                }}
-              >
-                {t_p.toFixed(1)}g
-              </Text>
-              <Text
-                style={{
-                  paddingVertical: 6,
-                  paddingHorizontal: 10,
-                  backgroundColor: colors.app.dark_100,
-                  color: colors.tailwind.gray._500,
-                  borderRadius: 5,
-                  fontFamily: "Inter-Medium",
-                  fontSize: 15,
-                  marginRight: 10,
-                }}
-              >
-                {t_f.toFixed(1)}g
-              </Text>
-              <Text
-                style={{
-                  paddingVertical: 6,
-                  paddingHorizontal: 10,
-                  backgroundColor: colors.app.dark_100,
-                  color: colors.tailwind.gray._500,
-                  borderRadius: 5,
-                  fontFamily: "Inter-Medium",
-                  fontSize: 15,
-                  marginRight: 10,
-                }}
-              >
-                {t_c.toFixed(1)}g
-              </Text>
+                <LinearGradient
+                  colors={[
+                    colors.tailwind.green._500,
+                    colors.tailwind.green._600,
+                  ]}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 1 }}
+                  style={{
+                    width: 33,
+                    height: 33,
+                    backgroundColor: colors.app.green_200,
+                    borderRadius: 999,
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Ionicons name="md-add" size={22.5} color={"#fff"} />
+                </LinearGradient>
+              </TouchableWithoutFeedback>
             </View>
           </View>
-          {open && <View style={{ marginTop: 10 }}>{props.children}</View>}
-        </View>
-      </TouchableWithoutFeedback>
+        </TouchableWithoutFeedback>
+
+        {open && (
+          <View
+            style={{
+              marginTop: 15,
+              paddingTop: 5,
+              borderTopWidth: 2,
+              borderTopColor: colors.app.dark_100,
+            }}
+          >
+            {props.children}
+          </View>
+        )}
+      </View>
     </View>
   );
 };
