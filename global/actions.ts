@@ -1,11 +1,6 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AppDate } from "../interface";
 
-// run it in cache everytime if not date
-
-// storing system: AsyncStorage(date, data)
-// retirve initial data form the storage through a function which runs in the cahce
-
+/** =========================== ITEM ================ */
 /**
  * @description check date availability in the state
  * @param state
@@ -15,6 +10,7 @@ import { AppDate } from "../interface";
 const isDate = (state, date) => state.data[date];
 
 /**
+ * @connect db.initializeRouteine
  * @description Add a new date to the state
  * @param state
  * @param action {date}
@@ -35,7 +31,8 @@ const addNewDate = (state, { date }) => {
 };
 
 /**
- * @description Add a daily routeine data
+ * @connect db.retrieveRouteine
+ * @description Load a daily routeine data
  * @param state
  * @param action {payload, date}
  * @returns
@@ -51,6 +48,7 @@ const addData = (state, { payload, date }) => {
 };
 
 /**
+ * @connect db.addItem
  * @description Add a new item to the state;
  * @param state
  * @param action {date, field data}
@@ -69,6 +67,7 @@ const addFood = (state, { payload: { date, field, data } }) => {
 };
 
 /**
+ * @connect db.deleteItem
  * @description Remove a food from the state
  * @param state
  * @param action {date, field, id}
@@ -91,6 +90,14 @@ const removeFood = (state, { payload: { date, field, id } }) => {
 };
 
 /* ===================== FAVORITE ===========================*/
+/**
+ * @connect db.getFavourites
+ * @description Load the favourites list
+ * @param state
+ * @param payload {data}
+ * @returns undefined
+ */
+
 const initializeFavourites = (state, { data }) => {
   return {
     ...state,
@@ -98,6 +105,13 @@ const initializeFavourites = (state, { data }) => {
   };
 };
 
+/**
+ * @connect db.addFavourite
+ * @description Add a new item to state
+ * @param state
+ * @param payload {item}
+ * @returns undefined
+ */
 const setFavourite = (state, { item }) => {
   return {
     ...state,
@@ -105,6 +119,13 @@ const setFavourite = (state, { item }) => {
   };
 };
 
+/**
+ * @connect db.removeFavourite
+ * @description Remove a favourite item from list
+ * @param state
+ * @param payload {food_name, calories}
+ * @returns
+ */
 const removeFavourites = (state, { food_name, calories }) => {
   const favourites = state.favourites;
   const index = favourites.findIndex(
@@ -132,14 +153,14 @@ const defaultDate: AppDate = {
 };
 
 /**
- *
- * @returns default routeine data model
+ *@description Return the default values
+ * @returns data modal
  */
 export const setDefaultDate = () => defaultDate;
 
 /**
- *
- * @returns formatted current date
+ *@description Return fomatted string of date as ID
+ * @returns string
  */
 export const todayDate = () => {
   const date = new Date();

@@ -5,6 +5,16 @@ import { setDefaultDate } from "./actions";
 /** ============================ ITEM ================================ */
 
 /**
+ * @connect ADD_NEW_DATE
+ * @description Create a new record for a day
+ * @param date
+ * @returns undefined
+ */
+const initializeRouteine = async (date) =>
+  await AsyncStorage.setItem(date, JSON.stringify(setDefaultDate()));
+
+/**
+ * @connect ADD_DATE
  * @description Retrieve daily routine data
  * @param date
  * @returns daily routeine data;
@@ -12,10 +22,8 @@ import { setDefaultDate } from "./actions";
 const retrieveRouteine = async (date) =>
   JSON.parse(await AsyncStorage.getItem(date));
 
-const initializeRouteine = async (date) =>
-  await AsyncStorage.setItem(date, JSON.stringify(setDefaultDate()));
-
 /**
+ * @connect ADD-ITEM
  * @description Add a new item to the routeine
  * @param state
  * @param date
@@ -33,6 +41,7 @@ const addItem = async (state, date, field, data) =>
   );
 
 /**
+ * @connect DELETE_ITEM
  * @description delete an item from routeine
  * @param state
  * @param date
@@ -55,6 +64,7 @@ const deleteItem = async (state, date, field, id) => {
 /** ================================ FAVOURITE ================================== */
 
 /**
+ * @connect INITIALIZE_FAVOURITES
  * @description Get the list of all the starred items
  * @returns favourites list
  */
@@ -63,6 +73,7 @@ const getFavourites = async () =>
     []) as Array<CommonItem>;
 
 /**
+ * @connect SET_FAVOURITE
  * @description Add an item to the favourite list
  * @param item: CommonItem
  */
@@ -73,6 +84,7 @@ const addFavourite = async (item: CommonItem) => {
 };
 
 /**
+ * @connect REMOVE_FAVOURITES
  * @description Remove an item from favourite list
  * @param id (item)
  */

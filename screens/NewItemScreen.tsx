@@ -118,4 +118,10 @@ const NewItemScreen = (props) => {
   );
 };
 
+const FavouritesList = () => {
+  const {state: {favourites}} = useGlobal();
+
+  return 
+}
+
 export default NewItemScreen;
