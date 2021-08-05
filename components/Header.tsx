@@ -5,6 +5,10 @@ import { StackNavigationHelpers } from "@react-navigation/stack/lib/typescript/s
 import colors from "../colors";
 import Svg, { Path } from "react-native-svg";
 
+/**
+ * Main app header
+ * The back button is shown in the upper stack pages, not in the main stack
+ */
 const Header = (props: {
   navigation: StackNavigationHelpers;
   page?: string;

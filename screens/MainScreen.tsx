@@ -13,7 +13,6 @@ import { REMOVE_FOOD, useGlobal } from "../global/provider";
 import { todayDate } from "../global/actions";
 import { AppDate, CommonItem, Fields } from "../interface";
 
-import NewItemButton from "../components/NewItemButton";
 import Progress from "../components/Progress";
 import Header from "../components/Header";
 import Card from "../components/Card";
@@ -33,12 +32,19 @@ const MainScreen = (props) => {
 
   // Retrive data of a prticular date from state
 
+  /**
+   * Calulcation of the totdal carbohydrates, fat and proteins
+   */
   const progress_data = {
     carbohydrates: 0,
     fat: 0,
     protein: 0,
   };
 
+  /**
+   * Loop throught all the daily cosumption to add up the interested values to show
+   * The current total calories are also calculated
+   */
   Fields.map((field) => {
     date_data[field].forEach((item: CommonItem) => {
       progress_data.fat += item.fat * item.quantity;
@@ -47,25 +53,29 @@ const MainScreen = (props) => {
       current += item.calories * item.quantity;
     });
   });
-  console.log(progress_data);
 
   return (
     <SafeAreaView style={styles.container}>
+      <Header navigation={props.navigation} />
+
       <ScrollView showsVerticalScrollIndicator={false}>
-        <Header navigation={props.navigation} />
         <Calorimeter target={target} current={current} />
         <Progresses progress_data={progress_data} />
         <RenderCards
-          sessions={["breakfast", "lunch"]}
-          date_data={date_data}
+          sessions={["breakfast", "lunch"]} // All the card sessions to show
+          date_data={date_data} // Current state date based data
           navigation={props.navigation}
-          date={date}
+          date={date} // Currest state date
         />
       </ScrollView>
     </SafeAreaView>
   );
 };
 
+/**
+ * The state of the calories remained to consume
+ * Calulated by substracting the total number of calories and the number of calories consumed
+ */
 const Calorimeter = ({
   target,
   current,
@@ -102,6 +112,11 @@ const Calorimeter = ({
     </View>
   );
 };
+
+/**
+ * The progress circle bars of the carbohydrates, fat and caories
+ * The data is taken from the main state
+ */
 
 const Progresses = ({ progress_data }) => {
   const user_mass = 55; // add it to state;
@@ -168,6 +183,14 @@ const Progresses = ({ progress_data }) => {
   );
 };
 
+/**
+ * REnder the session cards
+ * The component takes an array of the sessions we want to render on the main page(breakfast, lunch, etc.)
+ * The data is retreived form the state and extrated based on the date and the session
+ * The sessions are looped to show all the cards of each session
+ * The <Card /> component is rendered to give design
+ * For each card, the items that are consumed on that date and session are displayed using the <Item /> component
+ */
 const RenderCards = ({ sessions, date_data, navigation, date }) => (
   <View>
     {sessions.map((session) => {
@@ -179,7 +202,7 @@ const RenderCards = ({ sessions, date_data, navigation, date }) => (
       const session_data = date_data[session];
       console.log(date_data);
 
-      date_data[session]?.forEach((item: CommonItem) => {
+      session_data?.forEach((item: CommonItem) => {
         total_calories += item.calories * item.quantity;
         total_fat += item.fat * item.quantity;
         total_protein += item.protein * item.quantity;
@@ -217,6 +240,10 @@ const RenderCards = ({ sessions, date_data, navigation, date }) => (
 );
 // replace [a] with [session]
 
+/**
+ * Component for diplaying all the items eaten in specific date and session
+ * Delete consumed food item is created
+ */
 const Item = ({
   food_name,
   id,

@@ -1,8 +1,8 @@
 import React from "react";
 
-import { SafeAreaView, StatusBar, Text, View } from "react-native";
+import { SafeAreaView, StatusBar } from "react-native";
 import LoadCache from "./cache";
-import GlobalProvider, { ADD_NEW_DATE, useGlobal } from "./global/provider";
+import GlobalProvider, { useGlobal } from "./global/provider";
 import Navigation from "./navigation";
 import { Svg, Path } from "react-native-svg";
 

@@ -13,14 +13,22 @@ import { CommonItem } from "../../interface";
 import { todayDate } from "../../global/actions";
 import db from "../../global/db";
 
+/**
+ * Main modal component for showing the detailed data of the searched item
+ * The detailed data is fetching in the component
+ * The session is required as it ads the data to the current session the page is opened
+ */
 const ItemModal = ({ ID, visible, onDismiss, session }) => {
   const { dispatch, state } = useGlobal();
-  const [quantity, set_quantity] = useState<number>(0);
-  const [type, set_type] = useState<string>();
+  const date = todayDate();
 
-  const [loading, setLoading] = useState<boolean>(false);
+  const [type, set_type] = useState<string>();
   const [result, set_result] = useState<any>();
+  const [quantity, set_quantity] = useState<number>(0);
+  const [loading, setLoading] = useState<boolean>(false);
   const [saveItemLoading, setSaveItemLoading] = useState<boolean>(false);
+
+  // All the data that is fetched is then filteerd to fit the CommonItem interface
   const data: CommonItem = result && {
     calories: result.nf_calories || 0,
     carbohydrates: result.nf_total_carbohydrate || 0,
@@ -41,6 +49,7 @@ const ItemModal = ({ ID, visible, onDismiss, session }) => {
     quantity: quantity || 1,
   };
 
+  // The Search function is ran to get the main item
   useEffect(() => {
     if (!ID) onDismiss();
     (async () => {
@@ -48,6 +57,7 @@ const ItemModal = ({ ID, visible, onDismiss, session }) => {
     })();
   }, []);
 
+  // The function fetched the main item for its details
   const Search = async () => {
     setLoading(true);
     const result = await nutritionix.nutrients(ID);
@@ -55,22 +65,24 @@ const ItemModal = ({ ID, visible, onDismiss, session }) => {
     setLoading(false);
   };
 
+  // Push the current item to the consumed list
   const AddNewItem = async () => {
     setSaveItemLoading(true);
 
     // Save to the database
-    await db.addItem(state, todayDate(), session, data);
+    await db.addItem(state, date, session, data);
     // Save to local state
     dispatch({
       type: ADD_FOOD,
-      payload: { date: todayDate(), field: session, data },
+      payload: { date, field: session, data },
     });
     setSaveItemLoading(false);
     onDismiss();
   };
 
+  // Add the item to the favourite list
   const setFavourite = async () => {
-    await db.addFavourite(result);
+    await db.addFavourite(data);
     dispatch({ type: SET_FAVOURITE, item: data });
   };
   if (loading) return <Text></Text>;

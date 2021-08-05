@@ -2,11 +2,16 @@ import React, { useState } from "react";
 import { TouchableWithoutFeedback } from "react-native";
 import { StyleSheet, Text } from "react-native";
 import { View } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+import { FontAwesome5, Ionicons } from "@expo/vector-icons";
 import colors from "../colors";
 import { LinearGradient } from "expo-linear-gradient";
 import { StackNavigationHelpers } from "@react-navigation/stack/lib/typescript/src/types";
 
+/**
+ * @connect MainScreen
+ * Design of the main per session card
+ *
+ */
 const Card = ({
   title,
   t_kcal,
@@ -59,7 +64,7 @@ const Card = ({
               <Text
                 style={{
                   fontFamily: "Inter-Medium",
-                  fontSize: 18,
+                  fontSize: 20,
                   color: colors.app.dark_600,
                 }}
               >
@@ -178,7 +183,7 @@ const Card = ({
                     justifyContent: "center",
                   }}
                 >
-                  <Ionicons name="md-add" size={22.5} color={"#fff"} />
+                  <FontAwesome5 name="plus" size={17} color={"#fff"} />
                 </LinearGradient>
               </TouchableWithoutFeedback>
             </View>

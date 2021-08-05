@@ -7,8 +7,12 @@ import {
   MaterialCommunityIcons,
   Ionicons,
 } from "@expo/vector-icons";
-import { FlatList, Text, View } from "react-native";
+import { FlatList, StyleSheet, Text, View } from "react-native";
 
+/**
+ * @connect ItemModal index.js
+ * Component for the 4 cards that show the additional information about a product
+ */
 const Cards = ({ data }) => {
   const data_local = [
     {
@@ -72,29 +76,9 @@ const Cards = ({ data }) => {
       keyExtractor={({ id }) => id.toString()}
       renderItem={({ item, index }) => (
         <View
-          style={{
-            flex: 1,
-            padding: 20,
-            borderWidth: 2.5,
-            borderRadius: 20,
-            marginRight: index % 2 === 0 ? 20 : 0,
-            borderColor: colors.app.dark_100,
-            marginBottom: 20,
-            paddingVertical: 25,
-            flexDirection: "row",
-            alignItems: "center",
-          }}
+          style={[styles.container, { marginRight: index % 2 === 0 ? 20 : 0 }]}
         >
-          <View
-            style={{
-              width: 50,
-              height: 50,
-              borderRadius: 10,
-              backgroundColor: item.opacity_color,
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
+          <View style={[styles.icon, { backgroundColor: item.opacity_color }]}>
             {item.icon}
           </View>
           <View style={{ marginLeft: 15 }}>
@@ -112,5 +96,26 @@ const Cards = ({ data }) => {
     />
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+    borderWidth: 2.5,
+    borderRadius: 20,
+    borderColor: colors.app.dark_100,
+    marginBottom: 20,
+    paddingVertical: 25,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  icon: {
+    width: 50,
+    height: 50,
+    borderRadius: 10,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+});
 
 export default Cards;

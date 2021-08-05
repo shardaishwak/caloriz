@@ -1,15 +1,13 @@
 import React from "react";
-import {
-  Image,
-  ScrollView,
-  Text,
-  TouchableWithoutFeedback,
-  View,
-} from "react-native";
-import { AntDesign } from "@expo/vector-icons";
+import { ScrollView, Text, TouchableWithoutFeedback, View } from "react-native";
 import colors from "../colors";
 import { SearchCommonItem } from "../interface";
 
+/**
+ * @connect NewItemScreen
+ * Card for showing all the searched item from the input
+ * When clicked, triggers the modal
+ */
 const ItemCard = ({
   data,
   onPress,

@@ -10,6 +10,7 @@ export const ADD_DATA = "ADD_DATA";
 export const INITIALIZE_FAVOURITES = "INITIALIZE_FAVOURITES";
 export const SET_FAVOURITE = "SET_FAVORITE";
 export const REMOVE_FAVOURITE = "REMOVE_FAVOURITE";
+export const CLEAR_FAVOURITES = "CLEAR_FAVOURITES";
 
 const reducer = (state, action) => {
   console.log("ACTION: " + action.type);
@@ -27,7 +28,9 @@ const reducer = (state, action) => {
     case SET_FAVOURITE:
       return actions.setFavourite(state, action);
     case REMOVE_FAVOURITE:
-      return actions.removeFavourites(state, action);
+      return actions.removeFavourite(state, action);
+    case CLEAR_FAVOURITES:
+      return actions.clearFavourites(state, action);
 
     default:
       break;

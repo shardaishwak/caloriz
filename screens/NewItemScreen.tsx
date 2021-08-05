@@ -1,6 +1,16 @@
 import React, { useState } from "react";
-import { SafeAreaView, View, Text } from "react-native";
+import {
+  SafeAreaView,
+  View,
+  Text,
+  StyleSheet,
+  TouchableWithoutFeedback,
+} from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
+import uuid from "react-native-uuid";
+
+import { LinearGradient } from "expo-linear-gradient";
+import { FontAwesome5 } from "@expo/vector-icons";
 
 import Header from "../components/Header";
 import SearchInput from "../components/SearchInput";
@@ -8,10 +18,13 @@ import ItemCard from "../components/ItemCard";
 import Searching_Svg from "../components/Searching_svg";
 import ItemModal from "../components/ItemModal";
 
-import { useGlobal } from "../global/provider";
-import nutritionix from "../api/nutritionix";
 import colors from "../colors";
-import { CommonItem, SearchCommonItem } from "../interface";
+import nutritionix from "../api/nutritionix";
+import { SearchCommonItem } from "../interface";
+
+import db from "../global/db";
+import { todayDate } from "../global/actions";
+import { ADD_FOOD, REMOVE_FOOD, useGlobal } from "../global/provider";
 
 const NewItemScreen = (props) => {
   const session = props.route.params.session || "breakfast";
@@ -21,10 +34,11 @@ const NewItemScreen = (props) => {
   const [modal, setModal] = useState<boolean>(false);
   const [modalItemID, setModalItemID] = useState<string>();
 
+  const date = todayDate();
+
   /**
-   * @description Search all the common food items by name
-   * @param query
-   * @returns promise
+   * Search for 20 foods from the database for a particular query
+   * The data is filtered to take only desired fields of interface SearchCommonItem
    */
   const Search = async (query) => {
     try {
@@ -48,24 +62,26 @@ const NewItemScreen = (props) => {
     }
   };
 
+  /**
+   * Triggers the close of the modal
+   */
   const CloseModal = () => {
     setModal(false);
     setModalItemID("");
   };
+  /**
+   * Triggers the opening of the modal and set's the current food_name
+   * The food name is important for the furteher detailed fetch of the food
+   * which is taken place in the modal component
+   *
+   */
   const OpenModal = (food_name) => {
     setModalItemID(food_name);
     setModal(true);
   };
 
-  // console.log(results); All the search items
   return (
-    <SafeAreaView
-      style={{
-        flex: 1,
-        backgroundColor: "#fff",
-        //paddingTop: Platform.OS === "android" ? 25 : 0,
-      }}
-    >
+    <SafeAreaView style={styles.container}>
       <Header navigation={props.navigation} page={session} small="Today" />
 
       <ScrollView>
@@ -74,23 +90,13 @@ const NewItemScreen = (props) => {
           onSearch={Search}
           loading={loading}
         />
-        {results.length > 0 && (
-          <Text
-            style={{
-              fontSize: 15,
-              fontFamily: "Inter",
-              color: colors.app.dark_300,
-              marginHorizontal: 20,
-              textAlign: "center",
-            }}
-          >
-            Results
-          </Text>
+        {results && results.length > 0 && (
+          <Text style={styles.smallText}>Results</Text>
         )}
         {results.length > 0 ? (
           <SearchResultRender OpenModal={OpenModal} items={results} />
         ) : (
-          <Illustration />
+          <FavouritesRender session={session} date={date} /> // render the favourite list here.
         )}
         {modal && modalItemID && (
           <ItemModal
@@ -119,6 +125,10 @@ const Illustration = () => (
   </View>
 );
 
+/**
+ *
+ * Render all the search items as card dsing
+ */
 const SearchResultRender = ({
   items,
   OpenModal,
@@ -142,5 +152,160 @@ const SearchResultRender = ({
     </View>
   );
 };
+
+/**
+ * Render the favourite item list
+ * The data is taken from the loca state
+ */
+const FavouritesRender = ({ session, date }) => {
+  const {
+    state: { favourites },
+  } = useGlobal();
+  return (
+    <View style={{ margin: 20 }}>
+      {favourites.map((favourite) => (
+        <FavouriteCard
+          date={date}
+          key={favourite.id as number}
+          item={favourite}
+          session={session}
+        />
+      ))}
+    </View>
+  );
+};
+
+/**
+ * Favourite card design component
+ * @requires item (CommonItem)
+ * @requires session (Fields)
+ */
+const FavouriteCard = ({ item, session, date }) => {
+  const { state, dispatch } = useGlobal();
+  // The state contains the ID of the added item
+  const [isAdded, setIsAdded] = useState(null); // contains the new id of the added product
+  const { food_name, serving_qty, serving_unit, calories, quantity } = item;
+
+  /**
+   * Add a new item to the daily list
+   * The data is stored on mobile and local state
+   * The id of the element is changed so to not create a conflict. That's
+   * beacuse all the consumed items have a unique id
+   */
+  const addItem = async () => {
+    const ID = uuid.v4();
+    await db.addItem(state, date, session, {
+      ...item,
+      id: ID,
+      consumed_at: Date.now(),
+    });
+    dispatch({
+      type: ADD_FOOD,
+      payload: {
+        date: date,
+        field: session,
+        data: {
+          ...item,
+          id: ID,
+          consumed_at: Date.now(),
+        },
+      },
+    });
+    setIsAdded(true);
+  };
+
+  /**
+   *
+   * Remove an item from the consumed list.
+   * @deprecated remove the todayDate() and make it dynamic
+   */
+  const removeItem = async () => {
+    await db.deleteItem(state, date, session, isAdded);
+    dispatch({
+      type: REMOVE_FOOD,
+      payload: { date, field: session, id: isAdded },
+    });
+    setIsAdded(null);
+  };
+  return (
+    <View style={styles.foodCard_container}>
+      <View>
+        <Text
+          style={{
+            color: colors.app.dark_600,
+            fontFamily: "Inter-Semibold",
+            fontSize: 17,
+            textTransform: "capitalize",
+          }}
+        >
+          {food_name}
+        </Text>
+        <Text
+          style={{
+            marginTop: 2,
+            color: colors.app.dark_300,
+            fontFamily: "Inter",
+          }}
+        >
+          {quantity} x {serving_unit} ({serving_qty}) / {calories} kcal
+        </Text>
+      </View>
+      <View>
+        <TouchableWithoutFeedback onPress={isAdded ? removeItem : addItem}>
+          {isAdded ? (
+            <LinearGradient
+              colors={[colors.tailwind.red._300, colors.tailwind.red._400]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={styles.gradient_button}
+            >
+              <FontAwesome5 name="times" size={15} color={"#fff"} />
+            </LinearGradient>
+          ) : (
+            <LinearGradient
+              colors={[colors.tailwind.green._300, colors.tailwind.green._400]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={styles.gradient_button}
+            >
+              <FontAwesome5 name="plus" size={15} color={"#fff"} />
+            </LinearGradient>
+          )}
+        </TouchableWithoutFeedback>
+      </View>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+    //paddingTop: Platform.OS === "android" ? 25 : 0,
+  },
+  smallText: {
+    fontSize: 15,
+    fontFamily: "Inter",
+    color: colors.app.dark_300,
+    marginHorizontal: 20,
+    textAlign: "center",
+  },
+  gradient_button: {
+    width: 30,
+    height: 30,
+    borderRadius: 999,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  foodCard_container: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingBottom: 15,
+    marginBottom: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.app.dark_100,
+  },
+});
 
 export default NewItemScreen;

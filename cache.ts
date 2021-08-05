@@ -2,7 +2,11 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Font from "expo-font";
 import { setDefaultDate, todayDate } from "./global/actions";
 import db from "./global/db";
-import { ADD_NEW_DATE, ADD_DATA } from "./global/provider";
+import {
+  ADD_NEW_DATE,
+  ADD_DATA,
+  INITIALIZE_FAVOURITES,
+} from "./global/provider";
 
 // Load all the fonts
 /**
@@ -39,6 +43,8 @@ const LoadData = async (dispatch) => {
     // load daily record to state
     dispatch({ type: ADD_DATA, payload: is_data, date: todayDate() });
   }
+  // await db.clearFavourites();
+  dispatch({ type: INITIALIZE_FAVOURITES, data: await db.getFavourites() });
 };
 
 /**

@@ -31,7 +31,7 @@ const retrieveRouteine = async (date) =>
  * @param data
  * @returns undefined
  */
-const addItem = async (state, date, field, data) =>
+const addItem = async (state, date, field, data: CommonItem) =>
   await AsyncStorage.setItem(
     date,
     JSON.stringify({
@@ -96,6 +96,16 @@ const removeFavourite = async (food_name, calories) => {
   favourites.splice(index, 1);
   await AsyncStorage.setItem("favourites", JSON.stringify(favourites));
 };
+
+/**
+ * @connect CLEAR_FAVOURITES
+ * @description Clear all the data from favourites
+ *
+ */
+const clearFavourites = async () => {
+  await AsyncStorage.setItem("favourites", JSON.stringify([]));
+};
+
 export default {
   addItem,
   deleteItem,
@@ -104,4 +114,5 @@ export default {
   getFavourites,
   addFavourite,
   removeFavourite,
+  clearFavourites,
 };

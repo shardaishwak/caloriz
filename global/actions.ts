@@ -51,7 +51,7 @@ const addData = (state, { payload, date }) => {
  * @connect db.addItem
  * @description Add a new item to the state;
  * @param state
- * @param action {date, field data}
+ * @param payload {date, field, data}
  * @returns new state
  */
 const addFood = (state, { payload: { date, field, data } }) => {
@@ -126,7 +126,7 @@ const setFavourite = (state, { item }) => {
  * @param payload {food_name, calories}
  * @returns
  */
-const removeFavourites = (state, { food_name, calories }) => {
+const removeFavourite = (state, { food_name, calories }) => {
   const favourites = state.favourites;
   const index = favourites.findIndex(
     (a) => a.food_name === food_name && a.calories === calories
@@ -137,6 +137,15 @@ const removeFavourites = (state, { food_name, calories }) => {
     favourites,
   };
 };
+
+/**
+ * @connect db.clearFavourites
+ * @description Clear all the favourite list from the state
+ */
+const clearFavourites = (state, action) => ({
+  ...state,
+  favourites: [],
+});
 
 // Default routeine data model
 const defaultDate: AppDate = {
@@ -178,5 +187,6 @@ export default {
   addData,
   initializeFavourites,
   setFavourite,
-  removeFavourites,
+  removeFavourite,
+  clearFavourites,
 };

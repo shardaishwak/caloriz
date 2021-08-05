@@ -3,6 +3,10 @@ import { Text, View } from "react-native";
 import { AnimatedCircularProgress } from "react-native-circular-progress";
 import colors from "../colors";
 
+/**
+ * @connect MainScreen
+ * Circular progress bars
+ */
 const Progress = ({
   percent,
   title,
