@@ -50,8 +50,11 @@ const addItem = async (state, date, field, data: CommonItem) =>
  */
 const deleteItem = async (state, date, field, id) => {
   const field_data = state.data[date][field];
+
   const index = field_data.findIndex((a) => a.id === id);
+  if (!index) return;
   field_data.splice(index, 1);
+
   await AsyncStorage.setItem(
     date,
     JSON.stringify({
@@ -69,7 +72,7 @@ const deleteItem = async (state, date, field, id) => {
  * @returns favourites list
  */
 const getFavourites = async () =>
-  (JSON.parse(await AsyncStorage.getItem("favourites")) ||
+  (JSON.parse(await AsyncStorage.getItem("@favourites")) ||
     []) as Array<CommonItem>;
 
 /**
@@ -80,7 +83,7 @@ const getFavourites = async () =>
 const addFavourite = async (item: CommonItem) => {
   const favourites = await getFavourites();
   favourites.push(item);
-  await AsyncStorage.setItem("favourites", JSON.stringify(favourites));
+  await AsyncStorage.setItem("@favourites", JSON.stringify(favourites));
 };
 
 /**
@@ -94,7 +97,7 @@ const removeFavourite = async (food_name, calories) => {
     (a) => a.food_name === food_name && a.calories === calories
   );
   favourites.splice(index, 1);
-  await AsyncStorage.setItem("favourites", JSON.stringify(favourites));
+  await AsyncStorage.setItem("@favourites", JSON.stringify(favourites));
 };
 
 /**
