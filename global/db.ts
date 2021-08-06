@@ -49,17 +49,18 @@ const addItem = async (state, date, field, data: CommonItem) =>
  * @param id
  */
 const deleteItem = async (state, date, field, id) => {
-  const field_data = state.data[date][field];
+  const field_data = [...state.data[date][field]];
+  console.log(field_data);
 
   const index = field_data.findIndex((a) => a.id === id);
-  if (!index) return;
+  if (index < 0) return;
   field_data.splice(index, 1);
 
   await AsyncStorage.setItem(
     date,
     JSON.stringify({
       ...state.data[date],
-      breakfast: field_data,
+      [field]: field_data,
     })
   );
 };
@@ -106,7 +107,7 @@ const removeFavourite = async (food_name, calories) => {
  *
  */
 const clearFavourites = async () => {
-  await AsyncStorage.setItem("favourites", JSON.stringify([]));
+  await AsyncStorage.setItem("@favourites", JSON.stringify([]));
 };
 
 export default {

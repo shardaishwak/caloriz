@@ -13,7 +13,7 @@ export const REMOVE_FAVOURITE = "REMOVE_FAVOURITE";
 export const CLEAR_FAVOURITES = "CLEAR_FAVOURITES";
 
 const reducer = (state, action) => {
-  console.log("ACTION: " + action.type);
+  console.log("[ACTION] ", action.type);
   switch (action.type) {
     case ADD_NEW_DATE:
       return actions.addNewDate(state, action);
@@ -46,7 +46,7 @@ class GlobalProvider extends React.Component<{}, {}> {
   _reducer = reducer;
   dispatch = (action) => this.setState(this._reducer(this.state, action));
   render() {
-    console.log(this.state);
+    console.log("[STATE]", this.state);
     return (
       <GlobalContext.Provider
         value={{

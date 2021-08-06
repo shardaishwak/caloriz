@@ -74,8 +74,12 @@ const addFood = (state, { payload: { date, field, data } }) => {
  * @returns new state
  */
 const removeFood = (state, { payload: { date, field, id } }) => {
-  const index = state.data[date][field].findIndex((a) => a.id === id);
-  if (!index) return;
+  const new_field = [...state.data[date][field]];
+  console.log(id);
+  const index = new_field.findIndex((a) => a.id === id);
+  console.log(index);
+  if (index < 0) return;
+  new_field.splice(index, 1);
 
   return {
     ...state,
@@ -83,7 +87,7 @@ const removeFood = (state, { payload: { date, field, id } }) => {
       ...state.data,
       [date]: {
         ...state.data[date],
-        [field]: state.data[date][field].splice(index, 1),
+        [field]: new_field,
       },
     },
   };
