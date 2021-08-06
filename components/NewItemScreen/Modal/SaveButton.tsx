@@ -6,7 +6,7 @@ import {
   Text,
   View,
 } from "react-native";
-import colors from "../../colors";
+import colors from "../../../colors";
 
 /**
  * @connect ItemModal index.js
@@ -23,9 +23,18 @@ const SaveButton = ({ onSave, loading }: { onSave: any; loading: boolean }) => {
         onTouchEnd={() => set_is_pressing(false)}
         onPress={onSave}
       >
-        <View style={[styles.container, { elevation: is_pressing ? 0 : 5 }]}>
+        <View
+          style={[
+            styles.container,
+            {
+              backgroundColor: is_pressing
+                ? colors.tailwind.green._600
+                : colors.tailwind.green._500,
+            },
+          ]}
+        >
           {loading ? (
-            <ActivityIndicator size={28} color={"#ffffff"} />
+            <ActivityIndicator size={26} color={"#ffffff"} />
           ) : (
             <Text style={styles.text}>Save</Text>
           )}

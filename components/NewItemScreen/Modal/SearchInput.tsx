@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import { Ionicons } from "@expo/vector-icons";
-import colors from "../colors";
+import colors from "../../../colors";
 
 /**
  * Design of the search input used in @NewItemScreen

@@ -1,6 +1,6 @@
 import React from "react";
 
-import colors from "../../colors";
+import colors from "../../../colors";
 import {
   SimpleLineIcons,
   MaterialIcons,
@@ -74,6 +74,7 @@ const Cards = ({ data }) => {
       numColumns={2}
       style={{ marginTop: 20 }}
       keyExtractor={({ id }) => id.toString()}
+      scrollEnabled={false}
       renderItem={({ item, index }) => (
         <View
           style={[styles.container, { marginRight: index % 2 === 0 ? 20 : 0 }]}

@@ -3,7 +3,7 @@ import { TouchableWithoutFeedback } from "react-native";
 import { StyleSheet, Text } from "react-native";
 import { View } from "react-native";
 import { FontAwesome5, Ionicons } from "@expo/vector-icons";
-import colors from "../colors";
+import colors from "../../colors";
 import { LinearGradient } from "expo-linear-gradient";
 import { StackNavigationHelpers } from "@react-navigation/stack/lib/typescript/src/types";
 
@@ -107,7 +107,7 @@ const Card = ({
                       color: colors.tailwind.gray._400,
                       fontFamily: "Inter",
                       fontSize: 15,
-                      marginRight: 10,
+                      marginRight: 5,
                     }}
                   >
                     {t_p.toFixed(1)}g
@@ -130,7 +130,7 @@ const Card = ({
                       color: colors.tailwind.gray._400,
                       fontFamily: "Inter",
                       fontSize: 15,
-                      marginRight: 10,
+                      marginRight: 5,
                     }}
                   >
                     {t_f.toFixed(1)}g
@@ -153,7 +153,7 @@ const Card = ({
                       color: colors.tailwind.gray._400,
                       fontFamily: "Inter",
                       fontSize: 15,
-                      marginRight: 10,
+                      marginRight: 5,
                     }}
                   >
                     {t_c.toFixed(1)}g

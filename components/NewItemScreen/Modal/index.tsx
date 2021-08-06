@@ -7,11 +7,11 @@ import SaveButton from "./SaveButton";
 import Cards from "./Cards";
 import Inputs from "./Inputs";
 import TopNotch from "./TopNotch";
-import { ADD_FOOD, SET_FAVOURITE, useGlobal } from "../../global/provider";
-import nutritionix from "../../api/nutritionix";
-import { CommonItem } from "../../interface";
-import { todayDate } from "../../global/actions";
-import db from "../../global/db";
+import { ADD_FOOD, SET_FAVOURITE, useGlobal } from "../../../global/provider";
+import nutritionix from "../../../api/nutritionix";
+import { CommonItem } from "../../../interface";
+import { todayDate } from "../../../global/actions";
+import db from "../../../global/db";
 
 /**
  * Main modal component for showing the detailed data of the searched item
@@ -96,14 +96,7 @@ const ItemModal = ({ ID, visible, onDismiss, session }) => {
     >
       <View style={styles.overlay}>
         <View style={{ alignItems: "center", marginVertical: 5 }}>
-          <View
-            style={{
-              height: 4,
-              width: 45,
-              borderRadius: 10,
-              backgroundColor: "#fff",
-            }}
-          ></View>
+          <View style={styles.empty_box}></View>
         </View>
         {result && (
           <View style={[styles.container]}>
@@ -146,6 +139,12 @@ const styles = StyleSheet.create({
     padding: 20,
     justifyContent: "flex-end",
   },
+  empty_box: {
+    height: 4,
+    width: 45,
+    borderRadius: 10,
+    backgroundColor: "#fff",
+  }, // for spacing and centering
 });
 
 export default ItemModal;
