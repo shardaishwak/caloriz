@@ -18,6 +18,11 @@ const initializeRouteine = async (date) =>
  * @description Retrieve daily routine data
  * @param date
  * @returns daily routeine data;
+ * @type {
+ *  breakfast: Array<CommonItem>
+ *  lunch: Array<CommonItem>
+ *  ...
+ * }
  */
 const retrieveRouteine = async (date) =>
   JSON.parse(await AsyncStorage.getItem(date));
@@ -31,14 +36,19 @@ const retrieveRouteine = async (date) =>
  * @param data
  * @returns undefined
  */
-const addItem = async (state, date, field, data: CommonItem) =>
+
+// TODO: MOVE DATE TO THE STATE, SO NO NEED TO ADD THE DATE.
+const addItem = async (date, field, data: CommonItem) => {
+  const local_data = await retrieveRouteine(date);
+
   await AsyncStorage.setItem(
     date,
     JSON.stringify({
-      ...state.data[date],
-      breakfast: [...state.data[date][field], { ...data }],
-    })
+      ...local_data,
+      [field]: [...local_data[field], { ...data }],
+    }) // change breafast to [field]
   );
+};
 
 /**
  * @connect DELETE_ITEM
@@ -48,9 +58,9 @@ const addItem = async (state, date, field, data: CommonItem) =>
  * @param field
  * @param id
  */
-const deleteItem = async (state, date, field, id) => {
-  const field_data = [...state.data[date][field]];
-  console.log(field_data);
+const deleteItem = async (date, field, id) => {
+  const local_data = await retrieveRouteine(date);
+  const field_data = [...local_data[field]];
 
   const index = field_data.findIndex((a) => a.id === id);
   if (index < 0) return;
@@ -59,7 +69,7 @@ const deleteItem = async (state, date, field, id) => {
   await AsyncStorage.setItem(
     date,
     JSON.stringify({
-      ...state.data[date],
+      ...local_data,
       [field]: field_data,
     })
   );
