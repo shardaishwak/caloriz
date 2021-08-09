@@ -3,6 +3,7 @@ import { CommonItem } from "../interface";
 import actions from "./actions";
 import GlobalContext from "./context";
 
+export const SET_APP_DATE = "SET_APP_DATE";
 export const ADD_NEW_DATE = "ADD_NEW_DATE";
 export const ADD_FOOD = "ADD_FOOD";
 export const REMOVE_FOOD = "REMOVE_FOOD";
@@ -15,6 +16,8 @@ export const CLEAR_FAVOURITES = "CLEAR_FAVOURITES";
 const reducer = (state, action) => {
   console.log("[ACTION] ", action.type);
   switch (action.type) {
+    case SET_APP_DATE:
+      return actions.setAppDate(state, action);
     case ADD_NEW_DATE:
       return actions.addNewDate(state, action);
     case ADD_DATA:
@@ -42,6 +45,7 @@ class GlobalProvider extends React.Component<{}, {}> {
   state = {
     data: {},
     favourites: [],
+    app_date: null,
   };
   _reducer = reducer;
   dispatch = (action) => this.setState(this._reducer(this.state, action));
@@ -62,7 +66,11 @@ class GlobalProvider extends React.Component<{}, {}> {
 
 export const useGlobal = () =>
   useContext<{
-    state: { data: Object; favourites: Array<CommonItem> };
+    state: {
+      data: Array<CommonItem>;
+      favourites: Array<CommonItem>;
+      app_date: string;
+    };
     dispatch;
   }>(GlobalContext);
 

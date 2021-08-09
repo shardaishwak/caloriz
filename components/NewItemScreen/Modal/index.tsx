@@ -20,7 +20,6 @@ import db from "../../../global/db";
  */
 const ItemModal = ({ ID, visible, onDismiss, session }) => {
   const { dispatch, state } = useGlobal();
-  const date = todayDate();
 
   const [type, set_type] = useState<string>();
   const [result, set_result] = useState<any>();
@@ -70,11 +69,11 @@ const ItemModal = ({ ID, visible, onDismiss, session }) => {
     setSaveItemLoading(true);
 
     // Save to the database
-    await db.addItem(date, session, data);
+    await db.addItem(state.app_date, session, data);
     // Save to local state
     dispatch({
       type: ADD_FOOD,
-      payload: { date, field: session, data },
+      payload: { field: session, data },
     });
     setSaveItemLoading(false);
     onDismiss();

@@ -23,8 +23,7 @@ import db from "../global/db";
 const MainScreen = (props) => {
   const { state } = useGlobal();
   // default, pass it from the main screen as the user takes a new date
-  const date = todayDate();
-  const date_data = (state.data[date] as AppDate) || [];
+  const date_data = state.data || [];
 
   let target = 7000;
   let current = 0;
@@ -73,7 +72,6 @@ const MainScreen = (props) => {
           sessions={["breakfast", "lunch"]} // All the card sessions to show
           date_data={date_data} // Current state date based data
           navigation={props.navigation}
-          date={date} // Currest state date
         />
       </ScrollView>
     </SafeAreaView>
@@ -199,7 +197,7 @@ const Progresses = ({ progress_data }) => {
  * The <Card /> component is rendered to give design
  * For each card, the items that are consumed on that date and session are displayed using the <Item /> component
  */
-const RenderCards = ({ sessions, date_data, navigation, date }) => (
+const RenderCards = ({ sessions, date_data, navigation }) => (
   <View>
     {sessions.map((session) => {
       let total_calories = 0;
@@ -235,7 +233,6 @@ const RenderCards = ({ sessions, date_data, navigation, date }) => (
               protein={item.protein}
               id={item.id}
               session={session}
-              date={date}
               key={item.id as string}
             />
           ))}
@@ -255,7 +252,6 @@ const Item = ({
   food_name,
   id,
   session,
-  date,
   calories,
   sugar,
   protein,
@@ -264,16 +260,15 @@ const Item = ({
   food_name: string;
   id: string | number | number[];
   session: Session;
-  date: string;
   calories: number;
   sugar: number;
   protein: number;
   fat: number;
 }) => {
-  const { dispatch } = useGlobal();
+  const { state, dispatch } = useGlobal();
   const deleteItem = async () => {
-    await db.deleteItem(date, session, id);
-    dispatch({ type: REMOVE_FOOD, payload: { date, field: session, id } });
+    await db.deleteItem(state.app_date, session, id);
+    dispatch({ type: REMOVE_FOOD, payload: { field: session, id } });
   };
   return (
     <View style={{ marginVertical: 10 }}>

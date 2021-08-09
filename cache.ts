@@ -6,6 +6,7 @@ import {
   ADD_NEW_DATE,
   ADD_DATA,
   INITIALIZE_FAVOURITES,
+  SET_APP_DATE,
 } from "./global/provider";
 import log from "./log";
 
@@ -29,23 +30,25 @@ const LoadFonts = async () => {
  * @param dispatch (update state)
  */
 const LoadData = async (dispatch) => {
+  const initial_date = todayDate();
   // Retieve daily record.
-  const is_data = await db.retrieveRouteine(todayDate());
+  const is_data = await db.retrieveRouteine(initial_date);
   log("[DATABASE]", is_data);
 
   //await AsyncStorage.setItem(todayDate(), JSON.stringify(setDefaultDate()));
   // Check if a daily record is present, create new if not
   if (!is_data || Object.keys(is_data).length === 0) {
     // Create a new daily record [db]
-    await db.initializeRouteine(todayDate());
+    await db.initializeRouteine(initial_date);
     // Create a new daily record [state]
-    dispatch({ type: ADD_NEW_DATE, date: todayDate() });
+    dispatch({ type: ADD_NEW_DATE, date: initial_date });
   } else {
     // load daily record to state
-    dispatch({ type: ADD_DATA, payload: is_data, date: todayDate() });
+    dispatch({ type: ADD_DATA, payload: is_data, date: initial_date });
   }
   // await db.clearFavourites();
   dispatch({ type: INITIALIZE_FAVOURITES, data: await db.getFavourites() });
+  dispatch({ type: SET_APP_DATE, date: initial_date });
 };
 
 /**

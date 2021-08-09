@@ -1,32 +1,26 @@
 import { AppDate } from "../interface";
 
-/** =========================== ITEM ================ */
 /**
- * @description check date availability in the state
+ * @description Set the app date
  * @param state
  * @param date
- * @returns boolean
  */
-const isDate = (state, date) => state.data[date];
+const setAppDate = (state, { date }) => ({
+  ...state,
+  app_date: date,
+});
+
+/** =========================== ROUTEINE RECORD ================ */
 
 /**
  * @connect db.initializeRouteine
  * @description Add a new date to the state
  * @param state
- * @param action {date}
- * @returns new state
  */
-const addNewDate = (state, { date }) => {
-  if (isDate(state, date)) return;
-
-  // update the phone storage directly too.
-
+const addNewDate = (state, _) => {
   return {
     ...state,
-    data: {
-      ...state.data,
-      [date]: defaultDate,
-    },
+    data: setDefaultDate(),
   };
 };
 
@@ -34,16 +28,12 @@ const addNewDate = (state, { date }) => {
  * @connect db.retrieveRouteine
  * @description Load a daily routeine data
  * @param state
- * @param action {payload, date}
- * @returns
+ * @param action {payload}
  */
-const addData = (state, { payload, date }) => {
+const addData = (state, { payload }) => {
   return {
     ...state,
-    data: {
-      ...state.data,
-      [date]: payload,
-    },
+    data: payload,
   };
 };
 
@@ -51,17 +41,14 @@ const addData = (state, { payload, date }) => {
  * @connect db.addItem
  * @description Add a new item to the state;
  * @param state
- * @param payload {date, field, data}
- * @returns new state
+ * @param payload { field, data}
  */
 const addFood = (state, { payload: { date, field, data } }) => {
   return {
+    ...state,
     data: {
       ...state.data,
-      [date]: {
-        ...state.data[date],
-        [field]: [...state.data[date][field], data],
-      },
+      [field]: [...state.data[field], data],
     },
   };
 };
@@ -70,11 +57,11 @@ const addFood = (state, { payload: { date, field, data } }) => {
  * @connect db.deleteItem
  * @description Remove a food from the state
  * @param state
- * @param action {date, field, id}
+ * @param action { field, id}
  * @returns new state
  */
-const removeFood = (state, { payload: { date, field, id } }) => {
-  const new_field = [...state.data[date][field]];
+const removeFood = (state, { payload: { field, id } }) => {
+  const new_field = [...state.data[field]];
   const index = new_field.findIndex((a) => a.id === id);
   if (index < 0) return;
   new_field.splice(index, 1);
@@ -83,10 +70,8 @@ const removeFood = (state, { payload: { date, field, id } }) => {
     ...state,
     data: {
       ...state.data,
-      [date]: {
-        ...state.data[date],
-        [field]: new_field,
-      },
+
+      [field]: new_field,
     },
   };
 };
@@ -183,6 +168,7 @@ export const todayDate = () => {
 };
 
 export default {
+  setAppDate,
   addNewDate,
   addFood,
   removeFood,

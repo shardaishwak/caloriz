@@ -39,8 +39,6 @@ const NewItemScreen = (props) => {
   const [modal, setModal] = useState<boolean>(false);
   const [modalItemID, setModalItemID] = useState<string>();
 
-  const date = todayDate();
-
   /**
    * Search for 20 foods from the database for a particular query
    * The data is filtered to take only desired fields of interface SearchCommonItem
@@ -103,7 +101,7 @@ const NewItemScreen = (props) => {
         {results && results.length > 0 ? (
           <SearchResultRender OpenModal={OpenModal} items={results} />
         ) : (
-          <FavouritesRender session={session} date={date} /> // render the favourite list here.
+          <FavouritesRender session={session} /> // render the favourite list here.
         )}
         {modal && modalItemID && (
           <ItemModal
@@ -164,7 +162,7 @@ const SearchResultRender = ({
  * Render the favourite item list
  * The data is taken from the loca state
  */
-const FavouritesRender = ({ session, date }) => {
+const FavouritesRender = ({ session }) => {
   const {
     state: { favourites },
   } = useGlobal();
@@ -172,7 +170,6 @@ const FavouritesRender = ({ session, date }) => {
     <View style={{ margin: 20 }}>
       {favourites.map((favourite) => (
         <FavouriteCard
-          date={date}
           key={favourite.id as number}
           item={favourite}
           session={session}
@@ -187,8 +184,8 @@ const FavouritesRender = ({ session, date }) => {
  * @requires item (CommonItem)
  * @requires session (Fields)
  */
-const FavouriteCard = ({ item, session, date }) => {
-  const { dispatch } = useGlobal();
+const FavouriteCard = ({ item, session }) => {
+  const { state, dispatch } = useGlobal();
   // The state contains the ID of the added item
   const [isAdded, setIsAdded] = useState(null); // contains the new id of the added product
   const { food_name, serving_qty, serving_unit, calories, quantity } = item;
@@ -201,7 +198,7 @@ const FavouriteCard = ({ item, session, date }) => {
    */
   const addItem = async () => {
     const ID = uuid.v4();
-    await db.addItem(date, session, {
+    await db.addItem(state.app_date, session, {
       ...item,
       id: ID,
       consumed_at: Date.now(),
@@ -209,7 +206,6 @@ const FavouriteCard = ({ item, session, date }) => {
     dispatch({
       type: ADD_FOOD,
       payload: {
-        date: date,
         field: session,
         data: {
           ...item,
@@ -226,10 +222,10 @@ const FavouriteCard = ({ item, session, date }) => {
    * Remove an item from the consumed list.
    */
   const removeItem = async () => {
-    await db.deleteItem(date, session, isAdded);
+    await db.deleteItem(state.app_date, session, isAdded);
     dispatch({
       type: REMOVE_FOOD,
-      payload: { date, field: session, id: isAdded },
+      payload: { field: session, id: isAdded },
     });
     setIsAdded(null);
   };
