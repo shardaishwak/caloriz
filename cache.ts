@@ -29,8 +29,7 @@ const LoadFonts = async () => {
  * @description Run cache -> fetch local data + add state + fonts
  * @param dispatch (update state)
  */
-const LoadData = async (dispatch) => {
-  const initial_date = todayDate();
+export const LoadData = async (initial_date, dispatch) => {
   // Retieve daily record.
   const is_data = await db.retrieveRouteine(initial_date);
   log("[DATABASE]", is_data);
@@ -59,7 +58,7 @@ const LoadCache = async (global) => {
   log("[CACHE]", "Initialized");
 
   await LoadFonts();
-  await LoadData(global.dispatch);
+  await LoadData(todayDate(), global.dispatch);
 
   log("[CACHE]", "Finished");
 };
