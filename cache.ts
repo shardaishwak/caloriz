@@ -1,6 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Font from "expo-font";
-import { setDefaultDate, todayDate } from "./global/actions";
 import db from "./global/db";
 import {
   ADD_NEW_DATE,
@@ -9,6 +8,7 @@ import {
   SET_APP_DATE,
 } from "./global/provider";
 import log from "./log";
+import { todayDate } from "./time";
 
 // Load all the fonts
 /**

@@ -1,5 +1,6 @@
 import React from "react";
 import {
+  FlatList,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -9,8 +10,7 @@ import {
 } from "react-native";
 
 import { REMOVE_FOOD, useGlobal } from "../global/provider";
-import { todayDate } from "../global/actions";
-import { AppDate, CommonItem, Session } from "../interface";
+import { CommonItem, Session } from "../interface";
 
 import Progress from "../components/MainScreen/Progress";
 import Header from "../components/Header";
@@ -19,13 +19,22 @@ import { Ionicons } from "@expo/vector-icons";
 
 import colors from "../colors";
 import db from "../global/db";
+import {
+  daysInMonth,
+  extract_data_from_date,
+  formatted_get_week_of_date,
+  transform_week_to_string,
+} from "../time";
+import { LoadData } from "../cache";
 
 const MainScreen = (props) => {
-  const { state } = useGlobal();
+  const {
+    state: { data },
+  } = useGlobal();
   // default, pass it from the main screen as the user takes a new date
-  const date_data = state.data || [];
+  const date_data = data || [];
 
-  let target = 7000;
+  let target = 3000;
   let current = 0;
 
   // Retrive data of a prticular date from state
@@ -61,13 +70,18 @@ const MainScreen = (props) => {
     });
   });
 
+  /**
+   * Create a date list for the particular month and year
+   */
+
   return (
     <SafeAreaView style={styles.container}>
       <Header navigation={props.navigation} />
 
       <ScrollView showsVerticalScrollIndicator={false}>
+        <Dater />
         <Calorimeter target={target} current={current} />
-        <Progresses progress_data={progress_data} />
+        <Progresses progress_data={progress_data} total_calories={target} />
         <RenderCards
           sessions={["breakfast", "lunch"]} // All the card sessions to show
           date_data={date_data} // Current state date based data
@@ -75,6 +89,82 @@ const MainScreen = (props) => {
         />
       </ScrollView>
     </SafeAreaView>
+  );
+};
+
+const Dater = () => {
+  const {
+    state: { app_date },
+    dispatch,
+  } = useGlobal();
+  const unformatted_app_date = extract_data_from_date(app_date);
+  const dates = daysInMonth(unformatted_app_date[1], unformatted_app_date[2]);
+
+  return (
+    <FlatList
+      horizontal
+      showsHorizontalScrollIndicator={false}
+      initialScrollIndex={parseInt(unformatted_app_date[0]) - 1}
+      style={{ paddingHorizontal: 20, marginVertical: 10 }}
+      keyExtractor={(item) => item}
+      data={dates}
+      renderItem={({ item }) => {
+        let date = item;
+        const week = transform_week_to_string(
+          formatted_get_week_of_date(date)
+        ).slice(0, 3);
+        const is_current_date = date === app_date;
+        return (
+          <TouchableWithoutFeedback onPress={() => LoadData(date, dispatch)}>
+            <View
+              style={{
+                alignItems: "center",
+                borderRadius: 999,
+                width: 50,
+                paddingVertical: 10,
+                backgroundColor: is_current_date
+                  ? colors.app.green_100
+                  : "#fff",
+                marginHorizontal: 5,
+              }}
+            >
+              <Text
+                style={{
+                  textTransform: "capitalize",
+                  fontFamily: "Inter-Semibold",
+                  color: is_current_date ? "#fff" : colors.app.dark_300,
+                  marginBottom: 5,
+                  marginTop: 5,
+                }}
+              >
+                {week}
+              </Text>
+              <View
+                style={{
+                  width: 30,
+                  height: 30,
+                  backgroundColor: "#fff",
+                  borderRadius: 999,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Text
+                  style={{
+                    color: is_current_date
+                      ? colors.app.green_100
+                      : colors.app.dark_500,
+                    fontFamily: "Inter-Medium",
+                  }}
+                >
+                  {extract_data_from_date(date)[0]}
+                </Text>
+              </View>
+            </View>
+          </TouchableWithoutFeedback>
+        );
+      }}
+    />
   );
 };
 
@@ -124,19 +214,19 @@ const Calorimeter = ({
  * The data is taken from the main state
  */
 
-const Progresses = ({ progress_data }) => {
+const Progresses = ({ progress_data, total_calories }) => {
   const user_mass = 55; // add it to state;
-  const total_fat_to_consume = user_mass * 0.4;
+  const total_fat_to_consume = (total_calories * 60.5) / 2000;
   const total_protein_to_consume = user_mass * 1; // based on total_calories_daily consumption
-  const total_carbs_to_consume = user_mass * 0.5; // based on total_calories_daily/8;
+  const total_carbs_to_consume = (total_calories * 275) / 2000; // based on total_calories_daily/8;
 
   // 0.4g per mass is the prescribed journal fat
   const fat_perc = Math.round((100 * progress_data.fat) / total_fat_to_consume);
-  // 0.5g per mass is the prescribed journal fat
+  // 2000:275 = calories : carbohydrates
   const carb_perc = Math.round(
     (100 * progress_data.fat) / total_carbs_to_consume
   );
-  // 0.8g per mass is the prescribed journal fat
+  // 3000:60.5 = calroeis: fat
   const protein_perc = Math.round(
     (100 * progress_data.fat) / total_protein_to_consume
   );

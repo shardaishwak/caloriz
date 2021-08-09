@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import { CommonItem } from "../interface";
+import log from "../log";
 import actions from "./actions";
 import GlobalContext from "./context";
 
@@ -14,7 +15,7 @@ export const REMOVE_FAVOURITE = "REMOVE_FAVOURITE";
 export const CLEAR_FAVOURITES = "CLEAR_FAVOURITES";
 
 const reducer = (state, action) => {
-  console.log("[ACTION] ", action.type);
+  log("[ACTION] ", action.type);
   switch (action.type) {
     case SET_APP_DATE:
       return actions.setAppDate(state, action);
@@ -50,7 +51,7 @@ class GlobalProvider extends React.Component<{}, {}> {
   _reducer = reducer;
   dispatch = (action) => this.setState(this._reducer(this.state, action));
   render() {
-    console.log("[STATE]", this.state);
+    log("[STATE]", this.state);
     return (
       <GlobalContext.Provider
         value={{

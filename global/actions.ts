@@ -159,13 +159,6 @@ export const setDefaultDate = () => defaultDate;
  *@description Return fomatted string of date as ID
  * @returns string
  */
-export const todayDate = () => {
-  const date = new Date();
-  const id_date =
-    date.getDate() + "-" + date.getMonth() + "-" + date.getFullYear();
-
-  return id_date;
-};
 
 export default {
   setAppDate,
