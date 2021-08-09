@@ -7,6 +7,7 @@ import {
   ADD_DATA,
   INITIALIZE_FAVOURITES,
 } from "./global/provider";
+import log from "./log";
 
 // Load all the fonts
 /**
@@ -30,7 +31,7 @@ const LoadFonts = async () => {
 const LoadData = async (dispatch) => {
   // Retieve daily record.
   const is_data = await db.retrieveRouteine(todayDate());
-  console.log("DB: ", is_data);
+  log("[DATABASE]", is_data);
 
   //await AsyncStorage.setItem(todayDate(), JSON.stringify(setDefaultDate()));
   // Check if a daily record is present, create new if not
@@ -52,9 +53,11 @@ const LoadData = async (dispatch) => {
  * @param global (dispatch)
  */
 const LoadCache = async (global) => {
+  log("[CACHE]", "Initialized");
+
   await LoadFonts();
   await LoadData(global.dispatch);
 
-  console.log("Cached");
+  log("[CACHE]", "Finished");
 };
 export default LoadCache;

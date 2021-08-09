@@ -1,6 +1,5 @@
 import React from "react";
 import {
-  Pressable,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -11,11 +10,11 @@ import {
 
 import { REMOVE_FOOD, useGlobal } from "../global/provider";
 import { todayDate } from "../global/actions";
-import { AppDate, CommonItem, Fields } from "../interface";
+import { AppDate, CommonItem, Session } from "../interface";
 
-import Progress from "../components/Progress";
+import Progress from "../components/MainScreen/Progress";
 import Header from "../components/Header";
-import Card from "../components/Card";
+import Card from "../components/MainScreen/Card";
 import { Ionicons } from "@expo/vector-icons";
 
 import colors from "../colors";
@@ -45,7 +44,16 @@ const MainScreen = (props) => {
    * Loop throught all the daily cosumption to add up the interested values to show
    * The current total calories are also calculated
    */
-  Fields.map((field) => {
+  const fixed_sessions: Array<Session> = [
+    Session.breakfast,
+    Session.dessert,
+    Session.dinner,
+    Session.extra,
+    Session.lunch,
+    Session.second_breakfast,
+    Session.snack,
+  ];
+  fixed_sessions.map((field) => {
     date_data[field].forEach((item: CommonItem) => {
       progress_data.fat += item.fat * item.quantity;
       progress_data.carbohydrates = item.carbohydrates * item.quantity;
@@ -200,7 +208,6 @@ const RenderCards = ({ sessions, date_data, navigation, date }) => (
       let total_sugar = 0;
 
       const session_data = date_data[session];
-      console.log(date_data);
 
       session_data?.forEach((item: CommonItem) => {
         total_calories += item.calories * item.quantity;
@@ -256,16 +263,16 @@ const Item = ({
 }: {
   food_name: string;
   id: string | number | number[];
-  session: string;
+  session: Session;
   date: string;
   calories: number;
   sugar: number;
   protein: number;
   fat: number;
 }) => {
-  const { state, dispatch } = useGlobal();
+  const { dispatch } = useGlobal();
   const deleteItem = async () => {
-    await db.deleteItem(state, date, session, id);
+    await db.deleteItem(date, session, id);
     dispatch({ type: REMOVE_FOOD, payload: { date, field: session, id } });
   };
   return (

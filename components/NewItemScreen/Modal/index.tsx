@@ -70,7 +70,7 @@ const ItemModal = ({ ID, visible, onDismiss, session }) => {
     setSaveItemLoading(true);
 
     // Save to the database
-    await db.addItem(state, date, session, data);
+    await db.addItem(date, session, data);
     // Save to local state
     dispatch({
       type: ADD_FOOD,

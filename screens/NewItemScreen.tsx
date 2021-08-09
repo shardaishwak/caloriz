@@ -13,10 +13,10 @@ import { LinearGradient } from "expo-linear-gradient";
 import { FontAwesome5 } from "@expo/vector-icons";
 
 import Header from "../components/Header";
-import SearchInput from "../components/SearchInput";
-import ItemCard from "../components/ItemCard";
-import Searching_Svg from "../components/Searching_svg";
-import ItemModal from "../components/ItemModal";
+import SearchInput from "../components/NewItemScreen/Modal/SearchInput";
+import ItemCard from "../components/NewItemScreen/ItemCard";
+import Searching_Svg from "../components/NewItemScreen/Searching_svg";
+import ItemModal from "../components/NewItemScreen/Modal";
 
 import colors from "../colors";
 import nutritionix from "../api/nutritionix";
@@ -24,7 +24,12 @@ import { SearchCommonItem } from "../interface";
 
 import db from "../global/db";
 import { todayDate } from "../global/actions";
-import { ADD_FOOD, REMOVE_FOOD, useGlobal } from "../global/provider";
+import {
+  ADD_FOOD,
+  REMOVE_FAVOURITE,
+  REMOVE_FOOD,
+  useGlobal,
+} from "../global/provider";
 
 const NewItemScreen = (props) => {
   const session = props.route.params.session || "breakfast";
@@ -90,10 +95,12 @@ const NewItemScreen = (props) => {
           onSearch={Search}
           loading={loading}
         />
-        {results && results.length > 0 && (
+        {results && results.length > 0 ? (
           <Text style={styles.smallText}>Results</Text>
+        ) : (
+          <Text style={styles.smallText}>Your Favourites</Text>
         )}
-        {results.length > 0 ? (
+        {results && results.length > 0 ? (
           <SearchResultRender OpenModal={OpenModal} items={results} />
         ) : (
           <FavouritesRender session={session} date={date} /> // render the favourite list here.
@@ -181,7 +188,7 @@ const FavouritesRender = ({ session, date }) => {
  * @requires session (Fields)
  */
 const FavouriteCard = ({ item, session, date }) => {
-  const { state, dispatch } = useGlobal();
+  const { dispatch } = useGlobal();
   // The state contains the ID of the added item
   const [isAdded, setIsAdded] = useState(null); // contains the new id of the added product
   const { food_name, serving_qty, serving_unit, calories, quantity } = item;
@@ -194,7 +201,7 @@ const FavouriteCard = ({ item, session, date }) => {
    */
   const addItem = async () => {
     const ID = uuid.v4();
-    await db.addItem(state, date, session, {
+    await db.addItem(date, session, {
       ...item,
       id: ID,
       consumed_at: Date.now(),
@@ -217,15 +224,23 @@ const FavouriteCard = ({ item, session, date }) => {
   /**
    *
    * Remove an item from the consumed list.
-   * @deprecated remove the todayDate() and make it dynamic
    */
   const removeItem = async () => {
-    await db.deleteItem(state, date, session, isAdded);
+    await db.deleteItem(date, session, isAdded);
     dispatch({
       type: REMOVE_FOOD,
       payload: { date, field: session, id: isAdded },
     });
     setIsAdded(null);
+  };
+
+  const removeFavouriteItem = async () => {
+    await db.removeFavourite(item.food_name, item.calories);
+    dispatch({
+      type: REMOVE_FAVOURITE,
+      food_name: item.food_name,
+      calories: item.calories,
+    });
   };
   return (
     <View style={styles.foodCard_container}>
@@ -250,7 +265,7 @@ const FavouriteCard = ({ item, session, date }) => {
           {quantity} x {serving_unit} ({serving_qty}) / {calories} kcal
         </Text>
       </View>
-      <View>
+      <View style={{ flexDirection: "row", alignItems: "center" }}>
         <TouchableWithoutFeedback onPress={isAdded ? removeItem : addItem}>
           {isAdded ? (
             <LinearGradient
@@ -271,6 +286,15 @@ const FavouriteCard = ({ item, session, date }) => {
               <FontAwesome5 name="plus" size={15} color={"#fff"} />
             </LinearGradient>
           )}
+        </TouchableWithoutFeedback>
+        <TouchableWithoutFeedback onPress={removeFavouriteItem}>
+          <View style={{ marginLeft: 10 }}>
+            <FontAwesome5
+              name="trash-alt"
+              size={18}
+              color={colors.app.dark_200}
+            />
+          </View>
         </TouchableWithoutFeedback>
       </View>
     </View>

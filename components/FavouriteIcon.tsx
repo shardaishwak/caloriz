@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import { TouchableWithoutFeedback } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
-import { useGlobal } from "../global/provider";
+import { REMOVE_FAVOURITE, useGlobal } from "../global/provider";
+import db from "../global/db";
 
 /**
  * componet for managing on favourite click
@@ -10,6 +11,7 @@ import { useGlobal } from "../global/provider";
 const FavouriteIcon = ({ food_name, calories, onClick }) => {
   const {
     state: { favourites },
+    dispatch,
   } = useGlobal();
   const isActive = () =>
     favourites.findIndex(
@@ -17,8 +19,17 @@ const FavouriteIcon = ({ food_name, calories, onClick }) => {
     ) < 0
       ? false
       : true;
+
+  const removeFavourite = async () => {
+    await db.removeFavourite(food_name, calories);
+    dispatch({
+      type: REMOVE_FAVOURITE,
+      food_name: food_name,
+      calories: calories,
+    });
+  };
   return (
-    <TouchableWithoutFeedback onPress={onClick}>
+    <TouchableWithoutFeedback onPress={isActive() ? removeFavourite : onClick}>
       <AntDesign name={isActive() ? "star" : "staro"} size={20} />
     </TouchableWithoutFeedback>
   );

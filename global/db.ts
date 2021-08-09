@@ -120,6 +120,7 @@ const clearFavourites = async () => {
   await AsyncStorage.setItem("@favourites", JSON.stringify([]));
 };
 
+// make the name coherent with each other
 export default {
   addItem,
   deleteItem,

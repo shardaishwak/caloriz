@@ -32,6 +32,7 @@ export interface AppDate {
   snack: Array<CommonItem>;
   dinner: Array<CommonItem>;
   dessert: Array<CommonItem>;
+  extra: Array<CommonItem>;
 
   water: {
     cup_size: number;
@@ -39,14 +40,15 @@ export interface AppDate {
   };
 }
 
-export const Fields = [
-  "breakfast",
-  "second_breakfast",
-  "lunch",
-  "snack",
-  "dinner",
-  "dessert",
-];
+export enum Session {
+  breakfast = "breakfast",
+  second_breakfast = "second_breakfast",
+  lunch = "lunch",
+  snack = "snack",
+  dinner = "dinner",
+  dessert = "dessert",
+  extra = "extra",
+}
 
 /**
  *

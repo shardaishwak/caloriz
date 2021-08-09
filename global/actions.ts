@@ -75,9 +75,7 @@ const addFood = (state, { payload: { date, field, data } }) => {
  */
 const removeFood = (state, { payload: { date, field, id } }) => {
   const new_field = [...state.data[date][field]];
-  console.log(id);
   const index = new_field.findIndex((a) => a.id === id);
-  console.log(index);
   if (index < 0) return;
   new_field.splice(index, 1);
 
@@ -159,6 +157,7 @@ const defaultDate: AppDate = {
   snack: [],
   dinner: [],
   dessert: [],
+  extra: [],
   water: {
     cup_size: null,
     cup_qty: 0,

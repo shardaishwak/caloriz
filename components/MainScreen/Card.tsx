@@ -190,18 +190,7 @@ const Card = ({
           </View>
         </TouchableWithoutFeedback>
 
-        {open && (
-          <View
-            style={{
-              marginTop: 15,
-              paddingTop: 5,
-              borderTopWidth: 2,
-              borderTopColor: colors.app.dark_100,
-            }}
-          >
-            {props.children}
-          </View>
-        )}
+        {open && <View style={styles.children}>{props.children}</View>}
       </View>
     </View>
   );
@@ -213,6 +202,12 @@ const styles = StyleSheet.create({
     borderColor: colors.app.dark_100,
     borderRadius: 25,
     borderWidth: 3,
+  },
+  children: {
+    marginTop: 15,
+    paddingTop: 5,
+    borderTopWidth: 2,
+    borderTopColor: colors.app.dark_100,
   },
 });
 
