@@ -50,15 +50,9 @@ export enum Session {
   extra = "extra",
 }
 
-/**
- *
- * {
- *   [date]: {
- *    breakfast: [Item] ,
- *    lunch: [Item],
- *    dinner: [Item],
- *    total_calories: number,
- *    total
- *  }
- * }
- */
+export interface State {
+  app_date: string;
+  data: AppDate;
+  new_date_loading: boolean;
+  favourites: Array<CommonItem>;
+}

@@ -1,6 +1,11 @@
-import { AppDate } from "../interface";
+import { AppDate, CommonItem, Session, State } from "../interface";
 
-const newDateLoading = (state, action) => {
+/**
+ * @description Show the splash screen while the new date data is loading
+ * @param state
+ * @param action {payload(boolean)}
+ */
+const newDateLoading = (state: State, action: { payload: boolean }) => {
   return {
     ...state,
     new_date_loading: action.payload || !state.new_date_loading,
@@ -12,7 +17,7 @@ const newDateLoading = (state, action) => {
  * @param state
  * @param date
  */
-const setAppDate = (state, { date }) => ({
+const setAppDate = (state: State, { date }: { date: string }) => ({
   ...state,
   app_date: date,
 });
@@ -24,7 +29,7 @@ const setAppDate = (state, { date }) => ({
  * @description Add a new date to the state
  * @param state
  */
-const addNewDate = (state, _) => {
+const addNewDate = (state: State, _) => {
   return {
     ...state,
     data: setDefaultDate(),
@@ -37,7 +42,7 @@ const addNewDate = (state, _) => {
  * @param state
  * @param action {payload}
  */
-const addData = (state, { payload }) => {
+const addData = (state: State, { payload }: { payload: CommonItem }) => {
   return {
     ...state,
     data: payload,
@@ -50,7 +55,18 @@ const addData = (state, { payload }) => {
  * @param state
  * @param payload { field, data}
  */
-const addFood = (state, { payload: { date, field, data } }) => {
+const addFood = (
+  state: State,
+  {
+    payload: { date, field, data },
+  }: {
+    payload: {
+      date: string;
+      field: Session;
+      data: CommonItem;
+    };
+  }
+) => {
   return {
     ...state,
     data: {
@@ -67,7 +83,10 @@ const addFood = (state, { payload: { date, field, data } }) => {
  * @param action { field, id}
  * @returns new state
  */
-const removeFood = (state, { payload: { field, id } }) => {
+const removeFood = (
+  state: State,
+  { payload: { field, id } }: { payload: { field: Session; id: string } }
+) => {
   const new_field = [...state.data[field]];
   const index = new_field.findIndex((a) => a.id === id);
   if (index < 0) return;
@@ -92,7 +111,10 @@ const removeFood = (state, { payload: { field, id } }) => {
  * @returns undefined
  */
 
-const initializeFavourites = (state, { data }) => {
+const initializeFavourites = (
+  state: State,
+  { data }: { data: Array<CommonItem> }
+) => {
   return {
     ...state,
     favourites: data,
@@ -106,7 +128,7 @@ const initializeFavourites = (state, { data }) => {
  * @param payload {item}
  * @returns undefined
  */
-const setFavourite = (state, { item }) => {
+const setFavourite = (state: State, { item }: { item: CommonItem }) => {
   return {
     ...state,
     favourites: [...state.favourites, item],
@@ -120,7 +142,10 @@ const setFavourite = (state, { item }) => {
  * @param payload {food_name, calories}
  * @returns
  */
-const removeFavourite = (state, { food_name, calories }) => {
+const removeFavourite = (
+  state: State,
+  { food_name, calories }: { food_name: string; calories: number }
+) => {
   const favourites = state.favourites;
   const index = favourites.findIndex(
     (a) => a.food_name === food_name && a.calories === calories
@@ -136,7 +161,7 @@ const removeFavourite = (state, { food_name, calories }) => {
  * @connect db.clearFavourites
  * @description Clear all the favourite list from the state
  */
-const clearFavourites = (state, action) => ({
+const clearFavourites = (state: State, _) => ({
   ...state,
   favourites: [],
 });

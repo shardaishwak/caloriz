@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { CommonItem } from "../interface";
+import { CommonItem, State } from "../interface";
 import log from "../log";
 import actions from "./actions";
 import GlobalContext from "./context";
@@ -45,9 +45,9 @@ const reducer = (state, action) => {
   return state;
 };
 
-class GlobalProvider extends React.Component<{}, {}> {
+class GlobalProvider extends React.Component<{}, State> {
   state = {
-    data: {},
+    data: null,
     favourites: [],
     app_date: null,
     new_date_loading: false,
@@ -71,11 +71,7 @@ class GlobalProvider extends React.Component<{}, {}> {
 
 export const useGlobal = () =>
   useContext<{
-    state: {
-      data: Array<CommonItem>;
-      favourites: Array<CommonItem>;
-      app_date: string;
-    };
+    state: State;
     dispatch;
   }>(GlobalContext);
 

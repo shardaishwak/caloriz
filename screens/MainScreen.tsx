@@ -128,7 +128,7 @@ const Dater = () => {
               style={{
                 alignItems: "center",
                 borderRadius: 999,
-                width: 50,
+                width: 45,
                 paddingVertical: 10,
                 backgroundColor: is_current_date
                   ? colors.app.green_100

@@ -23,7 +23,6 @@ import nutritionix from "../api/nutritionix";
 import { SearchCommonItem } from "../interface";
 
 import db from "../global/db";
-import { todayDate } from "../global/actions";
 import {
   ADD_FOOD,
   REMOVE_FAVOURITE,
@@ -186,9 +185,11 @@ const FavouritesRender = ({ session }) => {
  */
 const FavouriteCard = ({ item, session }) => {
   const { state, dispatch } = useGlobal();
+  const { food_name, serving_qty, serving_unit, calories, quantity } = item;
+
   // The state contains the ID of the added item
   const [isAdded, setIsAdded] = useState(null); // contains the new id of the added product
-  const { food_name, serving_qty, serving_unit, calories, quantity } = item;
+  const [number, setNumber] = useState(0);
 
   /**
    * Add a new item to the daily list
@@ -202,6 +203,7 @@ const FavouriteCard = ({ item, session }) => {
       ...item,
       id: ID,
       consumed_at: Date.now(),
+      quantity: number || 1,
     });
     dispatch({
       type: ADD_FOOD,
@@ -211,10 +213,12 @@ const FavouriteCard = ({ item, session }) => {
           ...item,
           id: ID,
           consumed_at: Date.now(),
+          quantity: number || 1,
         },
       },
     });
-    setIsAdded(true);
+    setIsAdded(ID);
+    setNumber(0);
   };
 
   /**
@@ -240,7 +244,7 @@ const FavouriteCard = ({ item, session }) => {
   };
   return (
     <View style={styles.foodCard_container}>
-      <View>
+      <View style={{ flex: 1 }}>
         <Text
           style={{
             color: colors.app.dark_600,
@@ -256,42 +260,85 @@ const FavouriteCard = ({ item, session }) => {
             marginTop: 2,
             color: colors.app.dark_300,
             fontFamily: "Inter",
+            flexWrap: "wrap",
           }}
         >
           {quantity} x {serving_unit} ({serving_qty}) / {calories} kcal
         </Text>
       </View>
       <View style={{ flexDirection: "row", alignItems: "center" }}>
-        <TouchableWithoutFeedback onPress={isAdded ? removeItem : addItem}>
-          {isAdded ? (
-            <LinearGradient
-              colors={[colors.tailwind.red._300, colors.tailwind.red._400]}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={styles.gradient_button}
+        {isAdded ? (
+          <TouchableWithoutFeedback onPress={removeItem}>
+            <View style={{ marginLeft: 10 }}>
+              <LinearGradient
+                colors={[colors.tailwind.red._300, colors.tailwind.red._400]}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                style={styles.gradient_button}
+              >
+                <FontAwesome5 name="minus" size={13} color={"#fff"} />
+              </LinearGradient>
+            </View>
+          </TouchableWithoutFeedback>
+        ) : (
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <TouchableWithoutFeedback
+              onPress={(number > 0 && (() => setNumber(number - 1))) || null}
             >
-              <FontAwesome5 name="times" size={15} color={"#fff"} />
-            </LinearGradient>
-          ) : (
-            <LinearGradient
-              colors={[colors.tailwind.green._300, colors.tailwind.green._400]}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={styles.gradient_button}
+              <FontAwesome5
+                name="chevron-left"
+                size={15}
+                color={number > 0 ? colors.app.dark_300 : colors.app.dark_200}
+              />
+            </TouchableWithoutFeedback>
+            <Text
+              style={{
+                color: number === 0 ? colors.app.dark_200 : colors.app.dark_400,
+                fontFamily: "Inter-Medium",
+                marginHorizontal: 7.5,
+              }}
             >
-              <FontAwesome5 name="plus" size={15} color={"#fff"} />
-            </LinearGradient>
-          )}
-        </TouchableWithoutFeedback>
-        <TouchableWithoutFeedback onPress={removeFavouriteItem}>
-          <View style={{ marginLeft: 10 }}>
-            <FontAwesome5
-              name="trash-alt"
-              size={18}
-              color={colors.app.dark_200}
-            />
+              {number}
+            </Text>
+            <TouchableWithoutFeedback onPress={() => setNumber(number + 1)}>
+              <FontAwesome5
+                name="chevron-right"
+                size={15}
+                color={colors.app.dark_300}
+              />
+            </TouchableWithoutFeedback>
           </View>
-        </TouchableWithoutFeedback>
+        )}
+        {number > 0 ? (
+          <TouchableWithoutFeedback onPress={addItem}>
+            <View style={{ marginLeft: 10 }}>
+              <LinearGradient
+                colors={[
+                  colors.tailwind.green._300,
+                  colors.tailwind.green._400,
+                ]}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                style={styles.gradient_button}
+              >
+                <FontAwesome5 name="plus" size={15} color={"#fff"} />
+              </LinearGradient>
+            </View>
+          </TouchableWithoutFeedback>
+        ) : (
+          <TouchableWithoutFeedback onPress={removeFavouriteItem}>
+            <View style={{ marginLeft: 10 }}>
+              <LinearGradient
+                colors={[colors.tailwind.red._300, colors.tailwind.red._400]}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                style={styles.gradient_button}
+              >
+                <FontAwesome5 name="trash-alt" size={13} color={"#fff"} />
+              </LinearGradient>
+            </View>
+          </TouchableWithoutFeedback>
+        )}
       </View>
     </View>
   );
