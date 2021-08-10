@@ -1,5 +1,12 @@
 import { AppDate } from "../interface";
 
+const newDateLoading = (state, action) => {
+  return {
+    ...state,
+    new_date_loading: action.payload || !state.new_date_loading,
+  };
+};
+
 /**
  * @description Set the app date
  * @param state
@@ -161,6 +168,7 @@ export const setDefaultDate = () => defaultDate;
  */
 
 export default {
+  newDateLoading,
   setAppDate,
   addNewDate,
   addFood,

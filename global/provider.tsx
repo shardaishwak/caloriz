@@ -4,6 +4,7 @@ import log from "../log";
 import actions from "./actions";
 import GlobalContext from "./context";
 
+export const NEW_DATE_LOADING = "NEW_DATE_LOADING";
 export const SET_APP_DATE = "SET_APP_DATE";
 export const ADD_NEW_DATE = "ADD_NEW_DATE";
 export const ADD_FOOD = "ADD_FOOD";
@@ -17,6 +18,8 @@ export const CLEAR_FAVOURITES = "CLEAR_FAVOURITES";
 const reducer = (state, action) => {
   log("[ACTION] ", action.type);
   switch (action.type) {
+    case NEW_DATE_LOADING:
+      return actions.newDateLoading(state, action);
     case SET_APP_DATE:
       return actions.setAppDate(state, action);
     case ADD_NEW_DATE:
@@ -47,6 +50,7 @@ class GlobalProvider extends React.Component<{}, {}> {
     data: {},
     favourites: [],
     app_date: null,
+    new_date_loading: false,
   };
   _reducer = reducer;
   dispatch = (action) => this.setState(this._reducer(this.state, action));

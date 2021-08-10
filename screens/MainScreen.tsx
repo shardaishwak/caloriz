@@ -9,7 +9,7 @@ import {
   View,
 } from "react-native";
 
-import { REMOVE_FOOD, useGlobal } from "../global/provider";
+import { NEW_DATE_LOADING, REMOVE_FOOD, useGlobal } from "../global/provider";
 import { CommonItem, Session } from "../interface";
 
 import Progress from "../components/MainScreen/Progress";
@@ -23,6 +23,7 @@ import {
   daysInMonth,
   extract_data_from_date,
   formatted_get_week_of_date,
+  todayDate,
   transform_week_to_string,
 } from "../time";
 import { LoadData } from "../cache";
@@ -76,9 +77,9 @@ const MainScreen = (props) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header navigation={props.navigation} />
-
       <ScrollView showsVerticalScrollIndicator={false}>
+        <Header navigation={props.navigation} />
+
         <Dater />
         <Calorimeter target={target} current={current} />
         <Progresses progress_data={progress_data} total_calories={target} />
@@ -100,6 +101,12 @@ const Dater = () => {
   const unformatted_app_date = extract_data_from_date(app_date);
   const dates = daysInMonth(unformatted_app_date[1], unformatted_app_date[2]);
 
+  const LOAD_NEW_DATE = async (date) => {
+    dispatch({ type: NEW_DATE_LOADING, payload: true });
+    await LoadData(date, dispatch);
+    dispatch({ type: NEW_DATE_LOADING, payload: false });
+  };
+
   return (
     <FlatList
       horizontal
@@ -114,8 +121,9 @@ const Dater = () => {
           formatted_get_week_of_date(date)
         ).slice(0, 3);
         const is_current_date = date === app_date;
+        const today_date = todayDate();
         return (
-          <TouchableWithoutFeedback onPress={() => LoadData(date, dispatch)}>
+          <TouchableWithoutFeedback onPress={() => LOAD_NEW_DATE(date)}>
             <View
               style={{
                 alignItems: "center",
@@ -160,6 +168,16 @@ const Dater = () => {
                   {extract_data_from_date(date)[0]}
                 </Text>
               </View>
+              {today_date === date && !is_current_date && (
+                <View
+                  style={{
+                    backgroundColor: colors.app.green_100,
+                    width: 5,
+                    height: 5,
+                    borderRadius: 999,
+                  }}
+                ></View>
+              )}
             </View>
           </TouchableWithoutFeedback>
         );
