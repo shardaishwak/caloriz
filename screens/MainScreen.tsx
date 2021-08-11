@@ -80,6 +80,7 @@ const MainScreen = (props) => {
             Session.lunch,
             Session.snack,
             Session.dinner,
+            Session.dessert,
             Session.extra,
           ]} // All the card sessions to show
           date_data={date_data} // Current state date based data

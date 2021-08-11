@@ -20,7 +20,7 @@ export const transform_week_to_string = (week) =>
     "thursday",
     "friday",
     "saturday",
-  ][week];
+  ][parseInt(week)];
 
 export const transform_month_to_string = (month) =>
   [
@@ -36,7 +36,7 @@ export const transform_month_to_string = (month) =>
     "october",
     "november",
     "december",
-  ][month];
+  ][parseInt(month)];
 
 export const get_week_of_date = (day, month, year) =>
   new Date(moment().year(year).month(month).date(day).toISOString()).getDay();

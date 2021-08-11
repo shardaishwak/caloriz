@@ -29,8 +29,18 @@ import {
   REMOVE_FOOD,
   useGlobal,
 } from "../global/provider";
+import {
+  extract_data_from_date,
+  get_week_of_date,
+  todayDate,
+  transform_month_to_string,
+  transform_week_to_string,
+} from "../time";
 
 const NewItemScreen = (props) => {
+  const {
+    state: { app_date },
+  } = useGlobal();
   const session = props.route.params.session || "breakfast";
   const [results, setResults] = useState<Array<SearchCommonItem>>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -82,9 +92,36 @@ const NewItemScreen = (props) => {
     setModal(true);
   };
 
+  // Header date system
+  const is_today = todayDate() === app_date;
+  const decompose_date = extract_data_from_date(app_date);
+
+  const week = transform_week_to_string(
+    get_week_of_date(decompose_date[0], decompose_date[1], decompose_date[2])
+  );
+
+  const is_current_month = parseInt(decompose_date[1]) == new Date().getMonth();
+  const month = transform_month_to_string(decompose_date[1]);
+
+  const is_current_year =
+    parseInt(decompose_date[2]) === new Date().getFullYear();
+  const year = decompose_date[2];
+
   return (
     <SafeAreaView style={styles.container}>
-      <Header navigation={props.navigation} page={session} small={"Today"} />
+      <Header
+        navigation={props.navigation}
+        page={session}
+        small={
+          is_today
+            ? "Today"
+            : week +
+              " " +
+              decompose_date[0] +
+              ((!is_current_month && " " + month) || "") +
+              ((!is_current_year && " " + year) || "")
+        }
+      />
 
       <ScrollView>
         <SearchInput

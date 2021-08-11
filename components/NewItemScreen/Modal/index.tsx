@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import {
   Dimensions,
   ScrollView,
+  StatusBar,
   StyleSheet,
   TouchableWithoutFeedback,
 } from "react-native";
@@ -114,6 +115,11 @@ const ItemModal = ({ ID, visible, onDismiss, session }) => {
       coverScreen
     >
       <View style={styles.overlay}>
+        <StatusBar
+          backgroundColor={"rgba(0,0,0,.2)"}
+          animated
+          barStyle="dark-content"
+        />
         <View style={{ alignItems: "center", marginVertical: 5 }}>
           <View style={styles.empty_box}></View>
         </View>

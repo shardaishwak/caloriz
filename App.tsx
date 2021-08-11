@@ -72,7 +72,7 @@ class AppImpl extends React.Component<{ global }> {
           <StatusBar
             backgroundColor={colors.app.green_100}
             animated
-            barStyle="dark-content"
+            barStyle="light-content"
           />
           <Svg width="130" height="138" viewBox="0 0 458 150" fill="none">
             <Path

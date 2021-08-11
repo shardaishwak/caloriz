@@ -44,7 +44,7 @@ const Header = (props: {
               textTransform: "capitalize",
             }}
           >
-            {props.page}
+            {props.page.split("_").join(" ")}
           </Text>
           <Text
             style={{
@@ -52,6 +52,7 @@ const Header = (props: {
               fontFamily: "Inter",
               color: colors.app.dark_300,
               marginTop: -2,
+              textTransform: "capitalize",
             }}
           >
             {props.small}

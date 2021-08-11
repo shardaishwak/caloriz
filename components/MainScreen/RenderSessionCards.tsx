@@ -81,11 +81,25 @@ class RenderSessionCards extends React.Component<
           sliderWidth={Dimensions.get("screen").width}
           itemWidth={Dimensions.get("window").width}
           renderItem={this._renderItem}
+          firstItem={time_based_cards()}
         />
       </View>
     );
   }
 }
+
+const time_based_cards = () => {
+  const date = new Date();
+  const hours = date.getHours();
+
+  if (hours >= 5 && hours <= 9) return 0;
+  else if (hours > 9 && hours <= 12) return 1;
+  else if (hours > 12 && hours <= 15) return 2;
+  else if (hours > 15 && hours <= 18) return 3;
+  else if (hours > 18 && hours <= 21) return 4;
+  else if (hours > 21 && hours <= 22) return 5;
+  else return 6;
+};
 
 const styles_main = StyleSheet.create({
   top_text: {

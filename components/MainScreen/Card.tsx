@@ -58,7 +58,7 @@ const Card = ({
                     textTransform: "capitalize",
                   }}
                 >
-                  {title}
+                  {title.split("_").join(" ")}
                 </Text>
               </View>
               <Text
