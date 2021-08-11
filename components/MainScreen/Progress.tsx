@@ -44,6 +44,7 @@ const Progress = ({
             fontSize: 15,
             fontFamily: "Inter-Medium",
             color: colors.app.dark_500,
+            textTransform: "capitalize",
           }}
         >
           {title}

@@ -84,17 +84,7 @@ class AppImpl extends React.Component<{ global }> {
               fill="white"
             />
           </Svg>
-          <Text
-            style={{
-              color: colors.tailwind.gray._200,
-              fontFamily: "Inter-Medium",
-              marginTop: 5,
-              marginHorizontal: 30,
-              textAlign: "center",
-            }}
-          >
-            Retrieving data
-          </Text>
+
           <View style={{ marginTop: 10 }}>
             <ActivityIndicator size={25} color={"#fff"} />
           </View>

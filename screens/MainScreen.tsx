@@ -11,7 +11,7 @@ import {
 } from "react-native";
 
 import { NEW_DATE_LOADING, REMOVE_FOOD, useGlobal } from "../global/provider";
-import { AppDate, CommonItem, Session } from "../interface";
+import { AppDate, CommonItem, FoodNutrients, Session } from "../interface";
 
 import Progress from "../components/MainScreen/Progress";
 import Header from "../components/Header";
@@ -36,25 +36,14 @@ import RenderSessionCards from "../components/MainScreen/RenderSessionCards";
 
 const MainScreen = (props) => {
   const {
-    state: { data, app_date },
-    dispatch,
+    state: { data },
   } = useGlobal();
   // default, pass it from the main screen as the user takes a new date
   const date_data = data;
 
   let target = 3000;
-  let current = 0;
 
   // Retrive data of a prticular date from state
-
-  /**
-   * Calulcation of the totdal carbohydrates, fat and proteins
-   */
-  const progress_data = {
-    carbohydrates: 0,
-    fat: 0,
-    protein: 0,
-  };
 
   /**
    * Loop throught all the daily cosumption to add up the interested values to show
@@ -69,14 +58,8 @@ const MainScreen = (props) => {
     Session.second_breakfast,
     Session.snack,
   ];
-  fixed_sessions.map((field) => {
-    date_data[field].forEach((item: CommonItem) => {
-      progress_data.fat += item.fat * item.quantity;
-      progress_data.carbohydrates = item.carbohydrates * item.quantity;
-      progress_data.protein += item.protein * item.quantity;
-      current += item.calories * item.quantity;
-    });
-  });
+
+  const progress_data = GET_TOTAL_NUTRIENTS(date_data, fixed_sessions);
 
   /**
    * Create a date list for the particular month and year
@@ -88,7 +71,7 @@ const MainScreen = (props) => {
         <Header navigation={props.navigation} />
 
         <Dater />
-        <Calorimeter target={target} current={current} />
+        <Calorimeter target={target} current={progress_data.calories} />
         <Progresses progress_data={progress_data} total_calories={target} />
         <RenderSessionCards
           sessions={[
@@ -122,5 +105,39 @@ const styles = StyleSheet.create({
     fontFamily: "Inter",
   },
 });
+
+/**
+ * Calulcation of the total consumption of the nutrients
+ */
+
+const GET_TOTAL_NUTRIENTS = (data, sessions) => {
+  const progress_data: FoodNutrients = {
+    carbohydrates: 0,
+    fat: 0,
+    protein: 0,
+    sugars: 0,
+    cholesterol: 0,
+    potassium: 0,
+    sodium: 0,
+    dietary_fiber: 0,
+    saturated_fat: 0,
+    calories: 0,
+  };
+
+  sessions.map((field) => {
+    data[field].forEach((item: CommonItem) => {
+      progress_data.fat += item.fat * item.quantity;
+      progress_data.carbohydrates = item.carbohydrates * item.quantity;
+      progress_data.protein += item.protein * item.quantity;
+      progress_data.sugars += item.sugars * item.quantity;
+      progress_data.cholesterol += item.cholesterol * item.quantity;
+      progress_data.potassium += item.potassium * item.quantity;
+      progress_data.sodium += item.sodium * item.quantity;
+      progress_data.dietary_fiber += item.dietary_fiber * item.quantity;
+      progress_data.calories += item.calories * item.quantity;
+    });
+  });
+  return progress_data;
+};
 
 export default MainScreen;
