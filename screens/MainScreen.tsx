@@ -1,5 +1,6 @@
 import React from "react";
 import {
+  Dimensions,
   FlatList,
   SafeAreaView,
   ScrollView,
@@ -10,7 +11,7 @@ import {
 } from "react-native";
 
 import { NEW_DATE_LOADING, REMOVE_FOOD, useGlobal } from "../global/provider";
-import { CommonItem, Session } from "../interface";
+import { AppDate, CommonItem, Session } from "../interface";
 
 import Progress from "../components/MainScreen/Progress";
 import Header from "../components/Header";
@@ -27,13 +28,14 @@ import {
   transform_week_to_string,
 } from "../time";
 import { LoadData } from "../cache";
+import Carousel from "react-native-snap-carousel";
 
 const MainScreen = (props) => {
   const {
     state: { data },
   } = useGlobal();
   // default, pass it from the main screen as the user takes a new date
-  const date_data = data || [];
+  const date_data = data;
 
   let target = 3000;
   let current = 0;
@@ -84,7 +86,14 @@ const MainScreen = (props) => {
         <Calorimeter target={target} current={current} />
         <Progresses progress_data={progress_data} total_calories={target} />
         <RenderCards
-          sessions={["breakfast", "lunch"]} // All the card sessions to show
+          sessions={[
+            Session.breakfast,
+            Session.second_breakfast,
+            Session.lunch,
+            Session.snack,
+            Session.dinner,
+            Session.extra,
+          ]} // All the card sessions to show
           date_data={date_data} // Current state date based data
           navigation={props.navigation}
         />
@@ -305,51 +314,79 @@ const Progresses = ({ progress_data, total_calories }) => {
  * The <Card /> component is rendered to give design
  * For each card, the items that are consumed on that date and session are displayed using the <Item /> component
  */
-const RenderCards = ({ sessions, date_data, navigation }) => (
-  <View>
-    {sessions.map((session) => {
-      let total_calories = 0;
-      let total_fat = 0;
-      let total_protein = 0;
-      let total_sugar = 0;
+class RenderCards extends React.Component<
+  { sessions: Array<Session>; date_data: AppDate; navigation: any },
+  {}
+> {
+  carousel;
+  _renderItem = ({ item, index }) => {
+    const session = item;
+    let total_calories = 0;
+    let total_fat = 0;
+    let total_protein = 0;
+    let total_sugar = 0;
 
-      const session_data = date_data[session];
+    const session_data = this.props.date_data[session];
 
-      session_data?.forEach((item: CommonItem) => {
-        total_calories += item.calories * item.quantity;
-        total_fat += item.fat * item.quantity;
-        total_protein += item.protein * item.quantity;
-        total_sugar += item.sugars * item.quantity;
-      });
-      return (
-        <Card
-          title={session}
-          t_kcal={total_calories}
-          t_p={total_fat}
-          t_c={total_protein}
-          t_f={total_sugar}
-          key={session}
-          session={session}
-          navigation={navigation}
+    session_data?.forEach((item: CommonItem) => {
+      total_calories += item.calories * item.quantity;
+      total_fat += item.fat * item.quantity;
+      total_protein += item.protein * item.quantity;
+      total_sugar += item.sugars * item.quantity;
+    });
+    return (
+      <Card
+        title={session}
+        t_kcal={total_calories}
+        t_p={total_fat}
+        t_c={total_protein}
+        t_f={total_sugar}
+        key={session}
+        session={session}
+        navigation={this.props.navigation}
+      >
+        {session_data.map((item: CommonItem) => (
+          <Item
+            food_name={item.food_name}
+            calories={item.calories}
+            fat={item.fat}
+            sugar={item.sugars}
+            protein={item.protein}
+            id={item.id}
+            session={session}
+            key={item.id as string}
+          />
+        ))}
+        {/*<AddButton session={session} navigation={navigation} />*/}
+      </Card>
+    );
+  };
+  render() {
+    const { sessions } = this.props;
+    return (
+      <View>
+        <Text
+          style={{
+            fontSize: 15,
+            fontFamily: "Inter",
+            color: colors.app.dark_300,
+            textAlign: "center",
+          }}
         >
-          {session_data.map((item: CommonItem) => (
-            <Item
-              food_name={item.food_name}
-              calories={item.calories}
-              fat={item.fat}
-              sugar={item.sugars}
-              protein={item.protein}
-              id={item.id}
-              session={session}
-              key={item.id as string}
-            />
-          ))}
-          {/*<AddButton session={session} navigation={navigation} />*/}
-        </Card>
-      );
-    })}
-  </View>
-);
+          Daily consumption
+        </Text>
+        <Carousel
+          layout={"stack"}
+          ref={(ref) => (this.carousel = ref)}
+          data={sessions}
+          sliderWidth={Dimensions.get("screen").width}
+          itemWidth={Dimensions.get("window").width}
+          renderItem={this._renderItem}
+        />
+      </View>
+    );
+  }
+}
 // replace [a] with [session]
 
 /**

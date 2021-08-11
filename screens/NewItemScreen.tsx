@@ -286,7 +286,7 @@ const FavouriteCard = ({ item, session }) => {
               onPress={(number > 0 && (() => setNumber(number - 1))) || null}
             >
               <FontAwesome5
-                name="chevron-left"
+                name="plus"
                 size={15}
                 color={number > 0 ? colors.app.dark_300 : colors.app.dark_200}
               />
@@ -302,7 +302,7 @@ const FavouriteCard = ({ item, session }) => {
             </Text>
             <TouchableWithoutFeedback onPress={() => setNumber(number + 1)}>
               <FontAwesome5
-                name="chevron-right"
+                name="minus"
                 size={15}
                 color={colors.app.dark_300}
               />

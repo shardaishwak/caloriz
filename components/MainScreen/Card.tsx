@@ -202,6 +202,7 @@ const styles = StyleSheet.create({
     borderColor: colors.app.dark_100,
     borderRadius: 25,
     borderWidth: 3,
+    backgroundColor: "#fff",
   },
   children: {
     marginTop: 15,
