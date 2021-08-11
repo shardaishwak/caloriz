@@ -84,7 +84,7 @@ const NewItemScreen = (props) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header navigation={props.navigation} page={session} small="Today" />
+      <Header navigation={props.navigation} page={session} small={"Today"} />
 
       <ScrollView>
         <SearchInput
@@ -286,7 +286,7 @@ const FavouriteCard = ({ item, session }) => {
               onPress={(number > 0 && (() => setNumber(number - 1))) || null}
             >
               <FontAwesome5
-                name="plus"
+                name="minus"
                 size={15}
                 color={number > 0 ? colors.app.dark_300 : colors.app.dark_200}
               />
@@ -301,11 +301,7 @@ const FavouriteCard = ({ item, session }) => {
               {number}
             </Text>
             <TouchableWithoutFeedback onPress={() => setNumber(number + 1)}>
-              <FontAwesome5
-                name="minus"
-                size={15}
-                color={colors.app.dark_300}
-              />
+              <FontAwesome5 name="plus" size={15} color={colors.app.dark_300} />
             </TouchableWithoutFeedback>
           </View>
         )}

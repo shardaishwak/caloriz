@@ -23,6 +23,7 @@ class Dater extends React.Component<{ dispatch: any; state: State }> {
     this.props.dispatch({ type: NEW_DATE_LOADING, payload: false });
   };
   carousel;
+
   _renderItem = ({ item }) => {
     let date = item;
     const week = transform_week_to_string(
@@ -101,6 +102,7 @@ class Dater extends React.Component<{ dispatch: any; state: State }> {
         sliderWidth={Dimensions.get("screen").width}
         itemWidth={50}
         renderItem={this._renderItem}
+        onSnapToItem={(index) => this.LOAD_NEW_DATE(dates[index])}
       />
     );
   }

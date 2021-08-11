@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { ScrollView, StyleSheet } from "react-native";
-import { View, Modal, Text } from "react-native";
+import {
+  Dimensions,
+  ScrollView,
+  StyleSheet,
+  TouchableWithoutFeedback,
+} from "react-native";
+import { View, Text } from "react-native";
 import uuid from "react-native-uuid";
 
 import SaveButton from "./SaveButton";
@@ -10,8 +15,8 @@ import TopNotch from "./TopNotch";
 import { ADD_FOOD, SET_FAVOURITE, useGlobal } from "../../../global/provider";
 import nutritionix from "../../../api/nutritionix";
 import { CommonItem } from "../../../interface";
-import { todayDate } from "../../../global/actions";
 import db from "../../../global/db";
+import Modal from "react-native-modal";
 
 /**
  * Main modal component for showing the detailed data of the searched item
@@ -23,7 +28,7 @@ const ItemModal = ({ ID, visible, onDismiss, session }) => {
 
   const [type, set_type] = useState<string>();
   const [result, set_result] = useState<any>();
-  const [quantity, set_quantity] = useState<number>(0);
+  const [quantity, set_quantity] = useState<number>(1);
   const [loading, setLoading] = useState<boolean>(false);
   const [saveItemLoading, setSaveItemLoading] = useState<boolean>(false);
 
@@ -50,18 +55,19 @@ const ItemModal = ({ ID, visible, onDismiss, session }) => {
 
   // The Search function is ran to get the main item
   useEffect(() => {
+    setLoading(true);
+
     if (!ID) onDismiss();
     (async () => {
       await Search();
     })();
+    setLoading(false);
   }, []);
 
   // The function fetched the main item for its details
   const Search = async () => {
-    setLoading(true);
     const result = await nutritionix.nutrients(ID);
     set_result(result);
-    setLoading(false);
   };
 
   // Push the current item to the consumed list
@@ -87,11 +93,25 @@ const ItemModal = ({ ID, visible, onDismiss, session }) => {
   if (loading) return <Text></Text>;
   return (
     <Modal
-      animated
-      animationType="slide"
-      visible={visible}
-      transparent
-      onRequestClose={onDismiss}
+      animationIn={"slideInUp"}
+      swipeDirection="down"
+      animationOut={"slideInDown"}
+      onSwipeComplete={onDismiss}
+      onBackButtonPress={onDismiss}
+      onBackdropPress={onDismiss}
+      isVisible={visible}
+      onDismiss={onDismiss}
+      style={{ margin: 0 }}
+      customBackdrop={
+        <View
+          style={{
+            flex: 1,
+            width: Dimensions.get("window").width,
+            backgroundColor: "rgba(0,0,0,.2)",
+          }}
+        ></View>
+      }
+      coverScreen
     >
       <View style={styles.overlay}>
         <View style={{ alignItems: "center", marginVertical: 5 }}>
@@ -100,22 +120,20 @@ const ItemModal = ({ ID, visible, onDismiss, session }) => {
         {result && (
           <View style={[styles.container]}>
             <View>
-              <ScrollView showsVerticalScrollIndicator={false}>
-                {/**Children data */}
-                <TopNotch
-                  food_name={data.food_name}
-                  onStarClick={setFavourite}
-                  calories={data.calories}
-                />
-                <Inputs
-                  onQuantityChange={(e) => set_quantity(e)}
-                  onTypeChange={(e) => set_type(e)}
-                  quantity={quantity}
-                  type={result.serving_unit as string}
-                />
-                <Cards data={result} />
-                <SaveButton onSave={AddNewItem} loading={saveItemLoading} />
-              </ScrollView>
+              {/**Children data */}
+              <TopNotch
+                food_name={data.food_name}
+                onStarClick={setFavourite}
+                calories={data.calories}
+              />
+              <Inputs
+                onQuantityChange={(e) => set_quantity(e)}
+                onTypeChange={(e) => set_type(e)}
+                quantity={quantity}
+                type={result.serving_unit as string}
+              />
+              <Cards data={result} />
+              <SaveButton onSave={AddNewItem} loading={saveItemLoading} />
             </View>
           </View>
         )}
@@ -126,7 +144,6 @@ const ItemModal = ({ ID, visible, onDismiss, session }) => {
 
 const styles = StyleSheet.create({
   overlay: {
-    backgroundColor: "rgba(0,0,0,0.2)",
     flex: 1,
     justifyContent: "flex-end",
   },
@@ -136,6 +153,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 20,
     borderTopLeftRadius: 20,
     padding: 20,
+    paddingBottom: 10,
     justifyContent: "flex-end",
   },
   empty_box: {
