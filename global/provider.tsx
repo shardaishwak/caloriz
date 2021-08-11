@@ -75,4 +75,11 @@ export const useGlobal = () =>
     dispatch;
   }>(GlobalContext);
 
+export const withGlobal = (Component) => {
+  return (props) => {
+    const { state, dispatch } = useGlobal();
+    return <Component state={state} dispatch={dispatch} {...props} />;
+  };
+};
+
 export default GlobalProvider;
