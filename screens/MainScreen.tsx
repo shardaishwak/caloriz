@@ -1,40 +1,50 @@
 import React from "react";
-import {
-  Dimensions,
-  FlatList,
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableWithoutFeedback,
-  View,
-} from "react-native";
+import { SafeAreaView, ScrollView, StyleSheet } from "react-native";
 
-import { NEW_DATE_LOADING, REMOVE_FOOD, useGlobal } from "../global/provider";
-import { AppDate, CommonItem, FoodNutrients, Session } from "../interface";
+import { useGlobal } from "../global/provider";
+import { CommonItem, FoodNutrients, Session } from "../interface";
 
-import Progress from "../components/MainScreen/Progress";
-import Header from "../components/Header";
-import Card from "../components/MainScreen/Card";
-import { Ionicons } from "@expo/vector-icons";
-
-import colors from "../colors";
-import db from "../global/db";
-import {
-  daysInMonth,
-  extract_data_from_date,
-  formatted_get_week_of_date,
-  todayDate,
-  transform_week_to_string,
-} from "../time";
-import { LoadData } from "../cache";
-import Carousel from "react-native-snap-carousel";
 import Dater from "../components/MainScreen/Dater";
+import Header from "../components/Header";
 import Calorimeter from "../components/MainScreen/Calorimeter";
 import Progresses from "../components/MainScreen/Progresses";
 import RenderSessionCards from "../components/MainScreen/RenderSessionCards";
 
-const MainScreen = (props) => {
+/**
+ * Calulcation of the total consumption of the nutrients
+ */
+
+const GET_TOTAL_NUTRIENTS = (data, sessions) => {
+  const progress_data: FoodNutrients = {
+    carbohydrates: 0,
+    fat: 0,
+    protein: 0,
+    sugars: 0,
+    cholesterol: 0,
+    potassium: 0,
+    sodium: 0,
+    dietary_fiber: 0,
+    saturated_fat: 0,
+    calories: 0,
+  };
+
+  sessions.map((field) => {
+    data[field].forEach((item: CommonItem) => {
+      progress_data.fat += item.fat * item.quantity;
+      progress_data.carbohydrates = item.carbohydrates * item.quantity;
+      progress_data.protein += item.protein * item.quantity;
+      progress_data.sugars += item.sugars * item.quantity;
+      progress_data.cholesterol += item.cholesterol * item.quantity;
+      progress_data.potassium += item.potassium * item.quantity;
+      progress_data.sodium += item.sodium * item.quantity;
+      progress_data.dietary_fiber += item.dietary_fiber * item.quantity;
+      progress_data.calories += item.calories * item.quantity;
+    });
+  });
+  return progress_data;
+};
+
+const MainScreen = (props: { navigation }) => {
   const {
     state: { data },
   } = useGlobal();
@@ -106,39 +116,5 @@ const styles = StyleSheet.create({
     fontFamily: "Inter",
   },
 });
-
-/**
- * Calulcation of the total consumption of the nutrients
- */
-
-const GET_TOTAL_NUTRIENTS = (data, sessions) => {
-  const progress_data: FoodNutrients = {
-    carbohydrates: 0,
-    fat: 0,
-    protein: 0,
-    sugars: 0,
-    cholesterol: 0,
-    potassium: 0,
-    sodium: 0,
-    dietary_fiber: 0,
-    saturated_fat: 0,
-    calories: 0,
-  };
-
-  sessions.map((field) => {
-    data[field].forEach((item: CommonItem) => {
-      progress_data.fat += item.fat * item.quantity;
-      progress_data.carbohydrates = item.carbohydrates * item.quantity;
-      progress_data.protein += item.protein * item.quantity;
-      progress_data.sugars += item.sugars * item.quantity;
-      progress_data.cholesterol += item.cholesterol * item.quantity;
-      progress_data.potassium += item.potassium * item.quantity;
-      progress_data.sodium += item.sodium * item.quantity;
-      progress_data.dietary_fiber += item.dietary_fiber * item.quantity;
-      progress_data.calories += item.calories * item.quantity;
-    });
-  });
-  return progress_data;
-};
 
 export default MainScreen;

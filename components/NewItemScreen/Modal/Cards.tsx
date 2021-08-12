@@ -1,13 +1,13 @@
 import React from "react";
-
-import colors from "../../../colors";
+import { FlatList, StyleSheet, Text, View } from "react-native";
 import {
   SimpleLineIcons,
   MaterialIcons,
   MaterialCommunityIcons,
   Ionicons,
 } from "@expo/vector-icons";
-import { FlatList, StyleSheet, Text, View } from "react-native";
+
+import colors from "../../../colors";
 
 /**
  * @connect ItemModal index.js
@@ -83,14 +83,8 @@ const Cards = ({ data }) => {
             {item.icon}
           </View>
           <View style={{ marginLeft: 15 }}>
-            <Text style={{ color: colors.app.dark_500, fontFamily: "Inter" }}>
-              {item.name}
-            </Text>
-            <Text
-              style={{ color: colors.app.dark_500, fontFamily: "Inter-Medium" }}
-            >
-              {item.value}
-            </Text>
+            <Text style={styles.name}>{item.name}</Text>
+            <Text style={styles.value}>{item.value}</Text>
           </View>
         </View>
       )}
@@ -117,6 +111,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  name: { color: colors.app.dark_500, fontFamily: "Inter" },
+  value: { color: colors.app.dark_500, fontFamily: "Inter-Medium" },
 });
 
 export default Cards;

@@ -1,7 +1,6 @@
-import { Text, View } from "react-native";
-import colors from "../../colors";
 import React from "react";
-import { StyleSheet } from "react-native";
+import { Text, View, StyleSheet } from "react-native";
+import colors from "../../colors";
 
 /**
  * The state of the calories remained to consume
@@ -15,7 +14,7 @@ const Calorimeter = ({
   current: number;
 }) => {
   return (
-    <View style={{ alignItems: "center", marginTop: 20, marginBottom: 20 }}>
+    <View style={styles.container}>
       <Text style={styles.top_text}>Calories left</Text>
       <Text style={styles.calories}>
         <Text style={{ fontFamily: "Inter-Bold" }}>
@@ -31,6 +30,11 @@ const Calorimeter = ({
 };
 
 const styles = StyleSheet.create({
+  container: {
+    alignItems: "center",
+    marginTop: 20,
+    marginBottom: 20,
+  },
   top_text: {
     fontSize: 15,
     fontFamily: "Inter",

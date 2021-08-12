@@ -12,7 +12,7 @@ import { StyleSheet } from "react-native";
 const TopNotch = ({ food_name, calories, onStarClick }) => {
   return (
     <View style={styles.container}>
-      <View style={{ width: 20, height: 20 }}></View>
+      <View style={styles.default_spacing}></View>
       <Text style={styles.title}>{food_name}</Text>
       <FavouriteIcon
         onClick={onStarClick}
@@ -24,6 +24,7 @@ const TopNotch = ({ food_name, calories, onStarClick }) => {
 };
 
 const styles = StyleSheet.create({
+  default_spacing: { width: 20, height: 20 },
   container: {
     flexDirection: "row",
     alignItems: "center",

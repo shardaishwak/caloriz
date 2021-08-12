@@ -17,11 +17,11 @@ import { todayDate } from "./time";
  */
 const LoadFonts = async () => {
   await Font.loadAsync({
-    Poppins: require("./assets/static/Poppins-Regular.ttf"),
-    Inter: require("./assets/static/Inter-Regular.ttf"),
-    "Inter-Medium": require("./assets/static/Inter-Medium.ttf"),
-    "Inter-Bold": require("./assets/static/Inter-Bold.ttf"),
-    "Inter-Semibold": require("./assets/static/Inter-SemiBold.ttf"),
+    Poppins: require("./assets/fonts/Poppins-Regular.ttf"),
+    Inter: require("./assets/fonts/Inter-Regular.ttf"),
+    "Inter-Medium": require("./assets/fonts/Inter-Medium.ttf"),
+    "Inter-Bold": require("./assets/fonts/Inter-Bold.ttf"),
+    "Inter-Semibold": require("./assets/fonts/Inter-SemiBold.ttf"),
   });
 };
 

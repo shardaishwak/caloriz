@@ -4,11 +4,12 @@
  */
 import React from "react";
 
-import { Dimensions, ScrollView, StyleSheet, View } from "react-native";
+import { Dimensions, StyleSheet, View } from "react-native";
 import Carousel from "react-native-snap-carousel";
+
 import colors from "../../colors";
-import { FoodNutrients } from "../../interface";
 import Progress from "./Progress";
+import { FoodNutrients } from "../../interface";
 
 class Progresses extends React.Component<{
   progress_data: FoodNutrients;

@@ -6,13 +6,15 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
-import Carousel from "react-native-snap-carousel";
-import colors from "../../colors";
-import db from "../../global/db";
-import { REMOVE_FOOD, useGlobal } from "../../global/provider";
-import { AppDate, CommonItem, Session } from "../../interface";
-import Card from "./Card";
 import { Ionicons } from "@expo/vector-icons";
+import Carousel, { Pagination } from "react-native-snap-carousel";
+
+import Card from "./Card";
+
+import db from "../../global/db";
+import colors from "../../colors";
+import { AppDate, CommonItem, Session } from "../../interface";
+import { REMOVE_FOOD, useGlobal } from "../../global/provider";
 
 /**
  * REnder the session cards
@@ -24,8 +26,11 @@ import { Ionicons } from "@expo/vector-icons";
  */
 class RenderSessionCards extends React.Component<
   { sessions: Array<Session>; date_data: AppDate; navigation: any },
-  {}
+  { activeIndex: number }
 > {
+  state = {
+    activeIndex: time_based_cards(),
+  };
   carousel;
   _renderItem = ({ item, index }) => {
     const session = item;
@@ -74,14 +79,31 @@ class RenderSessionCards extends React.Component<
     return (
       <View>
         <Text style={styles_main.top_text}>Daily consumption</Text>
+        <Pagination
+          activeDotIndex={this.state.activeIndex}
+          dotsLength={sessions.length}
+          dotStyle={{
+            margin: 0,
+            padding: 0,
+            width: 5,
+            height: 5,
+            marginHorizontal: 0,
+            borderRadius: 999,
+          }}
+          inactiveDotOpacity={0.4}
+          inactiveDotScale={0.6}
+          dotContainerStyle={{ width: 0, height: 0 }}
+        />
         <Carousel
           layout={"stack"}
           ref={(ref) => (this.carousel = ref)}
           data={sessions}
+          loop
           sliderWidth={Dimensions.get("screen").width}
           itemWidth={Dimensions.get("window").width}
           renderItem={this._renderItem}
           firstItem={time_based_cards()}
+          onSnapToItem={(index) => this.setState({ activeIndex: index })}
         />
       </View>
     );

@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { TouchableWithoutFeedback } from "react-native";
-import { StyleSheet, Text } from "react-native";
-import { View } from "react-native";
+import { StyleSheet, Text, View, TouchableWithoutFeedback } from "react-native";
 import { FontAwesome5, Ionicons } from "@expo/vector-icons";
-import colors from "../../colors";
 import { LinearGradient } from "expo-linear-gradient";
+
 import { StackNavigationHelpers } from "@react-navigation/stack/lib/typescript/src/types";
+
+import colors from "../../colors";
 
 /**
  * @connect MainScreen
@@ -32,141 +32,62 @@ const Card = ({
   session: string;
 }) => {
   const [open, setOpen] = useState<boolean>(false);
+
+  const onPress = () =>
+    navigation.navigate("newitem", {
+      session,
+    });
+
   return (
-    <View style={{ margin: 20, marginBottom: 10 }}>
+    <View style={styles.main_wrap}>
       <View style={styles.container}>
         <TouchableWithoutFeedback onPress={() => setOpen(!open)}>
           <View>
-            <View
-              style={{
-                alignItems: "center",
-                flexDirection: "row",
-                justifyContent: "space-between",
-              }}
-            >
+            <View style={styles.center_justify}>
               <View style={{ alignItems: "center", flexDirection: "row" }}>
                 <Ionicons
                   name={open ? "chevron-up" : "chevron-down"}
                   size={20}
                 />
-                <Text
-                  style={{
-                    fontSize: 20,
-                    fontFamily: "Inter-Medium",
-                    marginLeft: 10,
-                    color: colors.app.dark_600,
-                    textTransform: "capitalize",
-                  }}
-                >
-                  {title.split("_").join(" ")}
-                </Text>
+                <Text style={styles.title}>{title.split("_").join(" ")}</Text>
               </View>
-              <Text
-                style={{
-                  fontFamily: "Inter-Medium",
-                  fontSize: 20,
-                  color: colors.app.dark_600,
-                }}
-              >
+              <Text style={styles.calories}>
                 {t_kcal.toFixed(1)}{" "}
-                <Text
-                  style={{
-                    fontFamily: "Inter",
-                    fontSize: 12,
-                    color: colors.tailwind.gray._400,
-                  }}
-                >
-                  kcal
-                </Text>
+                <Text style={styles.calories_span}>kcal</Text>
               </Text>
             </View>
 
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                marginTop: 10,
-                justifyContent: "space-between",
-              }}
-            >
-              <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <View style={[styles.center_justify, { marginTop: 10 }]}>
+              <View style={styles.row_center}>
+                <View style={styles.row_center}>
                   <View
-                    style={{
-                      width: 20,
-                      height: 20,
-                      borderRadius: 999,
-                      borderWidth: 3,
-                      borderColor: colors.app.orange_100,
-                    }}
+                    style={[
+                      styles.circle,
+                      { borderColor: colors.app.orange_100 },
+                    ]}
                   ></View>
-                  <Text
-                    style={{
-                      paddingVertical: 6,
-                      paddingHorizontal: 10,
-                      color: colors.tailwind.gray._400,
-                      fontFamily: "Inter",
-                      fontSize: 15,
-                      marginRight: 5,
-                    }}
-                  >
-                    {t_p.toFixed(1)}g
-                  </Text>
+                  <Text style={styles.circle_value}>{t_p.toFixed(1)}g</Text>
                 </View>
-                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <View style={styles.row_center}>
                   <View
-                    style={{
-                      width: 20,
-                      height: 20,
-                      borderRadius: 999,
-                      borderWidth: 3,
-                      borderColor: colors.app.purple_100,
-                    }}
+                    style={[
+                      styles.circle,
+                      { borderColor: colors.app.purple_100 },
+                    ]}
                   ></View>
-                  <Text
-                    style={{
-                      paddingVertical: 6,
-                      paddingHorizontal: 10,
-                      color: colors.tailwind.gray._400,
-                      fontFamily: "Inter",
-                      fontSize: 15,
-                      marginRight: 5,
-                    }}
-                  >
-                    {t_f.toFixed(1)}g
-                  </Text>
+                  <Text style={styles.circle_value}>{t_f.toFixed(1)}g</Text>
                 </View>
-                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <View style={styles.row_center}>
                   <View
-                    style={{
-                      width: 20,
-                      height: 20,
-                      borderRadius: 999,
-                      borderWidth: 3,
-                      borderColor: colors.app.blue_100,
-                    }}
+                    style={[
+                      styles.circle,
+                      { borderColor: colors.app.blue_100 },
+                    ]}
                   ></View>
-                  <Text
-                    style={{
-                      paddingVertical: 6,
-                      paddingHorizontal: 10,
-                      color: colors.tailwind.gray._400,
-                      fontFamily: "Inter",
-                      fontSize: 15,
-                      marginRight: 5,
-                    }}
-                  >
-                    {t_c.toFixed(1)}g
-                  </Text>
+                  <Text style={styles.circle_value}>{t_c.toFixed(1)}g</Text>
                 </View>
               </View>
-              <TouchableWithoutFeedback
-                onPress={() =>
-                  navigation.navigate("newitem", {
-                    session,
-                  })
-                }
-              >
+              <TouchableWithoutFeedback onPress={onPress}>
                 <LinearGradient
                   colors={[
                     colors.tailwind.green._500,
@@ -174,14 +95,7 @@ const Card = ({
                   ]}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 1 }}
-                  style={{
-                    width: 33,
-                    height: 33,
-                    backgroundColor: colors.app.green_200,
-                    borderRadius: 999,
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
+                  style={styles.button}
                 >
                   <FontAwesome5 name="plus" size={17} color={"#fff"} />
                 </LinearGradient>
@@ -197,6 +111,13 @@ const Card = ({
 };
 
 const styles = StyleSheet.create({
+  main_wrap: { margin: 20, marginBottom: 10, marginTop: 0 },
+  row_center: { flexDirection: "row", alignItems: "center" },
+  center_justify: {
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
   container: {
     padding: 20,
     borderColor: colors.app.dark_100,
@@ -209,6 +130,45 @@ const styles = StyleSheet.create({
     paddingTop: 5,
     borderTopWidth: 2,
     borderTopColor: colors.app.dark_100,
+  },
+  title: {
+    fontSize: 20,
+    fontFamily: "Inter-Medium",
+    marginLeft: 10,
+    color: colors.app.dark_600,
+    textTransform: "capitalize",
+  },
+  calories: {
+    fontFamily: "Inter-Medium",
+    fontSize: 20,
+    color: colors.app.dark_600,
+  },
+  calories_span: {
+    fontFamily: "Inter",
+    fontSize: 12,
+    color: colors.tailwind.gray._400,
+  },
+  circle: {
+    width: 20,
+    height: 20,
+    borderRadius: 999,
+    borderWidth: 3,
+  },
+  circle_value: {
+    paddingVertical: 6,
+    paddingHorizontal: 10,
+    color: colors.tailwind.gray._400,
+    fontFamily: "Inter",
+    fontSize: 15,
+    marginRight: 5,
+  },
+  button: {
+    width: 33,
+    height: 33,
+    backgroundColor: colors.app.green_200,
+    borderRadius: 999,
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
 

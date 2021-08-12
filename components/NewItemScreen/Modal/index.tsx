@@ -1,23 +1,18 @@
 import React, { useEffect, useState } from "react";
-import {
-  Dimensions,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  TouchableWithoutFeedback,
-} from "react-native";
-import { View, Text } from "react-native";
-import uuid from "react-native-uuid";
+import { View, Text, Dimensions, StatusBar, StyleSheet } from "react-native";
 
-import SaveButton from "./SaveButton";
+import uuid from "react-native-uuid";
+import Modal from "react-native-modal";
+
 import Cards from "./Cards";
 import Inputs from "./Inputs";
 import TopNotch from "./TopNotch";
-import { ADD_FOOD, SET_FAVOURITE, useGlobal } from "../../../global/provider";
-import nutritionix from "../../../api/nutritionix";
-import { CommonItem } from "../../../interface";
+import SaveButton from "./SaveButton";
+
 import db from "../../../global/db";
-import Modal from "react-native-modal";
+import { CommonItem } from "../../../interface";
+import nutritionix from "../../../api/nutritionix";
+import { ADD_FOOD, SET_FAVOURITE, useGlobal } from "../../../global/provider";
 
 /**
  * Main modal component for showing the detailed data of the searched item
@@ -91,7 +86,9 @@ const ItemModal = ({ ID, visible, onDismiss, session }) => {
     await db.addFavourite(data);
     dispatch({ type: SET_FAVOURITE, item: data });
   };
+
   if (loading) return <Text></Text>;
+
   return (
     <Modal
       animationIn={"slideInUp"}
@@ -103,15 +100,7 @@ const ItemModal = ({ ID, visible, onDismiss, session }) => {
       isVisible={visible}
       onDismiss={onDismiss}
       style={{ margin: 0 }}
-      customBackdrop={
-        <View
-          style={{
-            flex: 1,
-            width: Dimensions.get("window").width,
-            backgroundColor: "rgba(0,0,0,.2)",
-          }}
-        ></View>
-      }
+      customBackdrop={<View style={styles.backdrop}></View>}
       coverScreen
     >
       <View style={styles.overlay}>
@@ -168,6 +157,11 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: "#fff",
   }, // for spacing and centering
+  backdrop: {
+    flex: 1,
+    width: Dimensions.get("window").width,
+    backgroundColor: "rgba(0,0,0,.2)",
+  },
 });
 
 export default ItemModal;

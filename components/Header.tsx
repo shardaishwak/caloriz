@@ -1,9 +1,13 @@
 import React from "react";
-import { Text, TouchableNativeFeedback, View } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import { StackNavigationHelpers } from "@react-navigation/stack/lib/typescript/src/types";
-import colors from "../colors";
+
 import Svg, { Path } from "react-native-svg";
+import { Ionicons } from "@expo/vector-icons";
+import { Text, TouchableNativeFeedback, View } from "react-native";
+
+import { StackNavigationHelpers } from "@react-navigation/stack/lib/typescript/src/types";
+
+import colors from "../colors";
+import { StyleSheet } from "react-native";
 
 /**
  * Main app header
@@ -16,47 +20,20 @@ const Header = (props: {
   rightIcon?: React.FC;
 }) => {
   return (
-    <View
-      style={{
-        backgroundColor: "#fff",
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "space-between",
-        height: 70,
-        paddingLeft: 15,
-        paddingRight: 15,
-      }}
-    >
+    <View style={styles.container}>
       {props.navigation.canGoBack() ? (
         <TouchableNativeFeedback onPress={props.navigation.goBack}>
           <Ionicons size={25} name="chevron-back" />
         </TouchableNativeFeedback>
       ) : (
-        <View style={{ width: 25, height: 25 }}></View>
+        <View style={styles.default_spacing}></View>
       )}
       {props.page && props.small ? (
         <View style={{ alignItems: "center" }}>
-          <Text
-            style={{
-              fontSize: 19,
-              fontFamily: "Inter",
-              color: colors.app.dark_600,
-              textTransform: "capitalize",
-            }}
-          >
+          <Text style={styles.page_title}>
             {props.page.split("_").join(" ")}
           </Text>
-          <Text
-            style={{
-              fontSize: 15,
-              fontFamily: "Inter",
-              color: colors.app.dark_300,
-              marginTop: -2,
-              textTransform: "capitalize",
-            }}
-          >
-            {props.small}
-          </Text>
+          <Text style={styles.date}>{props.small}</Text>
         </View>
       ) : (
         <Svg width="110" height="50" viewBox="0 0 753 259" fill="none">
@@ -74,9 +51,35 @@ const Header = (props: {
           />
         </Svg>
       )}
-      <View style={{ height: 25, width: 25 }}>{props.rightIcon}</View>
+      <View style={styles.default_spacing}>{props.rightIcon}</View>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: "#fff",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    height: 70,
+    paddingLeft: 15,
+    paddingRight: 15,
+  },
+  default_spacing: { width: 25, height: 25 },
+  page_title: {
+    fontSize: 19,
+    fontFamily: "Inter",
+    color: colors.app.dark_600,
+    textTransform: "capitalize",
+  },
+  date: {
+    fontSize: 15,
+    fontFamily: "Inter",
+    color: colors.app.dark_300,
+    marginTop: -2,
+    textTransform: "capitalize",
+  },
+});
 
 export default Header;

@@ -1,8 +1,10 @@
-import React, { Component } from "react";
-import { TouchableWithoutFeedback } from "react-native";
+import React from "react";
+
 import { AntDesign } from "@expo/vector-icons";
-import { REMOVE_FAVOURITE, useGlobal } from "../global/provider";
+import { TouchableWithoutFeedback } from "react-native";
+
 import db from "../global/db";
+import { REMOVE_FAVOURITE, useGlobal } from "../global/provider";
 
 /**
  * componet for managing on favourite click

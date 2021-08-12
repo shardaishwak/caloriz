@@ -9,14 +9,14 @@ import {
 import { ScrollView } from "react-native-gesture-handler";
 import uuid from "react-native-uuid";
 
-import { LinearGradient } from "expo-linear-gradient";
 import { FontAwesome5 } from "@expo/vector-icons";
+import { LinearGradient } from "expo-linear-gradient";
 
 import Header from "../components/Header";
-import SearchInput from "../components/NewItemScreen/Modal/SearchInput";
+import ItemModal from "../components/NewItemScreen/Modal";
 import ItemCard from "../components/NewItemScreen/ItemCard";
 import Searching_Svg from "../components/NewItemScreen/Searching_svg";
-import ItemModal from "../components/NewItemScreen/Modal";
+import SearchInput from "../components/NewItemScreen/Modal/SearchInput";
 
 import colors from "../colors";
 import nutritionix from "../api/nutritionix";
@@ -29,6 +29,7 @@ import {
   REMOVE_FOOD,
   useGlobal,
 } from "../global/provider";
+
 import {
   extract_data_from_date,
   get_week_of_date,

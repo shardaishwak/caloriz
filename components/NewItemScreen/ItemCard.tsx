@@ -1,15 +1,11 @@
-import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableWithoutFeedback,
-  View,
-} from "react-native";
-import colors from "../../colors";
-import { SearchCommonItem } from "../../interface";
+
 import { FontAwesome5 } from "@expo/vector-icons";
+import { SearchCommonItem } from "../../interface";
+import { LinearGradient } from "expo-linear-gradient";
+import { StyleSheet, Text, View, TouchableWithoutFeedback } from "react-native";
+
+import colors from "../../colors";
 
 /**
  * @connect NewItemScreen

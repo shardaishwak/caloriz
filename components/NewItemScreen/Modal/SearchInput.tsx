@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+
 import {
   ActivityIndicator,
   Keyboard,
@@ -9,6 +10,7 @@ import {
 } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import { Ionicons } from "@expo/vector-icons";
+
 import colors from "../../../colors";
 
 /**
