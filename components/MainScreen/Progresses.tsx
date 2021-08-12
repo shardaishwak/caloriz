@@ -4,8 +4,8 @@
  */
 import React from "react";
 
-import { Dimensions, StyleSheet, View } from "react-native";
 import Carousel from "react-native-snap-carousel";
+import { Dimensions, StyleSheet, View } from "react-native";
 
 import colors from "../../colors";
 import Progress from "./Progress";
@@ -41,7 +41,7 @@ class Progresses extends React.Component<{
     );
     // CARBOHYDRATES: 2000:275 = calories : carbohydrates
     const carb_perc = Math.round(
-      (100 * progress_data.fat) / total_carbs_to_consume
+      (100 * progress_data.carbohydrates) / total_carbs_to_consume
     );
     // PROTEIN: 3000:60.5 = calroeis: fat
     const protein_perc = Math.round(

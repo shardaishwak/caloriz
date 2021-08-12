@@ -13,8 +13,8 @@ import Card from "./Card";
 
 import db from "../../global/db";
 import colors from "../../colors";
-import { AppDate, CommonItem, Session } from "../../interface";
 import { REMOVE_FOOD, useGlobal } from "../../global/provider";
+import { AppDate, CommonItem, Session } from "../../interface";
 
 /**
  * REnder the session cards
@@ -34,19 +34,23 @@ class RenderSessionCards extends React.Component<
   carousel;
   _renderItem = ({ item, index }) => {
     const session = item;
+
     let total_calories = 0;
     let total_fat = 0;
     let total_protein = 0;
     let total_sugar = 0;
 
+    // Load a particular session data
     const session_data = this.props.date_data[session];
 
+    // Sum up all the nutrients consumed in a particular session
     session_data?.forEach((item: CommonItem) => {
       total_calories += item.calories * item.quantity;
       total_fat += item.fat * item.quantity;
       total_protein += item.protein * item.quantity;
       total_sugar += item.sugars * item.quantity;
     });
+
     return (
       <Card
         title={session}
@@ -68,9 +72,9 @@ class RenderSessionCards extends React.Component<
             id={item.id}
             session={session}
             key={item.id as string}
+            quantity={item.quantity}
           />
         ))}
-        {/*<AddButton session={session} navigation={navigation} />*/}
       </Card>
     );
   };
@@ -116,8 +120,8 @@ const time_based_cards = () => {
 
   if (hours >= 5 && hours <= 9) return 0;
   else if (hours > 9 && hours <= 12) return 1;
-  else if (hours > 12 && hours <= 15) return 2;
-  else if (hours > 15 && hours <= 18) return 3;
+  else if (hours > 12 && hours <= 14) return 2;
+  else if (hours > 14 && hours <= 18) return 3;
   else if (hours > 18 && hours <= 21) return 4;
   else if (hours > 21 && hours <= 22) return 5;
   else return 6;
@@ -144,6 +148,7 @@ const Item = ({
   sugar,
   protein,
   fat,
+  quantity,
 }: {
   food_name: string;
   id: string | number | number[];
@@ -152,6 +157,7 @@ const Item = ({
   sugar: number;
   protein: number;
   fat: number;
+  quantity: number;
 }) => {
   const { state, dispatch } = useGlobal();
   const deleteItem = async () => {
@@ -160,7 +166,9 @@ const Item = ({
   };
   return (
     <View style={styles.container}>
-      <Text style={styles.food_name}>{food_name}</Text>
+      <Text style={styles.food_name}>
+        {food_name} <Text style={styles.food_name_span}>({quantity})</Text>
+      </Text>
       <View style={styles.detail_container}>
         <View style={styles.detail_wrapper}>
           <Text style={styles.info}>{calories}kcal</Text>
@@ -185,6 +193,7 @@ const styles = StyleSheet.create({
     textTransform: "capitalize",
     color: colors.app.dark_500,
   },
+  food_name_span: { fontSize: 10, fontFamily: "Inter" },
   container: { marginVertical: 10 },
   detail_container: {
     alignItems: "center",

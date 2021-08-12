@@ -15,6 +15,7 @@ const FavouriteIcon = ({ food_name, calories, onClick }) => {
     state: { favourites },
     dispatch,
   } = useGlobal();
+  // Check if the item is present in the favourites list
   const isActive = () =>
     favourites.findIndex(
       (a) => a.food_name === food_name && a.calories === calories
@@ -22,6 +23,7 @@ const FavouriteIcon = ({ food_name, calories, onClick }) => {
       ? false
       : true;
 
+  // Remove the item from the favourite list
   const removeFavourite = async () => {
     await db.removeFavourite(food_name, calories);
     dispatch({

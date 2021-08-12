@@ -17,9 +17,9 @@ import colors from "../../../colors";
  * Design of the search input used in @NewItemScreen
  */
 const SearchInput = (props: {
-  placeholder: string;
   onSearch: any;
   loading: boolean;
+  placeholder: string;
 }) => {
   const [text, setText] = useState<string>();
   return (

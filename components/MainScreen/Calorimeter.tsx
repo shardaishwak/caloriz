@@ -13,17 +13,16 @@ const Calorimeter = ({
   target: number;
   current: number;
 }) => {
+  const value = (target - current)
+    .toFixed(0)
+    .toString()
+    .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
   return (
     <View style={styles.container}>
       <Text style={styles.top_text}>Calories left</Text>
       <Text style={styles.calories}>
-        <Text style={{ fontFamily: "Inter-Bold" }}>
-          {(target - current)
-            .toFixed(0)
-            .toString()
-            .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-        </Text>{" "}
-        kcal
+        <Text style={{ fontFamily: "Inter-Bold" }}>{value}</Text> kcal
       </Text>
     </View>
   );

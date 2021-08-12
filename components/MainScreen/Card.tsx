@@ -31,6 +31,7 @@ const Card = ({
   navigation: StackNavigationHelpers;
   session: string;
 }) => {
+  // Session card state
   const [open, setOpen] = useState<boolean>(false);
 
   const onPress = () =>
@@ -44,7 +45,7 @@ const Card = ({
         <TouchableWithoutFeedback onPress={() => setOpen(!open)}>
           <View>
             <View style={styles.center_justify}>
-              <View style={{ alignItems: "center", flexDirection: "row" }}>
+              <View style={styles.row_center}>
                 <Ionicons
                   name={open ? "chevron-up" : "chevron-down"}
                   size={20}

@@ -1,12 +1,6 @@
-import Svg, {
-  Circle,
-  Ellipse,
-  Path,
-  Polygon,
-  Rect,
-  Text,
-} from "react-native-svg";
 import React from "react";
+import Svg, { Circle, Ellipse, Path, Polygon, Rect } from "react-native-svg";
+
 import colors from "../../colors";
 
 const Searching_Svg = () => (

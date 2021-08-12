@@ -1,5 +1,6 @@
 import moment from "moment";
 
+// Get the number of days of a given month and year
 export const daysInMonth = (month, year) => {
   const days = moment(year + "-" + month).daysInMonth();
 
@@ -11,6 +12,7 @@ export const daysInMonth = (month, year) => {
   return month_list;
 };
 
+// Transorm the week from number to string
 export const transform_week_to_string = (week) =>
   [
     "sunday",
@@ -22,6 +24,7 @@ export const transform_week_to_string = (week) =>
     "saturday",
   ][parseInt(week)];
 
+// Transform the month from number to string
 export const transform_month_to_string = (month) =>
   [
     "january",
@@ -38,17 +41,21 @@ export const transform_month_to_string = (month) =>
     "december",
   ][parseInt(month)];
 
+// Extract the week from the date
 export const get_week_of_date = (day, month, year) =>
   new Date(moment().year(year).month(month).date(day).toISOString()).getDay();
 
+// Extract the week from date formatted scheme: DD-MM-YYYY
 export const formatted_get_week_of_date = (date) => {
   const unformat = extract_data_from_date(date);
   return get_week_of_date(unformat[0], unformat[1], unformat[2]);
 };
 
+// Format date: DD-MM-YYYY
 export const transform_date_to_string = (day, month, year) =>
   `${digitize(day)}-${digitize(month)}-${year}`;
 
+// Unformat date
 export function extract_data_from_date(date: string) {
   if (date.length !== 10)
     throw Error("Unvalid date format. Should be DD-MM-YYYY");
@@ -60,6 +67,7 @@ export function extract_data_from_date(date: string) {
   ];
 }
 
+// Get formatted today date: DD-MM-YYYY
 export const todayDate = () => {
   const date = new Date();
   const id_date = transform_date_to_string(
@@ -71,4 +79,5 @@ export const todayDate = () => {
   return id_date;
 };
 
+// Setup the required zeros for the date
 export const digitize = (n) => ((n.toString().length < 2 && "0") || "") + n;

@@ -14,6 +14,7 @@ import colors from "../../../colors";
  * Component for the 4 cards that show the additional information about a product
  */
 const Cards = ({ data }) => {
+  // 4 nutritional informations given in the modal
   const data_local = [
     {
       id: 1,

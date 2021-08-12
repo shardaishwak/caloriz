@@ -51,7 +51,7 @@ const MainScreen = (props: { navigation }) => {
   // default, pass it from the main screen as the user takes a new date
   const date_data = data;
 
-  let target = 3000;
+  let target = 3000; // TODO: bring to state as user.preferences.target
 
   // Retrive data of a prticular date from state
 
@@ -61,19 +61,16 @@ const MainScreen = (props: { navigation }) => {
    */
   const fixed_sessions: Array<Session> = [
     Session.breakfast,
-    Session.dessert,
-    Session.dinner,
-    Session.extra,
-    Session.lunch,
     Session.second_breakfast,
+    Session.lunch,
     Session.snack,
+    Session.dinner,
+    Session.dessert,
+    Session.extra,
   ];
 
+  // All the collection of daily consumptions
   const progress_data = GET_TOTAL_NUTRIENTS(date_data, fixed_sessions);
-
-  /**
-   * Create a date list for the particular month and year
-   */
 
   return (
     <SafeAreaView style={styles.container}>
@@ -84,15 +81,7 @@ const MainScreen = (props: { navigation }) => {
         <Calorimeter target={target} current={progress_data.calories} />
         <Progresses progress_data={progress_data} total_calories={target} />
         <RenderSessionCards
-          sessions={[
-            Session.breakfast,
-            Session.second_breakfast,
-            Session.lunch,
-            Session.snack,
-            Session.dinner,
-            Session.dessert,
-            Session.extra,
-          ]} // All the card sessions to show
+          sessions={fixed_sessions} // All the card sessions to show
           date_data={date_data} // Current state date based data
           navigation={props.navigation}
         />

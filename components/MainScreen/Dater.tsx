@@ -27,15 +27,19 @@ import {
 class Dater extends React.Component<{ dispatch: any; state: State }> {
   carousel;
 
+  // Load a new date data
   LOAD_NEW_DATE = async (date) => {
     this.props.dispatch({ type: NEW_DATE_LOADING, payload: true });
+
     await LoadData(date, this.props.dispatch);
+
     this.props.dispatch({ type: NEW_DATE_LOADING, payload: false });
   };
 
   _renderItem = ({ item }) => {
     let date = item;
 
+    // Stringified week for the slider
     const week = transform_week_to_string(
       formatted_get_week_of_date(date)
     ).slice(0, 3);
@@ -83,8 +87,10 @@ class Dater extends React.Component<{ dispatch: any; state: State }> {
   };
   render() {
     const { app_date } = this.props.state;
+
     const unformatted_app_date = extract_data_from_date(app_date);
     const dates = daysInMonth(unformatted_app_date[1], unformatted_app_date[2]);
+
     return (
       <Carousel
         firstItem={parseInt(unformatted_app_date[0]) - 1}
@@ -94,7 +100,7 @@ class Dater extends React.Component<{ dispatch: any; state: State }> {
         sliderWidth={Dimensions.get("screen").width}
         itemWidth={50}
         renderItem={this._renderItem}
-        onSnapToItem={(index) => this.LOAD_NEW_DATE(dates[index])}
+        //onSnapToItem={(index) => this.LOAD_NEW_DATE(dates[index])}
       />
     );
   }

@@ -15,6 +15,7 @@ import colors from "../../../colors";
  * The main button component for adding the modal item to the consumed list
  */
 const SaveButton = ({ onSave, loading }: { onSave: any; loading: boolean }) => {
+  // Check if the user is pressing the button
   const [is_pressing, set_is_pressing] = useState<boolean>(false);
   return (
     <View style={styles.wrapper}>

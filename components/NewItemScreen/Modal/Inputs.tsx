@@ -11,15 +11,15 @@ import colors from "../../../colors";
  * Component for the two input field of the modal: quantity and type of food
  */
 const Inputs = ({
-  onQuantityChange,
-  onTypeChange,
-  quantity,
   type,
+  quantity,
+  onTypeChange,
+  onQuantityChange,
 }: {
-  onQuantityChange: any;
-  onTypeChange: any;
-  quantity: number;
   type: string;
+  quantity: number;
+  onTypeChange: any;
+  onQuantityChange: any;
 }) => (
   <View style={styles.container}>
     <View style={[styles.input_container, { marginRight: 10 }]}>

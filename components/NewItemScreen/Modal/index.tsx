@@ -54,9 +54,11 @@ const ItemModal = ({ ID, visible, onDismiss, session }) => {
     setLoading(true);
 
     if (!ID) onDismiss();
+
     (async () => {
       await Search();
     })();
+
     setLoading(false);
   }, []);
 
@@ -97,8 +99,8 @@ const ItemModal = ({ ID, visible, onDismiss, session }) => {
       onSwipeComplete={onDismiss}
       onBackButtonPress={onDismiss}
       onBackdropPress={onDismiss}
-      isVisible={visible}
       onDismiss={onDismiss}
+      isVisible={visible}
       style={{ margin: 0 }}
       customBackdrop={<View style={styles.backdrop}></View>}
       coverScreen
