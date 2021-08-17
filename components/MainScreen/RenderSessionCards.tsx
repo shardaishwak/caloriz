@@ -99,7 +99,7 @@ class RenderSessionCards extends React.Component<
           dotContainerStyle={{ width: 0, height: 0 }}
         />
         <Carousel
-          layout={"stack"}
+          layout={"default"}
           ref={(ref) => (this.carousel = ref)}
           data={sessions}
           loop

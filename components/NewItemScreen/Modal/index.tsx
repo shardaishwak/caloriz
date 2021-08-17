@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, Dimensions, StatusBar, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  Dimensions,
+  StatusBar,
+  StyleSheet,
+  ActivityIndicator,
+} from "react-native";
 
 import uuid from "react-native-uuid";
 import Modal from "react-native-modal";
@@ -89,7 +96,7 @@ const ItemModal = ({ ID, visible, onDismiss, session }) => {
     dispatch({ type: SET_FAVOURITE, item: data });
   };
 
-  if (loading) return <Text></Text>;
+  if (loading || !data) return <></>;
 
   return (
     <Modal
@@ -107,7 +114,7 @@ const ItemModal = ({ ID, visible, onDismiss, session }) => {
     >
       <View style={styles.overlay}>
         <StatusBar
-          backgroundColor={"rgba(0,0,0,.2)"}
+          backgroundColor={"rgba(0,0,0,.3)"}
           animated
           barStyle="dark-content"
         />
@@ -162,7 +169,7 @@ const styles = StyleSheet.create({
   backdrop: {
     flex: 1,
     width: Dimensions.get("window").width,
-    backgroundColor: "rgba(0,0,0,.2)",
+    backgroundColor: "rgba(0,0,0,.3)",
   },
 });
 

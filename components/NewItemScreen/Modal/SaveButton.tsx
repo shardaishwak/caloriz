@@ -49,7 +49,6 @@ const SaveButton = ({ onSave, loading }: { onSave: any; loading: boolean }) => {
 const styles = StyleSheet.create({
   wrapper: { marginTop: 10, height: 70, marginBottom: 0, borderRadius: 15 },
   container: {
-    backgroundColor: colors.app.green_100,
     borderRadius: 15,
     paddingVertical: 15,
   },

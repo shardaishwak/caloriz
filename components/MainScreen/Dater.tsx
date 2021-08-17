@@ -7,6 +7,7 @@ import {
   View,
 } from "react-native";
 import Carousel from "react-native-snap-carousel";
+import { FontAwesome5 } from "@expo/vector-icons";
 
 import colors from "../../colors";
 import { LoadData } from "../../cache";
@@ -17,7 +18,11 @@ import {
   daysInMonth,
   extract_data_from_date,
   formatted_get_week_of_date,
+  get_next_month_date,
+  get_prevous_month_date,
   todayDate,
+  transform_date_to_string,
+  transform_month_to_string,
   transform_week_to_string,
 } from "../../time";
 
@@ -34,6 +39,26 @@ class Dater extends React.Component<{ dispatch: any; state: State }> {
     await LoadData(date, this.props.dispatch);
 
     this.props.dispatch({ type: NEW_DATE_LOADING, payload: false });
+  };
+
+  LOAD_PREVOUS_MONTH = async (date) => {
+    const previous_date = get_prevous_month_date(date);
+    const format_date = transform_date_to_string(
+      previous_date.date,
+      previous_date.month,
+      previous_date.year
+    );
+    this.LOAD_NEW_DATE(format_date);
+  };
+
+  LOAD_NEXT_MONTH = async (date) => {
+    const next_date = get_next_month_date(date);
+    const format_date = transform_date_to_string(
+      next_date.date,
+      next_date.month,
+      next_date.year
+    );
+    this.LOAD_NEW_DATE(format_date);
   };
 
   _renderItem = ({ item }) => {
@@ -54,7 +79,9 @@ class Dater extends React.Component<{ dispatch: any; state: State }> {
           style={[
             styles.container,
             {
-              backgroundColor: is_current_date ? colors.app.green_100 : "#fff",
+              backgroundColor: is_current_date
+                ? colors.tailwind.green._500
+                : "#fff",
             },
           ]}
         >
@@ -70,7 +97,7 @@ class Dater extends React.Component<{ dispatch: any; state: State }> {
             <Text
               style={{
                 color: is_current_date
-                  ? colors.app.green_100
+                  ? colors.tailwind.green._500
                   : colors.app.dark_500,
                 fontFamily: "Inter-Medium",
               }}
@@ -90,10 +117,10 @@ class Dater extends React.Component<{ dispatch: any; state: State }> {
 
     const unformatted_app_date = extract_data_from_date(app_date);
     const dates = daysInMonth(unformatted_app_date[1], unformatted_app_date[2]);
-
+    console.log(unformatted_app_date[0]);
     return (
       <Carousel
-        firstItem={parseInt(unformatted_app_date[0]) - 1}
+        firstItem={parseInt(unformatted_app_date[0])}
         layout={"default"}
         ref={(ref) => (this.carousel = ref)}
         data={dates}
@@ -129,7 +156,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   point: {
-    backgroundColor: colors.app.green_100,
+    backgroundColor: colors.tailwind.green._500,
     width: 5,
     height: 5,
     borderRadius: 999,

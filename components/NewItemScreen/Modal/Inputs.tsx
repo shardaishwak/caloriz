@@ -1,7 +1,8 @@
 import React from "react";
 
-import { Text, View, StyleSheet } from "react-native";
+import { Text, View, StyleSheet, TouchableWithoutFeedback } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
+import { FontAwesome5 } from "@expo/vector-icons";
 
 import colors from "../../../colors";
 
@@ -24,14 +25,29 @@ const Inputs = ({
   <View style={styles.container}>
     <View style={[styles.input_container, { marginRight: 10 }]}>
       <Text style={styles.input_text}>Quantity</Text>
-      <TextInput
-        placeholder="1"
-        defaultValue={"1"}
-        keyboardType={"number-pad"}
-        onChangeText={onQuantityChange}
-        value={quantity.toString()}
-        style={styles.input}
-      />
+      <View style={styles.all_center}>
+        <TouchableWithoutFeedback
+          onPress={() => (quantity > 0 ? onQuantityChange(quantity - 1) : null)}
+        >
+          <View style={{ paddingRight: 15 }}>
+            <FontAwesome5
+              name={"minus"}
+              size={18}
+              color={colors.app.dark_300}
+            />
+          </View>
+        </TouchableWithoutFeedback>
+        <View>
+          <Text style={styles.input_value}>{quantity}</Text>
+        </View>
+        <TouchableWithoutFeedback
+          onPress={() => onQuantityChange(quantity + 1)}
+        >
+          <View style={{ paddingLeft: 15 }}>
+            <FontAwesome5 name={"plus"} size={18} color={colors.app.dark_300} />
+          </View>
+        </TouchableWithoutFeedback>
+      </View>
     </View>
     <View style={[styles.input_container, { marginLeft: 10 }]}>
       <Text style={styles.input_text}>Type</Text>
@@ -71,6 +87,17 @@ const styles = StyleSheet.create({
   input_text: {
     color: colors.tailwind.cool_gray._400,
     fontFamily: "Inter-Medium",
+  },
+  input_value: {
+    fontSize: 16,
+    fontFamily: "Inter-Medium",
+    colors: colors.app.dark_400,
+  },
+  all_center: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "row",
   },
 });
 

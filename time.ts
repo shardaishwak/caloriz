@@ -4,7 +4,7 @@ import moment from "moment";
 export const daysInMonth = (month, year) => {
   const days = moment(year + "-" + month).daysInMonth();
 
-  const month_list = [];
+  const month_list: Array<string> = [];
   for (var i = 1; i <= days; i++) {
     const str = transform_date_to_string(i, month, year);
     month_list.push(str);
@@ -81,3 +81,41 @@ export const todayDate = () => {
 
 // Setup the required zeros for the date
 export const digitize = (n) => ((n.toString().length < 2 && "0") || "") + n;
+
+/**
+ * @description Get the date of the prevous month with last date
+ * @param app_date
+ * @returns {month, year, date}
+ */
+export const get_prevous_month_date = (app_date) => {
+  const unformat = extract_data_from_date(app_date);
+  const mm = moment()
+    .year(parseInt(unformat[2]))
+    .month(parseInt(unformat[1]))
+    .subtract(1, "months")
+    .endOf("month");
+  const prev_month = mm.month();
+  const prev_date = mm.date();
+  const prev_year = mm.year();
+
+  return { month: prev_month, date: prev_date, year: prev_year };
+};
+
+/**
+ * @description Get the date of the next month with first date
+ * @param app_date
+ * @returns {month, year, date}
+ */
+export const get_next_month_date = (app_date) => {
+  const unformat = extract_data_from_date(app_date);
+  const mm = moment()
+    .year(parseInt(unformat[2]))
+    .month(parseInt(unformat[1]))
+    .add(1, "months")
+    .startOf("month");
+  const prev_month = mm.month();
+  const prev_date = mm.date();
+  const prev_year = mm.year();
+
+  return { month: prev_month, date: prev_date, year: prev_year };
+};

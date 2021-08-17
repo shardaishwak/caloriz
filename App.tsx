@@ -54,7 +54,7 @@ class AppImpl extends React.Component<{ global }> {
       return (
         <SafeAreaView style={styles.container_2}>
           <StatusBar
-            backgroundColor={colors.app.green_100}
+            backgroundColor={colors.tailwind.green._500}
             animated
             barStyle="light-content"
           />
@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
   },
   container_2: {
     flex: 1,
-    backgroundColor: colors.app.green_100,
+    backgroundColor: colors.tailwind.green._500,
     alignItems: "center",
     justifyContent: "center",
   },
