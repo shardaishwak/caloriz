@@ -3,10 +3,10 @@ import { SafeAreaView, Text, StyleSheet } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 
 import Header from "../components/Header";
-import ItemModal from "../components/NewItemScreen/Modal";
-import SearchInput from "../components/NewItemScreen/Modal/SearchInput";
-import FavouritesRender from "../components/NewItemScreen/RenderFavouritesList";
-import SearchResultRender from "../components/NewItemScreen/RenderSearchResults";
+import ItemModal from "../widgets/NewItemScreen/Modal";
+import SearchInput from "../widgets/NewItemScreen/Modal/SearchInput";
+import FavouritesRender from "../widgets/NewItemScreen/RenderFavouritesList";
+import SearchResultRender from "../widgets/NewItemScreen/RenderSearchResults";
 
 import colors from "../colors";
 import nutritionix from "../api/nutritionix";

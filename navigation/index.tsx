@@ -2,9 +2,8 @@ import React from "react";
 
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
-import MainScreen from "../screens/MainScreen";
-import NewItemScreen from "../screens/NewItemScreen";
-import { View } from "react-native";
+import MainScreen from "../screens/Main.screen";
+import NewItemScreen from "../screens/NewItem.screen";
 
 // Root navigation
 const Navigation: React.FC = () => (

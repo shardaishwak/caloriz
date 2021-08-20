@@ -2,7 +2,7 @@ import React from "react";
 
 import { Text, View } from "react-native";
 import colors from "../../../colors";
-import FavouriteIcon from "../../FavouriteIcon";
+import FavouriteIcon from "../../../components/FavouriteIcon";
 import { StyleSheet } from "react-native";
 
 /**

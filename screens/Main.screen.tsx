@@ -4,11 +4,11 @@ import { SafeAreaView, ScrollView, StyleSheet } from "react-native";
 import { useGlobal } from "../global/provider";
 import { CommonItem, FoodNutrients, Session } from "../interface";
 
-import Dater from "../components/MainScreen/Dater";
+import Dater from "../widgets/MainScreen/Dater";
 import Header from "../components/Header";
-import Calorimeter from "../components/MainScreen/Calorimeter";
-import Progresses from "../components/MainScreen/Progresses";
-import RenderSessionCards from "../components/MainScreen/RenderSessionCards";
+import Calorimeter from "../widgets/MainScreen/Calorimeter";
+import Progresses from "../widgets/MainScreen/Progresses";
+import RenderSessionCards from "../widgets/MainScreen/RenderSessionCards";
 
 /**
  * Calulcation of the total consumption of the nutrients
