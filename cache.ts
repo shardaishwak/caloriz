@@ -1,5 +1,5 @@
 import * as Font from "expo-font";
-import Constants from "expo-constants";
+
 import db from "./global/db";
 import {
   ADD_NEW_DATE,
@@ -8,7 +8,7 @@ import {
   SET_APP_DATE,
   SET_FIRST_TIME,
 } from "./global/constraints";
-import { FirstTime } from "./interface";
+
 import log from "./log";
 import { todayDate } from "./time";
 
@@ -60,7 +60,6 @@ export const LoadData = async (initial_date, dispatch) => {
  */
 const CheckFirstTime = async (dispatch) => {
   const is_record = await db.getFirstTime();
-  console.log(is_record);
   if (is_record.created_at && is_record.version) {
     // User already a member - no onboarding
     dispatch({ type: SET_FIRST_TIME, payload: is_record });

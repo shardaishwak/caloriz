@@ -81,6 +81,10 @@ const MainScreen = (props: { navigation }) => {
   // All the collection of daily consumptions
   const progress_data = GET_TOTAL_NUTRIENTS(date_data, fixed_sessions);
 
+  /**
+   * Add the first time fields to the db and state as user is not new anymore
+   * Called after the card click
+   */
   const ADD_FIRST_TIME = async () => {
     const values: FirstTime = {
       created_at: new Date(),

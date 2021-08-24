@@ -168,6 +168,12 @@ const clearFavourites = (state: State, _) => ({
 
 // ============================ SET FIRST TIME
 
+/**
+ * @description Add the first time data value to the state
+ * @param state
+ * @param payload FirstTime data
+ * @connect: db.setFirstTime
+ */
 const setFirstTime = (state: State, { payload }: { payload: FirstTime }) => ({
   ...state,
   first_time: payload,
