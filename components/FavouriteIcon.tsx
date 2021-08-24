@@ -4,7 +4,8 @@ import { AntDesign } from "@expo/vector-icons";
 import { TouchableWithoutFeedback } from "react-native";
 
 import db from "../global/db";
-import { REMOVE_FAVOURITE, useGlobal } from "../global/provider";
+import { useGlobal } from "../global/provider";
+import { REMOVE_FAVOURITE } from "../global/constraints";
 
 /**
  * componet for managing on favourite click

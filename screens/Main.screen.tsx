@@ -1,13 +1,20 @@
 import React from "react";
 import { SafeAreaView, ScrollView, StyleSheet } from "react-native";
 
-import { useGlobal } from "../global/provider";
-import { CommonItem, FoodNutrients, Session } from "../interface";
+import Constants from "expo-constants";
 
-import Dater from "../widgets/MainScreen/Dater";
+import db from "../global/db";
+import { useGlobal } from "../global/provider";
+import { SET_FIRST_TIME } from "../global/constraints";
+
+import { CommonItem, FirstTime, FoodNutrients, Session } from "../interface";
+
 import Header from "../components/Header";
-import Calorimeter from "../widgets/MainScreen/Calorimeter";
+
+import Onboarding from "../widgets/Onboarding";
+import Dater from "../widgets/MainScreen/Dater";
 import Progresses from "../widgets/MainScreen/Progresses";
+import Calorimeter from "../widgets/MainScreen/Calorimeter";
 import RenderSessionCards from "../widgets/MainScreen/RenderSessionCards";
 
 /**
@@ -15,6 +22,7 @@ import RenderSessionCards from "../widgets/MainScreen/RenderSessionCards";
  */
 
 const GET_TOTAL_NUTRIENTS = (data, sessions) => {
+  console.log(Constants.manifest.version);
   const progress_data: FoodNutrients = {
     carbohydrates: 0,
     fat: 0,
@@ -46,7 +54,8 @@ const GET_TOTAL_NUTRIENTS = (data, sessions) => {
 
 const MainScreen = (props: { navigation }) => {
   const {
-    state: { data },
+    state: { data, first_time },
+    dispatch,
   } = useGlobal();
   // default, pass it from the main screen as the user takes a new date
   const date_data = data;
@@ -72,8 +81,22 @@ const MainScreen = (props: { navigation }) => {
   // All the collection of daily consumptions
   const progress_data = GET_TOTAL_NUTRIENTS(date_data, fixed_sessions);
 
+  const ADD_FIRST_TIME = async () => {
+    const values: FirstTime = {
+      created_at: new Date(),
+      value: false,
+      version: Constants.manifest.version,
+    };
+    db.setFirstTime(values);
+    dispatch({ type: SET_FIRST_TIME, payload: values });
+  };
+
   return (
     <SafeAreaView style={styles.container}>
+      {!first_time.value && !first_time.created_at && (
+        <Onboarding onClose={ADD_FIRST_TIME} />
+      )}
+
       <ScrollView showsVerticalScrollIndicator={false}>
         <Header navigation={props.navigation} />
 

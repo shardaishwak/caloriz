@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
   input_value: {
     fontSize: 16,
     fontFamily: "Inter-Medium",
-    colors: colors.app.dark_400,
+    color: colors.app.dark_400,
   },
   all_center: {
     flex: 1,

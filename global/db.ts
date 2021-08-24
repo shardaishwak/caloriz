@@ -1,5 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { CommonItem } from "../interface";
+import { CommonItem, FirstTime } from "../interface";
 import { setDefaultDate } from "./actions";
 
 /** ============================ ITEM ================================ */
@@ -120,6 +120,14 @@ const clearFavourites = async () => {
   await AsyncStorage.setItem("@favourites", JSON.stringify([]));
 };
 
+// ========================= SET FIRST TIME
+
+const getFirstTime = async () =>
+  JSON.parse(await AsyncStorage.getItem("@first_time")) as FirstTime;
+
+const setFirstTime = async (data: FirstTime) =>
+  await AsyncStorage.setItem("@first_time", JSON.stringify(data));
+
 // make the name coherent with each other
 export default {
   addItem,
@@ -130,4 +138,6 @@ export default {
   addFavourite,
   removeFavourite,
   clearFavourites,
+  getFirstTime,
+  setFirstTime,
 };

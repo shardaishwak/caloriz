@@ -1,12 +1,14 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Font from "expo-font";
+import Constants from "expo-constants";
 import db from "./global/db";
 import {
   ADD_NEW_DATE,
   ADD_DATA,
   INITIALIZE_FAVOURITES,
   SET_APP_DATE,
-} from "./global/provider";
+  SET_FIRST_TIME,
+} from "./global/constraints";
+import { FirstTime } from "./interface";
 import log from "./log";
 import { todayDate } from "./time";
 
@@ -51,6 +53,21 @@ export const LoadData = async (initial_date, dispatch) => {
 };
 
 /**
+ * @description Check if the user is entering for the first time
+ * Update the inputted profile details
+ *
+ * Merge with user profile
+ */
+const CheckFirstTime = async (dispatch) => {
+  const is_record = await db.getFirstTime();
+  console.log(is_record);
+  if (is_record.created_at && is_record.version) {
+    // User already a member - no onboarding
+    dispatch({ type: SET_FIRST_TIME, payload: is_record });
+  }
+};
+
+/**
  * @description Initialize the cache on first app render
  * @param global (dispatch)
  */
@@ -59,6 +76,7 @@ const LoadCache = async (global) => {
 
   await LoadFonts();
   await LoadData(todayDate(), global.dispatch);
+  await CheckFirstTime(global.dispatch);
 
   log("[CACHE]", "Finished");
 };

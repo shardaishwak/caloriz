@@ -19,7 +19,8 @@ import SaveButton from "./SaveButton";
 import db from "../../../global/db";
 import { CommonItem } from "../../../interface";
 import nutritionix from "../../../api/nutritionix";
-import { ADD_FOOD, SET_FAVOURITE, useGlobal } from "../../../global/provider";
+import { useGlobal } from "../../../global/provider";
+import { ADD_FOOD, SET_FAVOURITE } from "../../../global/constraints";
 
 /**
  * Main modal component for showing the detailed data of the searched item

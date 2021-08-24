@@ -1,4 +1,4 @@
-import { AppDate, CommonItem, Session, State } from "../interface";
+import { AppDate, CommonItem, FirstTime, Session, State } from "../interface";
 
 /**
  * @description Show the splash screen while the new date data is loading
@@ -166,6 +166,13 @@ const clearFavourites = (state: State, _) => ({
   favourites: [],
 });
 
+// ============================ SET FIRST TIME
+
+const setFirstTime = (state: State, { payload }: { payload: FirstTime }) => ({
+  ...state,
+  first_time: payload,
+});
+
 // Default routeine data model
 const defaultDate: AppDate = {
   breakfast: [], // | Array<BrandedItem>
@@ -204,4 +211,5 @@ export default {
   setFavourite,
   removeFavourite,
   clearFavourites,
+  setFirstTime,
 };

@@ -5,14 +5,14 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native";
 
+import { useGlobal } from "../../global/provider";
+import db from "../../global/db";
+import colors from "../../colors";
 import {
   ADD_FOOD,
   REMOVE_FAVOURITE,
   REMOVE_FOOD,
-  useGlobal,
-} from "../../global/provider";
-import db from "../../global/db";
-import colors from "../../colors";
+} from "../../global/constraints";
 
 /**
  * Favourite card design component

@@ -13,7 +13,8 @@ import Card from "./Card";
 
 import db from "../../global/db";
 import colors from "../../colors";
-import { REMOVE_FOOD, useGlobal } from "../../global/provider";
+import { useGlobal } from "../../global/provider";
+import { REMOVE_FOOD } from "../../global/constraints";
 import { AppDate, CommonItem, Session } from "../../interface";
 
 /**

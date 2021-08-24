@@ -1,8 +1,9 @@
 {
   "expo": {
     "name": "Caloriz",
+
     "slug": "caloriz",
-    "version": "1.0.0",
+    "version": "0.1.0",
     "orientation": "portrait",
     "icon": "./assets/icons/android/mipmap-xxxhdpi/ic_launcher_foreground.png",
     "splash": {
@@ -16,14 +17,16 @@
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": false,
-      "bundleIdentifier": "com.ishwakcorps.caloriz"
+      "bundleIdentifier": "com.ishwakcorp.caloriz",
+      "buildNumber": "0.1.0"
     },
     "android": {
-      "package": "com.ishwakcorps.caloriz",
+      "package": "com.ishwakcorp.caloriz",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "versionCode": 1
     },
     "web": {
       "favicon": "./assets/icons/android/mipmap-xhdpi/ic_launcher_foreground.png"

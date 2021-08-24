@@ -12,7 +12,8 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import colors from "../../colors";
 import { LoadData } from "../../cache";
 import { State } from "../../interface";
-import { NEW_DATE_LOADING, withGlobal } from "../../global/provider";
+import { withGlobal } from "../../global/provider";
+import { NEW_DATE_LOADING } from "../../global/constraints";
 
 import {
   daysInMonth,

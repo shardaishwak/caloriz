@@ -1,6 +1,6 @@
 import { digitize } from "./time";
 
-const log = (i, m) => {
+const log = (i: string, m: any) => {
   const date = new Date();
   const hours = date.getHours();
   const minutes = date.getMinutes();

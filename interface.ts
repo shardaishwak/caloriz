@@ -55,4 +55,12 @@ export interface State {
   data: AppDate;
   new_date_loading: boolean;
   favourites: Array<CommonItem>;
+  first_time: FirstTime;
+}
+
+// move all info to the profile, first_time: boolean
+export interface FirstTime {
+  value: boolean;
+  created_at: Date;
+  version: string;
 }
