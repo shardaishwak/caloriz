@@ -6,7 +6,10 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
-import Carousel from "react-native-snap-carousel";
+import Carousel, {
+  CarouselProperties,
+  CarouselProps,
+} from "react-native-snap-carousel";
 import { FontAwesome5 } from "@expo/vector-icons";
 
 import colors from "../../colors";
@@ -121,13 +124,14 @@ class Dater extends React.Component<{ dispatch: any; state: State }> {
     console.log(unformatted_app_date[0]);
     return (
       <Carousel
-        firstItem={parseInt(unformatted_app_date[0])}
+        firstItem={parseInt(unformatted_app_date[0]) - 1}
         layout={"default"}
         ref={(ref) => (this.carousel = ref)}
         data={dates}
         sliderWidth={Dimensions.get("screen").width}
         itemWidth={50}
         renderItem={this._renderItem}
+        initialNumToRender={dates.length}
         //onSnapToItem={(index) => this.LOAD_NEW_DATE(dates[index])}
       />
     );
