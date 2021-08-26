@@ -30,7 +30,7 @@ export default class Onboarding extends React.Component<
           <CardContainer
             onPress={this.props.onClose}
             color={colors.app.blue_100}
-            imageSrc={require("../assets/undraw_ice_cream.png")}
+            imageSrc={require("../assets/images/undraw_ice_cream.png")}
             title={"Count your calories"}
             desc={
               "Stay aware of the daily intaken calories, caterogrized by day routeines."
@@ -52,7 +52,7 @@ export default class Onboarding extends React.Component<
           <CardContainer
             onPress={this.props.onClose}
             color={colors.app.orange_100}
-            imageSrc={require("../assets/undraw_searching.png")}
+            imageSrc={require("../assets/images/undraw_searching.png")}
             title={"Advanced search and data"}
             desc={
               "All the products in the database have been calibrated to assimilate to the real one. Every quantity is calculated with precision."
@@ -74,7 +74,7 @@ export default class Onboarding extends React.Component<
           <CardContainer
             onPress={this.props.onClose}
             color={colors.tailwind.red._500}
-            imageSrc={require("../assets/undraw_simple_target.png")}
+            imageSrc={require("../assets/images/undraw_simple_target.png")}
             title={"A precise target in mind"}
             desc={
               "We have the aim to bring awareness in what products your consumed daily. Your health depends on it."
@@ -96,7 +96,7 @@ export default class Onboarding extends React.Component<
           <CardContainer
             onPress={this.props.onClose}
             color={colors.tailwind.green._500}
-            imageSrc={require("../assets/undraw_start.png")}
+            imageSrc={require("../assets/images/undraw_start.png")}
             title={"What are you waiting for?"}
             desc={"Start counting your calories and have an healthy life."}
           >

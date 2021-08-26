@@ -1,15 +1,16 @@
 import React from "react";
 
-import { StyleSheet } from "react-native";
 import Svg, { Path } from "react-native-svg";
 import { Ionicons } from "@expo/vector-icons";
-import { Text, TouchableNativeFeedback, View } from "react-native";
+import { TouchableWithoutFeedback } from "react-native-gesture-handler";
+import { StyleSheet, Text, TouchableNativeFeedback, View } from "react-native";
 
 import { StackNavigationHelpers } from "@react-navigation/stack/lib/typescript/src/types";
 
+import { useGlobal } from "../global/provider";
+import { NEW_DATE_LOADING } from "../global/constraints";
+
 import colors from "../colors";
-import { TouchableWithoutFeedback } from "react-native-gesture-handler";
-import { NEW_DATE_LOADING, useGlobal } from "../global/provider";
 import { LoadData } from "../cache";
 import { todayDate } from "../time";
 
@@ -22,8 +23,10 @@ const Header = (props: {
   page?: string;
   small?: string;
   rightIcon?: React.FC;
+  goBack: boolean;
 }) => {
   const { dispatch } = useGlobal();
+  // Load the today data when user click on the icon
   const LOAD_NEW_DATE = async (date) => {
     dispatch({ type: NEW_DATE_LOADING, payload: true });
 
@@ -33,7 +36,7 @@ const Header = (props: {
   };
   return (
     <View style={styles.container}>
-      {props.navigation.canGoBack() ? (
+      {props.goBack ? (
         <TouchableNativeFeedback onPress={props.navigation.goBack}>
           <Ionicons size={25} name="chevron-back" />
         </TouchableNativeFeedback>

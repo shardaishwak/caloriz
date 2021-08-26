@@ -102,7 +102,7 @@ const MainScreen = (props: { navigation }) => {
       )}
 
       <ScrollView showsVerticalScrollIndicator={false}>
-        <Header navigation={props.navigation} />
+        <Header goBack={false} navigation={props.navigation} />
 
         <Dater />
         <Calorimeter target={target} current={progress_data.calories} />

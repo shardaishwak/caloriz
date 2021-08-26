@@ -5,9 +5,9 @@
     "slug": "caloriz",
     "version": "0.1.0",
     "orientation": "portrait",
-    "icon": "./assets/icons/android/mipmap-xxxhdpi/ic_launcher_foreground.png",
+    "icon": "./assets/icons/v2/icon.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/icons/v2/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -23,13 +23,10 @@
     "android": {
       "package": "com.ishwakcorp.caloriz",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/icons/v2/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
       "versionCode": 1
-    },
-    "web": {
-      "favicon": "./assets/icons/android/mipmap-xhdpi/ic_launcher_foreground.png"
     }
   }
 }

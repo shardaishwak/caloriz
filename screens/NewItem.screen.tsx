@@ -104,7 +104,12 @@ const NewItemScreen = (props) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header navigation={props.navigation} page={session} small={timing} />
+      <Header
+        goBack={true}
+        navigation={props.navigation}
+        page={session}
+        small={timing}
+      />
 
       <ScrollView>
         <SearchInput

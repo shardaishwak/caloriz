@@ -5,4 +5,4 @@
 @1 [] Back icon on the MainScreen
 @2 [] Too big icon logo
 @3 [] Low quality splash screen icon
-@4 [] Dater current date not working
+@4 [x] Dater current date not working

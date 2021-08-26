@@ -6,11 +6,7 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
-import Carousel, {
-  CarouselProperties,
-  CarouselProps,
-} from "react-native-snap-carousel";
-import { FontAwesome5 } from "@expo/vector-icons";
+import Carousel from "react-native-snap-carousel";
 
 import colors from "../../colors";
 import { LoadData } from "../../cache";
@@ -26,7 +22,6 @@ import {
   get_prevous_month_date,
   todayDate,
   transform_date_to_string,
-  transform_month_to_string,
   transform_week_to_string,
 } from "../../time";
 
