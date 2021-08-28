@@ -61,6 +61,7 @@ export const LoadData = async (initial_date, dispatch) => {
  * Merge with user profile
  */
 const LoadProfile = async (dispatch) => {
+  //await AsyncStorage.removeItem("@profile");
   const profile: Profile = await db.getProfile();
   log("[PROFILE]", profile);
 

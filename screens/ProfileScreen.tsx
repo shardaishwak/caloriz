@@ -18,10 +18,10 @@ import { StackNavigationHelpers } from "@react-navigation/stack/lib/typescript/s
 import { Gender } from "../interface";
 import { useRef } from "react";
 import moment from "moment";
+import { useNavigation, useRoute } from "@react-navigation/native";
 
 const isValidDate = (date: string) => {
   const m_date = moment(date, "DDMMYYYY", true);
-  console.log(m_date.day());
   return [m_date.isValid(), m_date];
 };
 
@@ -206,6 +206,7 @@ const ProfileScreen: React.FC<{ navigation: StackNavigationHelpers }> = ({
     state: { profile },
     dispatch,
   } = useGlobal();
+  const router = useNavigation();
   const [name, setName] = useState<string>(profile.name || "");
   const [username, setUsername] = useState<string>(profile.username || "");
   const [gender, setGender] = useState<Gender>(profile.gender || null);
@@ -241,9 +242,10 @@ const ProfileScreen: React.FC<{ navigation: StackNavigationHelpers }> = ({
     await db.updateProfile(update);
     dispatch({ type: UPDATE_PROFILE, payload: update });
     setLoading(false);
+
+    if (profile.new_user !== false) return router.navigate("entry");
   };
 
-  console.log(Age(date));
   return (
     <View style={{ backgroundColor: "#fff", flex: 1 }}>
       <ScrollView>
@@ -319,7 +321,6 @@ const ProfileScreen: React.FC<{ navigation: StackNavigationHelpers }> = ({
                 placeholder={"94.6"}
                 description={"Your height in (cm)."}
                 onChange={(e) => {
-                  console.log(e);
                   setHeight(!e ? 0 : parseFloat(e));
                 }}
               />
