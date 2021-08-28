@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ReactChild } from "react";
 
 import Svg, { Path } from "react-native-svg";
 import { Ionicons } from "@expo/vector-icons";
@@ -22,7 +22,7 @@ const Header = (props: {
   navigation: StackNavigationHelpers;
   page?: string;
   small?: string;
-  rightIcon?: React.FC;
+  rightIcon?: ReactChild;
   goBack: boolean;
 }) => {
   const { dispatch } = useGlobal();
@@ -37,18 +37,24 @@ const Header = (props: {
   return (
     <View style={styles.container}>
       {props.goBack ? (
-        <TouchableNativeFeedback onPress={props.navigation.goBack}>
+        <TouchableNativeFeedback
+          onPress={
+            props.navigation.canGoBack()
+              ? props.navigation.goBack
+              : () => props.navigation.push("entry")
+          }
+        >
           <Ionicons size={25} name="chevron-back" />
         </TouchableNativeFeedback>
       ) : (
         <View style={styles.default_spacing}></View>
       )}
-      {props.page && props.small ? (
+      {props.page || props.small ? (
         <View style={{ alignItems: "center" }}>
           <Text style={styles.page_title}>
             {props.page.split("_").join(" ")}
           </Text>
-          <Text style={styles.date}>{props.small}</Text>
+          {props.small && <Text style={styles.date}>{props.small}</Text>}
         </View>
       ) : (
         <TouchableWithoutFeedback onPress={() => LOAD_NEW_DATE(todayDate())}>

@@ -116,7 +116,6 @@ class Dater extends React.Component<{ dispatch: any; state: State }> {
 
     const unformatted_app_date = extract_data_from_date(app_date);
     const dates = daysInMonth(unformatted_app_date[1], unformatted_app_date[2]);
-    console.log(unformatted_app_date[0]);
     return (
       <Carousel
         firstItem={parseInt(unformatted_app_date[0]) - 1}

@@ -1,5 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { CommonItem, FirstTime } from "../interface";
+import { CommonItem, FirstTime, Profile } from "../interface";
 import { setDefaultDate } from "./actions";
 
 /** ============================ ITEM ================================ */
@@ -120,24 +120,31 @@ const clearFavourites = async () => {
   await AsyncStorage.setItem("@favourites", JSON.stringify([]));
 };
 
-// ========================= SET FIRST TIME
+// ===================== PROFILE
 
-const getFirstTime = async () =>
-  JSON.parse(await AsyncStorage.getItem("@first_time")) as FirstTime;
+const getProfile = async () =>
+  JSON.parse(await AsyncStorage.getItem("@profile")) as Profile;
 
-const setFirstTime = async (data: FirstTime) =>
-  await AsyncStorage.setItem("@first_time", JSON.stringify(data));
+const updateProfile = async (updates) => {
+  await AsyncStorage.setItem(
+    "@profile",
+    JSON.stringify({ ...(await getProfile()), ...updates })
+  );
+};
 
 // make the name coherent with each other
 export default {
   addItem,
   deleteItem,
+
   retrieveRouteine,
   initializeRouteine,
+
   getFavourites,
   addFavourite,
   removeFavourite,
   clearFavourites,
-  getFirstTime,
-  setFirstTime,
+
+  getProfile,
+  updateProfile,
 };

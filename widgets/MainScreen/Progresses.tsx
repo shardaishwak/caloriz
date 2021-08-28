@@ -9,11 +9,13 @@ import { Dimensions, StyleSheet, View } from "react-native";
 
 import colors from "../../colors";
 import Progress from "./Progress";
-import { FoodNutrients } from "../../interface";
+import { FoodNutrients, State } from "../../interface";
+import { withGlobal } from "../../global/provider";
 
 class Progresses extends React.Component<{
   progress_data: FoodNutrients;
-  total_calories: number;
+  dispatch: any;
+  state: State;
 }> {
   carousel;
   _renderItem = ({ item: { perc, total_consume, pd, title, color } }) => (
@@ -25,12 +27,17 @@ class Progresses extends React.Component<{
     />
   );
   render() {
-    const { progress_data, total_calories } = this.props;
-    const user_mass = 55; // add it to state;
+    const {
+      state: {
+        profile: { mass, calories_target },
+      },
+    } = this.props;
+    const { progress_data } = this.props;
+    const user_mass = mass; // add it to state;
 
-    const total_fat_to_consume = (total_calories * 60.5) / 2000;
+    const total_fat_to_consume = (calories_target * 60.5) / 2000;
     const total_protein_to_consume = user_mass * 1; // based on total_calories_daily consumption
-    const total_carbs_to_consume = (total_calories * 275) / 2000; // based on total_calories_daily/8;
+    const total_carbs_to_consume = (calories_target * 275) / 2000; // based on total_calories_daily/8;
     const total_sugar_to_consume = 37.5; // 25 for women
     const total_cholesterol_to_consume = 0.3;
     // add other fields
@@ -116,4 +123,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Progresses;
+export default withGlobal(Progresses);

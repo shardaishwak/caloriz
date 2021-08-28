@@ -1,13 +1,20 @@
 import React from "react";
-import { SafeAreaView, ScrollView, StyleSheet } from "react-native";
+import {
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  TouchableWithoutFeedback,
+  View,
+} from "react-native";
 
 import Constants from "expo-constants";
 
 import db from "../global/db";
 import { useGlobal } from "../global/provider";
-import { SET_FIRST_TIME } from "../global/constraints";
 
-import { CommonItem, FirstTime, FoodNutrients, Session } from "../interface";
+import { Entypo } from "@expo/vector-icons";
+
+import { CommonItem, FoodNutrients, Session } from "../interface";
 
 import Header from "../components/Header";
 
@@ -16,13 +23,13 @@ import Dater from "../widgets/MainScreen/Dater";
 import Progresses from "../widgets/MainScreen/Progresses";
 import Calorimeter from "../widgets/MainScreen/Calorimeter";
 import RenderSessionCards from "../widgets/MainScreen/RenderSessionCards";
+import { StackNavigationHelpers } from "@react-navigation/stack/lib/typescript/src/types";
 
 /**
  * Calulcation of the total consumption of the nutrients
  */
 
 const GET_TOTAL_NUTRIENTS = (data, sessions) => {
-  console.log(Constants.manifest.version);
   const progress_data: FoodNutrients = {
     carbohydrates: 0,
     fat: 0,
@@ -52,15 +59,14 @@ const GET_TOTAL_NUTRIENTS = (data, sessions) => {
   return progress_data;
 };
 
-const MainScreen = (props: { navigation }) => {
+const MainScreen = ({ navigation }: { navigation: StackNavigationHelpers }) => {
   const {
-    state: { data, first_time },
-    dispatch,
+    state: { data, profile },
   } = useGlobal();
   // default, pass it from the main screen as the user takes a new date
   const date_data = data;
 
-  let target = 3000; // TODO: bring to state as user.preferences.target
+  let target = profile.calories_target; // TODO: bring to state as user.preferences.target
 
   // Retrive data of a prticular date from state
 
@@ -81,36 +87,27 @@ const MainScreen = (props: { navigation }) => {
   // All the collection of daily consumptions
   const progress_data = GET_TOTAL_NUTRIENTS(date_data, fixed_sessions);
 
-  /**
-   * Add the first time fields to the db and state as user is not new anymore
-   * Called after the card click
-   */
-  const ADD_FIRST_TIME = async () => {
-    const values: FirstTime = {
-      created_at: new Date(),
-      value: false,
-      version: Constants.manifest.version,
-    };
-    db.setFirstTime(values);
-    dispatch({ type: SET_FIRST_TIME, payload: values });
-  };
-
   return (
     <SafeAreaView style={styles.container}>
-      {!first_time.value && !first_time.created_at && (
-        <Onboarding onClose={ADD_FIRST_TIME} />
-      )}
-
       <ScrollView showsVerticalScrollIndicator={false}>
-        <Header goBack={false} navigation={props.navigation} />
-
+        <Header
+          goBack={false}
+          navigation={navigation}
+          rightIcon={
+            <TouchableWithoutFeedback
+              onPress={() => navigation.push("settings:profile")}
+            >
+              <Entypo name="cog" size={25} />
+            </TouchableWithoutFeedback>
+          }
+        />
         <Dater />
         <Calorimeter target={target} current={progress_data.calories} />
-        <Progresses progress_data={progress_data} total_calories={target} />
+        <Progresses progress_data={progress_data} />
         <RenderSessionCards
           sessions={fixed_sessions} // All the card sessions to show
           date_data={date_data} // Current state date based data
-          navigation={props.navigation}
+          navigation={navigation}
         />
       </ScrollView>
     </SafeAreaView>

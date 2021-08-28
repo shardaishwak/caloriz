@@ -6,11 +6,13 @@ import {
   ADD_DATA,
   INITIALIZE_FAVOURITES,
   SET_APP_DATE,
-  SET_FIRST_TIME,
+  GET_PROFILE,
 } from "./global/constraints";
 
 import log from "./log";
 import { todayDate } from "./time";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Profile } from "./interface";
 
 // Load all the fonts
 /**
@@ -58,12 +60,11 @@ export const LoadData = async (initial_date, dispatch) => {
  *
  * Merge with user profile
  */
-const CheckFirstTime = async (dispatch) => {
-  const is_record = await db.getFirstTime();
-  if (is_record.created_at && is_record.version) {
-    // User already a member - no onboarding
-    dispatch({ type: SET_FIRST_TIME, payload: is_record });
-  }
+const LoadProfile = async (dispatch) => {
+  const profile: Profile = await db.getProfile();
+  log("[PROFILE]", profile);
+
+  if (!profile.new_user) dispatch({ type: GET_PROFILE, payload: profile });
 };
 
 /**
@@ -75,7 +76,7 @@ const LoadCache = async (global) => {
 
   await LoadFonts();
   await LoadData(todayDate(), global.dispatch);
-  await CheckFirstTime(global.dispatch);
+  await LoadProfile(global.dispatch);
 
   log("[CACHE]", "Finished");
 };

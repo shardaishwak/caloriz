@@ -9,10 +9,16 @@ const initialState: State = {
   favourites: [],
   app_date: null,
   new_date_loading: false,
-  first_time: {
-    value: null,
-    created_at: null,
+  profile: {
+    name: null,
+    calories_target: 0,
+    date_of_birth: { value: null, age: null },
+    height: 0,
+    mass: 0,
+    new_user: null,
+    username: null,
     version: null,
+    gender: null,
   },
 };
 

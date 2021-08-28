@@ -1,4 +1,11 @@
-import { AppDate, CommonItem, FirstTime, Session, State } from "../interface";
+import {
+  AppDate,
+  CommonItem,
+  FirstTime,
+  Profile,
+  Session,
+  State,
+} from "../interface";
 
 /**
  * @description Show the splash screen while the new date data is loading
@@ -166,17 +173,19 @@ const clearFavourites = (state: State, _) => ({
   favourites: [],
 });
 
-// ============================ SET FIRST TIME
+// =============================== PROFILE
 
-/**
- * @description Add the first time data value to the state
- * @param state
- * @param payload FirstTime data
- * @connect: db.setFirstTime
- */
-const setFirstTime = (state: State, { payload }: { payload: FirstTime }) => ({
+const getProfile = (state: State, { payload }: { payload: Profile }) => ({
   ...state,
-  first_time: payload,
+  profile: payload,
+});
+
+const updateProfile = (state: State, { payload }) => ({
+  ...state,
+  profile: {
+    ...state.profile,
+    ...payload,
+  },
 });
 
 // Default routeine data model
@@ -207,15 +216,22 @@ export const setDefaultDate = () => defaultDate;
 
 export default {
   newDateLoading,
+
   setAppDate,
   addNewDate,
+
   addFood,
   removeFood,
+
   defaultDate,
+
   addData,
+
   initializeFavourites,
   setFavourite,
   removeFavourite,
   clearFavourites,
-  setFirstTime,
+
+  getProfile,
+  updateProfile,
 };

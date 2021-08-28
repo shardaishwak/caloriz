@@ -55,12 +55,24 @@ export interface State {
   data: AppDate;
   new_date_loading: boolean;
   favourites: Array<CommonItem>;
-  first_time: FirstTime;
+  profile: Profile;
 }
 
-// move all info to the profile, first_time: boolean
-export interface FirstTime {
-  value: boolean;
-  created_at: Date;
-  version: string;
+export enum Gender {
+  male = "male",
+  female = "female",
+  other = "other",
+}
+
+export interface Profile {
+  name: string;
+  username: string;
+  date_of_birth: { value: Date | string; age: number };
+  new_user: boolean;
+  version: string | number;
+
+  mass: number;
+  height: number;
+  calories_target: number;
+  gender: Gender;
 }
