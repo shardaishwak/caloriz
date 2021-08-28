@@ -1,24 +1,28 @@
-import React, { MutableRefObject, ReactChild } from "react";
-import { useState } from "react";
+import React, { ReactChild, useState } from "react";
+
 import {
   KeyboardType,
   TouchableNativeFeedback,
   TouchableWithoutFeedback,
+  View,
+  Text,
+  ActivityIndicator,
 } from "react-native";
-import { View, Text, ActivityIndicator } from "react-native";
+import moment from "moment";
+import Constants from "expo-constants";
 import { ScrollView, TextInput } from "react-native-gesture-handler";
+
+import { useNavigation } from "@react-navigation/native";
+import { StackNavigationHelpers } from "@react-navigation/stack/lib/typescript/src/types";
+
 import colors from "../colors";
+import { Gender } from "../interface";
+
 import Header from "../components/Header";
+
 import db from "../global/db";
 import { useGlobal } from "../global/provider";
-
-import Constants from "expo-constants";
 import { UPDATE_PROFILE } from "../global/constraints";
-import { StackNavigationHelpers } from "@react-navigation/stack/lib/typescript/src/types";
-import { Gender } from "../interface";
-import { useRef } from "react";
-import moment from "moment";
-import { useNavigation, useRoute } from "@react-navigation/native";
 
 const isValidDate = (date: string) => {
   const m_date = moment(date, "DDMMYYYY", true);
@@ -42,7 +46,6 @@ const Input: React.FC<{
   dropdown?: ReactChild;
 }> = ({ name, type, placeholder, value, description, dropdown, onChange }) => {
   const [isFocus, setIsFocus] = useState<boolean>(false);
-  const ref = useRef<any>();
   return (
     <View style={{ width: "100%", marginVertical: 10 }}>
       <View
@@ -83,7 +86,6 @@ const Input: React.FC<{
           onFocus={() => setIsFocus(true)}
           onBlur={() => setIsFocus(false)}
           keyboardType={type}
-          ref={ref}
         />
       </View>
       <View style={{ marginTop: 7.5 }}>
@@ -207,11 +209,12 @@ const ProfileScreen: React.FC<{ navigation: StackNavigationHelpers }> = ({
     dispatch,
   } = useGlobal();
   const router = useNavigation();
-  const [name, setName] = useState<string>(profile.name || "");
-  const [username, setUsername] = useState<string>(profile.username || "");
-  const [gender, setGender] = useState<Gender>(profile.gender || null);
+
   const [mass, setMass] = useState<number>(profile.mass || 0);
+  const [name, setName] = useState<string>(profile.name || "");
   const [height, setHeight] = useState<number>(profile.height || 0);
+  const [gender, setGender] = useState<Gender>(profile.gender || null);
+  const [username, setUsername] = useState<string>(profile.username || "");
   const [calories, setCalories] = useState<number>(
     profile.calories_target || 0
   );
@@ -350,7 +353,7 @@ const ProfileScreen: React.FC<{ navigation: StackNavigationHelpers }> = ({
           />
         </View>
       </ScrollView>
-      <TouchableNativeFeedback onPress={UpdateProfile}>
+      <TouchableNativeFeedback onPress={!loading && UpdateProfile}>
         <View
           style={{
             padding: 10,

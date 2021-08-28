@@ -4,8 +4,9 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 import MainScreen from "../screens/Main.screen";
 import NewItemScreen from "../screens/NewItem.screen";
-import ProfileScreen from "../screens/ProfileScreen";
+import ProfileScreen from "../screens/Profile.screen";
 import { useGlobal } from "../global/provider";
+import OnboardingScreen from "../screens/Onboarding.screen";
 
 // Root navigation
 const Navigation: React.FC = () => (
@@ -24,12 +25,12 @@ const StackNavigation: React.FC = () => {
   } = useGlobal();
   return (
     <Stack.Navigator
-      initialRouteName={new_user !== false ? "settings:profile" : "entry"} // first_time.value ?? onboarding : entry
+      initialRouteName={new_user !== false ? "onboarding" : "entry"} // first_time.value ?? onboarding : entry
       screenOptions={{ headerShown: false }}
     >
       <Stack.Screen name="entry" component={MainScreen} />
-      {/*<Stack.Screen name="details" component={() => <View></View>} />*/}
       <Stack.Screen name="newitem" component={NewItemScreen} />
+      <Stack.Screen name="onboarding" component={OnboardingScreen} />
       <Stack.Screen name="settings:profile" component={ProfileScreen} />
     </Stack.Navigator>
   );
