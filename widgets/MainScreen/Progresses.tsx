@@ -9,7 +9,7 @@ import { Dimensions, StyleSheet, View } from "react-native";
 
 import colors from "../../colors";
 import Progress from "./Progress";
-import { FoodNutrients, State } from "../../interface";
+import { FoodNutrients, Gender, State } from "../../interface";
 import { withGlobal } from "../../global/provider";
 
 class Progresses extends React.Component<{
@@ -29,16 +29,22 @@ class Progresses extends React.Component<{
   render() {
     const {
       state: {
-        profile: { mass, calories_target },
+        profile: {
+          mass,
+          calories_target,
+          gender,
+          date_of_birth: { age },
+        },
       },
     } = this.props;
     const { progress_data } = this.props;
     const user_mass = mass; // add it to state;
 
-    const total_fat_to_consume = (calories_target * 60.5) / 2000;
+    const total_fat_to_consume = (calories_target * 60.5) / 2000; // ok
     const total_protein_to_consume = user_mass * 1; // based on total_calories_daily consumption
     const total_carbs_to_consume = (calories_target * 275) / 2000; // based on total_calories_daily/8;
-    const total_sugar_to_consume = 37.5; // 25 for women
+    const total_sugar_to_consume =
+      (age >= 4 && age <= 6 && 19) || (age >= 7 && age <= 10 && 24) || 30; // 25 for women
     const total_cholesterol_to_consume = 0.3;
     // add other fields
 

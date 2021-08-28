@@ -1,16 +1,14 @@
-import React, { ReactChild, useState } from "react";
+import React, { useState } from "react";
 
 import {
-  KeyboardType,
   TouchableNativeFeedback,
-  TouchableWithoutFeedback,
   View,
   Text,
   ActivityIndicator,
 } from "react-native";
 import moment from "moment";
 import Constants from "expo-constants";
-import { ScrollView, TextInput } from "react-native-gesture-handler";
+import { ScrollView } from "react-native-gesture-handler";
 
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationHelpers } from "@react-navigation/stack/lib/typescript/src/types";
@@ -23,6 +21,8 @@ import Header from "../components/Header";
 import db from "../global/db";
 import { useGlobal } from "../global/provider";
 import { UPDATE_PROFILE } from "../global/constraints";
+import Input from "../widgets/ProfileScreen/Input";
+import OptionBox from "../widgets/ProfileScreen/OptionBox";
 
 const isValidDate = (date: string) => {
   const m_date = moment(date, "DDMMYYYY", true);
@@ -34,171 +34,6 @@ const Age = (date) => {
   const b = moment(date, "DDMMYYYY");
   const age = a.diff(b, "years", true);
   return age;
-};
-
-const Input: React.FC<{
-  name: string;
-  type: KeyboardType;
-  value: string;
-  description?: string;
-  placeholder: string;
-  onChange: (text: string) => void;
-  dropdown?: ReactChild;
-}> = ({ name, type, placeholder, value, description, dropdown, onChange }) => {
-  const [isFocus, setIsFocus] = useState<boolean>(false);
-  return (
-    <View style={{ width: "100%", marginVertical: 10 }}>
-      <View
-        style={{
-          height: 75,
-          justifyContent: "center",
-          borderWidth: 2,
-          borderColor: isFocus ? colors.tailwind.blue._200 : "transparent",
-          borderRadius: 7.5,
-          paddingVertical: 7.5,
-          paddingHorizontal: 15,
-          backgroundColor: colors.app.dark_100,
-        }}
-      >
-        {(isFocus || !!value) && (
-          <Text
-            style={{
-              fontSize: 13,
-              color: colors.app.dark_300,
-              marginBottom: 2.5,
-              fontFamily: "Inter",
-            }}
-          >
-            {name}
-          </Text>
-        )}
-        <TextInput
-          onChangeText={onChange}
-          spellCheck={false}
-          placeholder={isFocus ? placeholder : name}
-          style={{
-            width: "100%",
-            fontSize: 16,
-            color: isFocus ? colors.app.dark_500 : colors.app.dark_400,
-            fontFamily: "Inter",
-          }}
-          value={value}
-          onFocus={() => setIsFocus(true)}
-          onBlur={() => setIsFocus(false)}
-          keyboardType={type}
-        />
-      </View>
-      <View style={{ marginTop: 7.5 }}>
-        <Text
-          style={{
-            color: colors.app.dark_300,
-            fontSize: 14,
-            fontFamily: "Inter",
-          }}
-        >
-          {description}
-        </Text>
-      </View>
-      {dropdown && isFocus && (
-        <View
-          style={{
-            backgroundColor: "#ffffff",
-            position: "absolute",
-            marginTop: 80,
-            width: "100%",
-            elevation: 2,
-            borderRadius: 5,
-            maxHeight: 100,
-            zIndex: 2,
-          }}
-        >
-          {dropdown}
-        </View>
-      )}
-    </View>
-  );
-};
-
-const OptionBox: React.FC<{
-  value: string;
-  description: string;
-  name: string;
-  options: Array<any>;
-  onChange: (e: any) => void;
-}> = ({ name, description, value, options, onChange }) => {
-  return (
-    <View style={{ width: "100%", marginVertical: 10 }}>
-      <View
-        style={{
-          minHeight: 75,
-          justifyContent: "center",
-          borderWidth: 2,
-          borderColor: "transparent",
-          borderRadius: 7.5,
-          paddingVertical: 7.5,
-          paddingHorizontal: 15,
-          backgroundColor: colors.app.dark_100,
-        }}
-      >
-        <Text
-          style={{
-            fontSize: 13,
-            color: colors.app.dark_300,
-            marginBottom: 2.5,
-            fontFamily: "Inter",
-          }}
-        >
-          {name}
-        </Text>
-
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          <View
-            style={{ flexDirection: "row", marginTop: 5, alignItems: "center" }}
-          >
-            {options.map((option, index) => (
-              <TouchableWithoutFeedback
-                key={option}
-                onPress={() => onChange(option)}
-              >
-                <Text
-                  style={{
-                    backgroundColor:
-                      value === option
-                        ? colors.app.dark_400
-                        : colors.app.dark_100,
-                    borderWidth: 1,
-                    borderColor: colors.app.dark_200,
-
-                    fontFamily: "Inter",
-                    paddingVertical: 5,
-                    paddingHorizontal: 15,
-                    borderRadius: 5,
-                    color: value === option ? "#fff" : colors.app.dark_400,
-                    textTransform: "capitalize",
-                    fontSize: 13,
-                    marginRight: index + 1 !== options.length ? 10 : 0,
-                  }}
-                >
-                  {option}
-                </Text>
-              </TouchableWithoutFeedback>
-            ))}
-          </View>
-        </ScrollView>
-      </View>
-      <View style={{ marginTop: 7.5 }}>
-        <Text
-          style={{
-            color: colors.app.dark_300,
-            fontSize: 14,
-            fontFamily: "Inter",
-          }}
-        >
-          {description}
-        </Text>
-      </View>
-    </View>
-  );
 };
 
 const ProfileScreen: React.FC<{ navigation: StackNavigationHelpers }> = ({
@@ -215,6 +50,7 @@ const ProfileScreen: React.FC<{ navigation: StackNavigationHelpers }> = ({
   const [height, setHeight] = useState<number>(profile.height || 0);
   const [gender, setGender] = useState<Gender>(profile.gender || null);
   const [username, setUsername] = useState<string>(profile.username || "");
+
   const [calories, setCalories] = useState<number>(
     profile.calories_target || 0
   );
