@@ -1,3 +1,5 @@
+import moment from "moment";
+
 export interface SearchCommonItem {
   calories: FoodNutrients["calories"];
   food_name: string;
@@ -25,7 +27,7 @@ export interface CommonItem extends SearchCommonItem, FoodNutrients {
   quantity: number;
 }
 
-export interface AppDate {
+export interface DateConsumption {
   breakfast: Array<CommonItem>; // | Array<BrandedItem>
   second_breakfast: Array<CommonItem>;
   lunch: Array<CommonItem>;
@@ -52,7 +54,7 @@ export enum Session {
 
 export interface State {
   app_date: string;
-  data: AppDate;
+  data: DateConsumption;
   new_date_loading: boolean;
   favourites: Array<CommonItem>;
   profile: Profile;
@@ -67,7 +69,7 @@ export enum Gender {
 export interface Profile {
   name: string;
   username: string;
-  date_of_birth: { value: Date | string; age: number };
+  date_of_birth: { value: string | Date | moment.Moment; age: number };
   new_user: boolean;
   version: string | number;
 
@@ -75,4 +77,12 @@ export interface Profile {
   height: number;
   calories_target: number;
   gender: Gender;
+}
+
+export interface Cache {
+  favourites: Array<CommonItem>;
+  dateConsumptions: Array<{
+    date: string;
+    data: DateConsumption;
+  }>;
 }

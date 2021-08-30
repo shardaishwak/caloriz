@@ -15,7 +15,9 @@ import db from "../../global/db";
 import colors from "../../colors";
 import { useGlobal } from "../../global/provider";
 import { REMOVE_FOOD } from "../../global/constraints";
-import { AppDate, CommonItem, Session } from "../../interface";
+import { DateConsumption, CommonItem, Session } from "../../interface";
+import store from "../../store";
+import { dateConsumptionSlice } from "../../store/reducers/dateConsumption.reducer";
 
 /**
  * REnder the session cards
@@ -26,7 +28,7 @@ import { AppDate, CommonItem, Session } from "../../interface";
  * For each card, the items that are consumed on that date and session are displayed using the <Item /> component
  */
 class RenderSessionCards extends React.Component<
-  { sessions: Array<Session>; date_data: AppDate; navigation: any },
+  { sessions: Array<Session>; date_data: DateConsumption; navigation: any },
   { activeIndex: number }
 > {
   state = {
@@ -164,6 +166,12 @@ const Item = ({
   const deleteItem = async () => {
     await db.deleteItem(state.app_date, session, id);
     dispatch({ type: REMOVE_FOOD, payload: { field: session, id } });
+    store.dispatch(
+      dateConsumptionSlice.actions.removeItemFromRecord({
+        field: session,
+        id: id as string,
+      })
+    );
   };
   return (
     <View style={styles.container}>

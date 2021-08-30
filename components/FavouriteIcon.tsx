@@ -6,6 +6,8 @@ import { TouchableWithoutFeedback } from "react-native";
 import db from "../global/db";
 import { useGlobal } from "../global/provider";
 import { REMOVE_FAVOURITE } from "../global/constraints";
+import store from "../store";
+import { cacheSlice } from "../store/reducers/cache.reducer";
 
 /**
  * componet for managing on favourite click
@@ -32,6 +34,12 @@ const FavouriteIcon = ({ food_name, calories, onClick }) => {
       food_name: food_name,
       calories: calories,
     });
+    store.dispatch(
+      cacheSlice.actions.removeFavouriteItem({
+        food_name: food_name,
+        calories: calories,
+      })
+    );
   };
   return (
     <TouchableWithoutFeedback onPress={isActive() ? removeFavourite : onClick}>

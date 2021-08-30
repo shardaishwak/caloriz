@@ -1,8 +1,8 @@
-# Versions Bugs
+# Version Bugs
 
-## v.0.1.0 - physical test
+## v.0.1.0 - Physical Test
 
-@1 [x] Back icon on the MainScreen
-@2 [x] Too big icon logo
-@3 [x] Low quality splash screen icon
-@4 [x] Dater current date not working
+@1 [solved] Back icon on the MainScreen <br>
+@2 [solved] Too big icon logo <br>
+@3 [solved] Low quality splash screen icon <br>
+@4 [solved] Dater current date not working <br>

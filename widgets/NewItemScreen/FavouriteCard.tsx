@@ -13,13 +13,23 @@ import {
   REMOVE_FAVOURITE,
   REMOVE_FOOD,
 } from "../../global/constraints";
+import store from "../../store";
+import { dateConsumptionSlice } from "../../store/reducers/dateConsumption.reducer";
+import { CommonItem, Session } from "../../interface";
+import { cacheSlice } from "../../store/reducers/cache.reducer";
 
 /**
  * Favourite card design component
  * @requires item (CommonItem)
  * @requires session (Fields)
  */
-const FavouriteCard = ({ item, session }) => {
+const FavouriteCard = ({
+  item,
+  session,
+}: {
+  item: CommonItem;
+  session: Session;
+}) => {
   const { state, dispatch } = useGlobal();
   const { food_name, serving_qty, serving_unit, calories, quantity } = item;
 
@@ -36,29 +46,32 @@ const FavouriteCard = ({ item, session }) => {
   const addItem = async () => {
     // Create a unique id for the new item
     const ID = uuid.v4();
-
-    // update the id, consumed_date and quantity for making a new element
-    // The actions is required as all the items in the consumed array
-    // need to be of unique ids for search
-    await db.addItem(state.app_date, session, {
+    const data: CommonItem = {
       ...item,
       id: ID,
       consumed_at: Date.now(),
       quantity: number || 1,
-    });
+    };
+
+    // update the id, consumed_date and quantity for making a new element
+    // The actions is required as all the items in the consumed array
+    // need to be of unique ids for search
+    await db.addItem(state.app_date, session, data);
 
     dispatch({
       type: ADD_FOOD,
       payload: {
         field: session,
-        data: {
-          ...item,
-          id: ID,
-          consumed_at: Date.now(),
-          quantity: number || 1,
-        },
+        data,
       },
     });
+
+    store.dispatch(
+      dateConsumptionSlice.actions.addNewItemToRecord({
+        field: session,
+        data,
+      })
+    );
 
     // The item has been added, change the state and show the remove button
     setIsAdded(ID);
@@ -76,6 +89,12 @@ const FavouriteCard = ({ item, session }) => {
       type: REMOVE_FOOD,
       payload: { field: session, id: isAdded },
     });
+    store.dispatch(
+      dateConsumptionSlice.actions.removeItemFromRecord({
+        field: session,
+        id: isAdded as string,
+      })
+    );
     setIsAdded(null);
   };
 
@@ -89,6 +108,12 @@ const FavouriteCard = ({ item, session }) => {
       food_name: item.food_name,
       calories: item.calories,
     });
+    store.dispatch(
+      cacheSlice.actions.removeFavouriteItem({
+        food_name: item.food_name,
+        calories: item.calories,
+      })
+    );
   };
   return (
     <View style={styles.foodCard_container}>

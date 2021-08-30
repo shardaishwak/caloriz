@@ -6,7 +6,7 @@ import {
   Text,
   ActivityIndicator,
 } from "react-native";
-import moment from "moment";
+import moment, { Moment } from "moment";
 import Constants from "expo-constants";
 import { ScrollView } from "react-native-gesture-handler";
 
@@ -23,6 +23,8 @@ import { useGlobal } from "../global/provider";
 import { UPDATE_PROFILE } from "../global/constraints";
 import Input from "../widgets/ProfileScreen/Input";
 import OptionBox from "../widgets/ProfileScreen/OptionBox";
+import store from "../store";
+import { profileSlice } from "../store/reducers/profile.reducer";
 
 const isValidDate = (date: string) => {
   const m_date = moment(date, "DDMMYYYY", true);
@@ -56,7 +58,7 @@ const ProfileScreen: React.FC<{ navigation: StackNavigationHelpers }> = ({
   );
   const [date, setDate] = useState<string>(
     profile.date_of_birth?.value
-      ? moment(profile.date_of_birth?.value as Date).format("DDMMYYYY")
+      ? moment(profile.date_of_birth?.value as moment.Moment).format("DDMMYYYY")
       : ""
   );
 
@@ -80,6 +82,7 @@ const ProfileScreen: React.FC<{ navigation: StackNavigationHelpers }> = ({
     };
     await db.updateProfile(update);
     dispatch({ type: UPDATE_PROFILE, payload: update });
+    store.dispatch(profileSlice.actions.updateProfile(update));
     setLoading(false);
 
     if (profile.new_user !== false) return router.navigate("entry");

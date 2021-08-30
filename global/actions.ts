@@ -1,7 +1,6 @@
 import {
-  AppDate,
+  DateConsumption,
   CommonItem,
-  FirstTime,
   Profile,
   Session,
   State,
@@ -189,7 +188,7 @@ const updateProfile = (state: State, { payload }) => ({
 });
 
 // Default routeine data model
-const defaultDate: AppDate = {
+const defaultDate: DateConsumption = {
   breakfast: [], // | Array<BrandedItem>
   second_breakfast: [],
   lunch: [],

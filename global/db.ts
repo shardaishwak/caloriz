@@ -1,5 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { CommonItem, FirstTime, Profile } from "../interface";
+import { CommonItem, DateConsumption, Profile } from "../interface";
 import { setDefaultDate } from "./actions";
 
 /** ============================ ITEM ================================ */
@@ -25,7 +25,7 @@ const initializeRouteine = async (date) =>
  * }
  */
 const retrieveRouteine = async (date) =>
-  JSON.parse(await AsyncStorage.getItem(date));
+  JSON.parse(await AsyncStorage.getItem(date)) as DateConsumption;
 
 /**
  * @connect ADD-ITEM
@@ -103,12 +103,16 @@ const addFavourite = async (item: CommonItem) => {
  * @param id (item)
  */
 const removeFavourite = async (food_name, calories) => {
-  const favourites = await getFavourites();
-  const index = favourites.findIndex(
-    (a) => a.food_name === food_name && a.calories === calories
-  );
-  favourites.splice(index, 1);
-  await AsyncStorage.setItem("@favourites", JSON.stringify(favourites));
+  try {
+    const favourites = await getFavourites();
+    const index = favourites.findIndex(
+      (a) => a.food_name === food_name && a.calories === calories
+    );
+    favourites.splice(index, 1);
+    await AsyncStorage.setItem("@favourites", JSON.stringify(favourites));
+  } catch (err) {
+    console.log(err.message);
+  }
 };
 
 /**

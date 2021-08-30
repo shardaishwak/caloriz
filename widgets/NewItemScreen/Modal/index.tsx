@@ -21,6 +21,9 @@ import { CommonItem } from "../../../interface";
 import nutritionix from "../../../api/nutritionix";
 import { useGlobal } from "../../../global/provider";
 import { ADD_FOOD, SET_FAVOURITE } from "../../../global/constraints";
+import store from "../../../store";
+import { dateConsumptionSlice } from "../../../store/reducers/dateConsumption.reducer";
+import { cacheSlice } from "../../../store/reducers/cache.reducer";
 
 /**
  * Main modal component for showing the detailed data of the searched item
@@ -87,6 +90,9 @@ const ItemModal = ({ ID, visible, onDismiss, session }) => {
       type: ADD_FOOD,
       payload: { field: session, data },
     });
+    store.dispatch(
+      dateConsumptionSlice.actions.addNewItemToRecord({ field: session, data })
+    );
     setSaveItemLoading(false);
     onDismiss();
   };
@@ -95,6 +101,7 @@ const ItemModal = ({ ID, visible, onDismiss, session }) => {
   const setFavourite = async () => {
     await db.addFavourite(data);
     dispatch({ type: SET_FAVOURITE, item: data });
+    store.dispatch(cacheSlice.actions.addFavouriteItem(data));
   };
 
   if (loading || !data) return <></>;

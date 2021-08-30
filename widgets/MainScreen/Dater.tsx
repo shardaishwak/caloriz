@@ -24,6 +24,8 @@ import {
   transform_date_to_string,
   transform_week_to_string,
 } from "../../time";
+import store from "../../store";
+import { generalSlice } from "../../store/reducers/general.reducer";
 
 /**
  * Top dates per month snapper
@@ -33,11 +35,13 @@ class Dater extends React.Component<{ dispatch: any; state: State }> {
 
   // Load a new date data
   LOAD_NEW_DATE = async (date) => {
+    store.dispatch(generalSlice.actions.newRecordLoading(true));
     this.props.dispatch({ type: NEW_DATE_LOADING, payload: true });
 
     await LoadData(date, this.props.dispatch);
 
     this.props.dispatch({ type: NEW_DATE_LOADING, payload: false });
+    store.dispatch(generalSlice.actions.newRecordLoading(false));
   };
 
   LOAD_PREVOUS_MONTH = async (date) => {

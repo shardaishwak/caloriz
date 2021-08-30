@@ -15,6 +15,9 @@ import LoadCache from "./cache";
 import Navigation from "./navigation";
 import GlobalProvider, { useGlobal } from "./global/provider";
 
+import { Provider } from "react-redux";
+import store from "./store";
+
 // Main navigation roots
 
 const SplashScreenIcon = () => (
@@ -104,9 +107,11 @@ const App = () => {
 };
 
 const Default = () => (
-  <GlobalProvider>
-    <App />
-  </GlobalProvider>
+  <Provider store={store}>
+    <GlobalProvider>
+      <App />
+    </GlobalProvider>
+  </Provider>
 );
 
 export default Default;

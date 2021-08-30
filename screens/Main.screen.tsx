@@ -14,22 +14,31 @@ import { useGlobal } from "../global/provider";
 
 import { Entypo } from "@expo/vector-icons";
 
-import { CommonItem, FoodNutrients, Session } from "../interface";
+import {
+  CommonItem,
+  DateConsumption,
+  FoodNutrients,
+  Session,
+} from "../interface";
 
 import Header from "../components/Header";
 
-import Onboarding from "../widgets/Onboarding";
 import Dater from "../widgets/MainScreen/Dater";
 import Progresses from "../widgets/MainScreen/Progresses";
 import Calorimeter from "../widgets/MainScreen/Calorimeter";
 import RenderSessionCards from "../widgets/MainScreen/RenderSessionCards";
 import { StackNavigationHelpers } from "@react-navigation/stack/lib/typescript/src/types";
+import { useSelector } from "react-redux";
+import { RootState } from "../store";
 
 /**
  * Calulcation of the total consumption of the nutrients
  */
 
 const GET_TOTAL_NUTRIENTS = (data, sessions) => {
+  const dateConsumption = useSelector<RootState>(
+    (state) => state.dateConsumption
+  ) as DateConsumption;
   const progress_data: FoodNutrients = {
     carbohydrates: 0,
     fat: 0,

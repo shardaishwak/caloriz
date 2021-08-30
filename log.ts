@@ -1,6 +1,7 @@
 import { digitize } from "./time";
 
 const log = (i: string, m: any) => {
+  return;
   const date = new Date();
   const hours = date.getHours();
   const minutes = date.getMinutes();
@@ -17,7 +18,6 @@ const log = (i: string, m: any) => {
 
   console.log("%c" + "[" + format + "]" + i, "color: green;");
   console.log(m);
-  console.log("====================================================");
 };
 
 export default log;

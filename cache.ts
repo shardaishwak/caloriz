@@ -13,6 +13,14 @@ import log from "./log";
 import { todayDate } from "./time";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Profile } from "./interface";
+import store from "./store";
+import dateConsumptionReducer, {
+  dateConsumptionSlice,
+} from "./store/reducers/dateConsumption.reducer";
+import { setDefaultDate } from "./global/actions";
+import { profileSlice } from "./store/reducers/profile.reducer";
+import { generalSlice } from "./store/reducers/general.reducer";
+import { cacheSlice } from "./store/reducers/cache.reducer";
 
 // Load all the fonts
 /**
@@ -45,13 +53,19 @@ export const LoadData = async (initial_date, dispatch) => {
     await db.initializeRouteine(initial_date);
     // Create a new daily record [state]
     dispatch({ type: ADD_NEW_DATE, date: initial_date });
+    store.dispatch(dateConsumptionSlice.actions.loadRecord(setDefaultDate()));
   } else {
     // load daily record to state
     dispatch({ type: ADD_DATA, payload: is_data, date: initial_date });
+    store.dispatch(dateConsumptionSlice.actions.loadRecord(is_data));
   }
   // await db.clearFavourites();
-  dispatch({ type: INITIALIZE_FAVOURITES, data: await db.getFavourites() });
+  const favourites = await db.getFavourites();
+  dispatch({ type: INITIALIZE_FAVOURITES, data: favourites });
+  store.dispatch(cacheSlice.actions.loadFavourites(favourites));
+
   dispatch({ type: SET_APP_DATE, date: initial_date });
+  store.dispatch(generalSlice.actions.setAppRecord(initial_date));
 };
 
 /**
@@ -65,7 +79,10 @@ const LoadProfile = async (dispatch) => {
   const profile: Profile = await db.getProfile();
   log("[PROFILE]", profile);
 
-  if (!profile.new_user) dispatch({ type: GET_PROFILE, payload: profile });
+  if (!profile.new_user) {
+    dispatch({ type: GET_PROFILE, payload: profile });
+    store.dispatch(profileSlice.actions.loadProfile(profile));
+  }
 };
 
 /**
