@@ -1,3 +1,4 @@
+import React from "react";
 import { configureStore } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 
@@ -28,5 +29,14 @@ export const useRootState: TypedUseSelectorHook<RootState> = useSelector;
 
 export type RootState = ReturnType<typeof store.getState>;
 export type RootDispatch = typeof store.dispatch;
+
+export const withRoot = (Component, reducer) => {
+  return (props) => {
+    const state = useSelector<RootState>((state) => state[reducer]);
+    const dispatch = useDispatch<RootDispatch>();
+
+    return <Component {...props} state={state} dispatch={dispatch} />;
+  };
+};
 
 export default store;

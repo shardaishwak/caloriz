@@ -3,10 +3,8 @@ import React from "react";
 import { AntDesign } from "@expo/vector-icons";
 import { TouchableWithoutFeedback } from "react-native";
 
-import db from "../global/db";
-import { useGlobal } from "../global/provider";
-import { REMOVE_FAVOURITE } from "../global/constraints";
-import store from "../store";
+import db from "../global@deprecated/db";
+import { useRootDispatch, useRootState } from "../store";
 import { cacheSlice } from "../store/reducers/cache.reducer";
 
 /**
@@ -14,10 +12,8 @@ import { cacheSlice } from "../store/reducers/cache.reducer";
  * Add the component to add the star
  */
 const FavouriteIcon = ({ food_name, calories, onClick }) => {
-  const {
-    state: { favourites },
-    dispatch,
-  } = useGlobal();
+  const favourites = useRootState((state) => state.cache.favourites);
+  const dispatch = useRootDispatch();
   // Check if the item is present in the favourites list
   const isActive = () =>
     favourites.findIndex(
@@ -29,12 +25,8 @@ const FavouriteIcon = ({ food_name, calories, onClick }) => {
   // Remove the item from the favourite list
   const removeFavourite = async () => {
     await db.removeFavourite(food_name, calories);
-    dispatch({
-      type: REMOVE_FAVOURITE,
-      food_name: food_name,
-      calories: calories,
-    });
-    store.dispatch(
+
+    dispatch(
       cacheSlice.actions.removeFavouriteItem({
         food_name: food_name,
         calories: calories,

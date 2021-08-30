@@ -10,7 +10,6 @@ import SearchResultRender from "../widgets/NewItemScreen/RenderSearchResults";
 
 import colors from "../colors";
 import nutritionix from "../api/nutritionix";
-import { useGlobal } from "../global/provider";
 import { SearchCommonItem } from "../interface";
 
 import {
@@ -20,11 +19,13 @@ import {
   transform_month_to_string,
   transform_week_to_string,
 } from "../time";
+import { useSelector } from "react-redux";
+import { RootState } from "../store";
 
 const NewItemScreen = (props) => {
-  const {
-    state: { app_date },
-  } = useGlobal();
+  const app_date = useSelector<RootState>(
+    (state) => state.general.app_date
+  ) as string;
 
   const session = props.route.params.session || "breakfast";
 

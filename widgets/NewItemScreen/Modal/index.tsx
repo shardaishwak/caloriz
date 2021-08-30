@@ -1,12 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  View,
-  Text,
-  Dimensions,
-  StatusBar,
-  StyleSheet,
-  ActivityIndicator,
-} from "react-native";
+import { View, Dimensions, StatusBar, StyleSheet } from "react-native";
 
 import uuid from "react-native-uuid";
 import Modal from "react-native-modal";
@@ -16,14 +9,14 @@ import Inputs from "./Inputs";
 import TopNotch from "./TopNotch";
 import SaveButton from "./SaveButton";
 
-import db from "../../../global/db";
+import db from "../../../global@deprecated/db";
 import { CommonItem } from "../../../interface";
 import nutritionix from "../../../api/nutritionix";
-import { useGlobal } from "../../../global/provider";
-import { ADD_FOOD, SET_FAVOURITE } from "../../../global/constraints";
-import store from "../../../store";
+
+import { RootState, useRootDispatch } from "../../../store";
 import { dateConsumptionSlice } from "../../../store/reducers/dateConsumption.reducer";
 import { cacheSlice } from "../../../store/reducers/cache.reducer";
+import { useSelector } from "react-redux";
 
 /**
  * Main modal component for showing the detailed data of the searched item
@@ -31,7 +24,8 @@ import { cacheSlice } from "../../../store/reducers/cache.reducer";
  * The session is required as it ads the data to the current session the page is opened
  */
 const ItemModal = ({ ID, visible, onDismiss, session }) => {
-  const { dispatch, state } = useGlobal();
+  const dispatch = useRootDispatch();
+  const app_date = useSelector<RootState>((state) => state.general.app_date);
 
   const [type, set_type] = useState<string>();
   const [result, set_result] = useState<any>();
@@ -84,13 +78,10 @@ const ItemModal = ({ ID, visible, onDismiss, session }) => {
     setSaveItemLoading(true);
 
     // Save to the database
-    await db.addItem(state.app_date, session, data);
+    await db.addItem(app_date, session, data);
     // Save to local state
-    dispatch({
-      type: ADD_FOOD,
-      payload: { field: session, data },
-    });
-    store.dispatch(
+
+    dispatch(
       dateConsumptionSlice.actions.addNewItemToRecord({ field: session, data })
     );
     setSaveItemLoading(false);
@@ -100,8 +91,7 @@ const ItemModal = ({ ID, visible, onDismiss, session }) => {
   // Add the item to the favourite list
   const setFavourite = async () => {
     await db.addFavourite(data);
-    dispatch({ type: SET_FAVOURITE, item: data });
-    store.dispatch(cacheSlice.actions.addFavouriteItem(data));
+    dispatch(cacheSlice.actions.addFavouriteItem(data));
   };
 
   if (loading || !data) return <></>;

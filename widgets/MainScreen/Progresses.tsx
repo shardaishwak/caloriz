@@ -9,13 +9,14 @@ import { Dimensions, StyleSheet, View } from "react-native";
 
 import colors from "../../colors";
 import Progress from "./Progress";
-import { FoodNutrients, Gender, State } from "../../interface";
-import { withGlobal } from "../../global/provider";
+import { FoodNutrients, Gender, Profile, State } from "../../interface";
+import { withGlobal } from "../../global@deprecated/provider";
+import { RootDispatch, withRoot } from "../../store";
 
 class Progresses extends React.Component<{
   progress_data: FoodNutrients;
-  dispatch: any;
-  state: State;
+  dispatch: RootDispatch;
+  state: Profile;
 }> {
   carousel;
   _renderItem = ({ item: { perc, total_consume, pd, title, color } }) => (
@@ -28,15 +29,10 @@ class Progresses extends React.Component<{
   );
   render() {
     const {
-      state: {
-        profile: {
-          mass,
-          calories_target,
-          gender,
-          date_of_birth: { age },
-        },
-      },
-    } = this.props;
+      mass,
+      calories_target,
+      date_of_birth: { age },
+    } = this.props.state;
     const { progress_data } = this.props;
     const user_mass = mass; // add it to state;
 
@@ -129,4 +125,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default withGlobal(Progresses);
+export default withRoot(Progresses, "profile");

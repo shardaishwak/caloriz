@@ -5,15 +5,10 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native";
 
-import { useGlobal } from "../../global/provider";
-import db from "../../global/db";
+import db from "../../global@deprecated/db";
 import colors from "../../colors";
-import {
-  ADD_FOOD,
-  REMOVE_FAVOURITE,
-  REMOVE_FOOD,
-} from "../../global/constraints";
-import store from "../../store";
+
+import { useRootDispatch, useRootState } from "../../store";
 import { dateConsumptionSlice } from "../../store/reducers/dateConsumption.reducer";
 import { CommonItem, Session } from "../../interface";
 import { cacheSlice } from "../../store/reducers/cache.reducer";
@@ -30,7 +25,8 @@ const FavouriteCard = ({
   item: CommonItem;
   session: Session;
 }) => {
-  const { state, dispatch } = useGlobal();
+  const dispatch = useRootDispatch();
+  const app_date = useRootState((state) => state.general.app_date) as string;
   const { food_name, serving_qty, serving_unit, calories, quantity } = item;
 
   // The state contains the ID of the added item
@@ -56,17 +52,9 @@ const FavouriteCard = ({
     // update the id, consumed_date and quantity for making a new element
     // The actions is required as all the items in the consumed array
     // need to be of unique ids for search
-    await db.addItem(state.app_date, session, data);
+    await db.addItem(app_date, session, data);
 
-    dispatch({
-      type: ADD_FOOD,
-      payload: {
-        field: session,
-        data,
-      },
-    });
-
-    store.dispatch(
+    dispatch(
       dateConsumptionSlice.actions.addNewItemToRecord({
         field: session,
         data,
@@ -84,12 +72,9 @@ const FavouriteCard = ({
    */
   const removeItem = async () => {
     // isAdded is the ID of the item which got stored through the addItem function above
-    await db.deleteItem(state.app_date, session, isAdded);
-    dispatch({
-      type: REMOVE_FOOD,
-      payload: { field: session, id: isAdded },
-    });
-    store.dispatch(
+    await db.deleteItem(app_date, session, isAdded);
+
+    dispatch(
       dateConsumptionSlice.actions.removeItemFromRecord({
         field: session,
         id: isAdded as string,
@@ -103,12 +88,8 @@ const FavouriteCard = ({
    */
   const removeFavouriteItem = async () => {
     await db.removeFavourite(item.food_name, item.calories);
-    dispatch({
-      type: REMOVE_FAVOURITE,
-      food_name: item.food_name,
-      calories: item.calories,
-    });
-    store.dispatch(
+
+    dispatch(
       cacheSlice.actions.removeFavouriteItem({
         food_name: item.food_name,
         calories: item.calories,

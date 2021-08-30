@@ -13,10 +13,9 @@ import AppLoading from "expo-app-loading";
 import colors from "./colors";
 import LoadCache from "./cache";
 import Navigation from "./navigation";
-import GlobalProvider, { useGlobal } from "./global/provider";
 
 import { Provider } from "react-redux";
-import store from "./store";
+import store, { useRootState } from "./store";
 
 // Main navigation roots
 
@@ -37,14 +36,14 @@ const SplashScreenIcon = () => (
   </Svg>
 );
 
-class AppImpl extends React.Component<{ global }> {
+class AppImpl extends React.Component<{ general }> {
   state = {
     _cacheLoaded: false,
     _error: null,
   };
   async componentDidMount() {
     try {
-      await LoadCache(this.props.global);
+      await LoadCache();
 
       this.setState({ _error: null, _cacheLoaded: true });
     } catch (error) {
@@ -53,7 +52,7 @@ class AppImpl extends React.Component<{ global }> {
   }
   render() {
     if (!this.state._cacheLoaded) return <AppLoading />;
-    if (this.props.global.state.new_date_loading)
+    if (this.props.general.new_app_loading)
       return (
         <SafeAreaView style={styles.container_2}>
           <StatusBar
@@ -102,15 +101,13 @@ const styles = StyleSheet.create({
 });
 
 const App = () => {
-  const global = useGlobal();
-  return <AppImpl global={global} />;
+  const general = useRootState((state) => state.general);
+  return <AppImpl general={general} />;
 };
 
 const Default = () => (
   <Provider store={store}>
-    <GlobalProvider>
-      <App />
-    </GlobalProvider>
+    <App />
   </Provider>
 );
 

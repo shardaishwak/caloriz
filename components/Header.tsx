@@ -7,12 +7,14 @@ import { StyleSheet, Text, TouchableNativeFeedback, View } from "react-native";
 
 import { StackNavigationHelpers } from "@react-navigation/stack/lib/typescript/src/types";
 
-import { useGlobal } from "../global/provider";
-import { NEW_DATE_LOADING } from "../global/constraints";
+import { useGlobal } from "../global@deprecated/provider";
+import { NEW_DATE_LOADING } from "../global@deprecated/constraints";
 
 import colors from "../colors";
 import { LoadData } from "../cache";
 import { todayDate } from "../time";
+import store from "../store";
+import { generalSlice } from "../store/reducers/general.reducer";
 
 /**
  * Main app header
@@ -25,14 +27,13 @@ const Header = (props: {
   rightIcon?: ReactChild;
   goBack: boolean;
 }) => {
-  const { dispatch } = useGlobal();
   // Load the today data when user click on the icon
   const LOAD_NEW_DATE = async (date) => {
-    dispatch({ type: NEW_DATE_LOADING, payload: true });
+    store.dispatch(generalSlice.actions.newRecordLoading(true));
 
-    await LoadData(date, dispatch);
+    await LoadData(date);
 
-    dispatch({ type: NEW_DATE_LOADING, payload: false });
+    store.dispatch(generalSlice.actions.newRecordLoading(false));
   };
   return (
     <View style={styles.container}>

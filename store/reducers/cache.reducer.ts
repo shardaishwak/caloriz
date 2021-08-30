@@ -31,9 +31,10 @@ const addFavouriteItem: (
   state: Cache,
   action: PayloadAction<CommonItem>
 ) => Cache = (state, { payload }) => {
+  const favourites = [...state.favourites, payload];
   return {
     ...state,
-    favourites: [...state.favourites, payload],
+    favourites,
   };
 };
 

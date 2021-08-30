@@ -2,11 +2,13 @@ import React from "react";
 
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
+
 import MainScreen from "../screens/Main.screen";
 import NewItemScreen from "../screens/NewItem.screen";
 import ProfileScreen from "../screens/Profile.screen";
-import { useGlobal } from "../global/provider";
 import OnboardingScreen from "../screens/Onboarding.screen";
+
+import { useRootState } from "../store";
 
 // Root navigation
 const Navigation: React.FC = () => (
@@ -18,11 +20,7 @@ const Navigation: React.FC = () => (
 const Stack = createStackNavigator();
 
 const StackNavigation: React.FC = () => {
-  const {
-    state: {
-      profile: { new_user },
-    },
-  } = useGlobal();
+  const new_user = useRootState((state) => state.profile.new_user);
   return (
     <Stack.Navigator
       initialRouteName={new_user !== false ? "onboarding" : "entry"} // first_time.value ?? onboarding : entry

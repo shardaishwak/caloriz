@@ -2,8 +2,8 @@ import React from "react";
 import { View } from "react-native";
 
 import FavouriteCard from "./FavouriteCard";
-import { useGlobal } from "../../global/provider";
 import Searching_Svg from "./Searching_svg";
+import { useRootState } from "../../store";
 
 // Nice illustration for empty favourites
 
@@ -26,9 +26,7 @@ const Illustration = () => (
  * The data is taken from the loca state
  */
 const FavouritesRender = ({ session }) => {
-  const {
-    state: { favourites },
-  } = useGlobal();
+  const favourites = useRootState((state) => state.cache.favourites);
   return (
     <View style={{ margin: 20 }}>
       {favourites.length > 0 ? (

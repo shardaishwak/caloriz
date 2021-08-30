@@ -11,13 +11,13 @@ import Carousel, { Pagination } from "react-native-snap-carousel";
 
 import Card from "./Card";
 
-import db from "../../global/db";
+import db from "../../global@deprecated/db";
 import colors from "../../colors";
-import { useGlobal } from "../../global/provider";
-import { REMOVE_FOOD } from "../../global/constraints";
+
 import { DateConsumption, CommonItem, Session } from "../../interface";
-import store from "../../store";
+import { RootState, useRootDispatch } from "../../store";
 import { dateConsumptionSlice } from "../../store/reducers/dateConsumption.reducer";
+import { useSelector } from "react-redux";
 
 /**
  * REnder the session cards
@@ -162,11 +162,13 @@ const Item = ({
   fat: number;
   quantity: number;
 }) => {
-  const { state, dispatch } = useGlobal();
+  const dispatch = useRootDispatch();
+  const app_date = useSelector<RootState>(
+    (state) => state.general.app_date
+  ) as string;
   const deleteItem = async () => {
-    await db.deleteItem(state.app_date, session, id);
-    dispatch({ type: REMOVE_FOOD, payload: { field: session, id } });
-    store.dispatch(
+    await db.deleteItem(app_date, session, id);
+    dispatch(
       dateConsumptionSlice.actions.removeItemFromRecord({
         field: session,
         id: id as string,

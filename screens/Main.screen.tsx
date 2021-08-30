@@ -4,13 +4,7 @@ import {
   ScrollView,
   StyleSheet,
   TouchableWithoutFeedback,
-  View,
 } from "react-native";
-
-import Constants from "expo-constants";
-
-import db from "../global/db";
-import { useGlobal } from "../global/provider";
 
 import { Entypo } from "@expo/vector-icons";
 
@@ -29,16 +23,13 @@ import Calorimeter from "../widgets/MainScreen/Calorimeter";
 import RenderSessionCards from "../widgets/MainScreen/RenderSessionCards";
 import { StackNavigationHelpers } from "@react-navigation/stack/lib/typescript/src/types";
 import { useSelector } from "react-redux";
-import { RootState } from "../store";
+import store, { RootState } from "../store";
 
 /**
  * Calulcation of the total consumption of the nutrients
  */
 
 const GET_TOTAL_NUTRIENTS = (data, sessions) => {
-  const dateConsumption = useSelector<RootState>(
-    (state) => state.dateConsumption
-  ) as DateConsumption;
   const progress_data: FoodNutrients = {
     carbohydrates: 0,
     fat: 0,
@@ -69,13 +60,13 @@ const GET_TOTAL_NUTRIENTS = (data, sessions) => {
 };
 
 const MainScreen = ({ navigation }: { navigation: StackNavigationHelpers }) => {
-  const {
-    state: { data, profile },
-  } = useGlobal();
-  // default, pass it from the main screen as the user takes a new date
-  const date_data = data;
+  const dateConsumption = useSelector<RootState>(
+    (state) => state.dateConsumption
+  ) as DateConsumption;
 
-  let target = profile.calories_target; // TODO: bring to state as user.preferences.target
+  const target = useSelector<RootState>(
+    (state) => state.profile.calories_target
+  ) as number;
 
   // Retrive data of a prticular date from state
 
@@ -94,7 +85,7 @@ const MainScreen = ({ navigation }: { navigation: StackNavigationHelpers }) => {
   ];
 
   // All the collection of daily consumptions
-  const progress_data = GET_TOTAL_NUTRIENTS(date_data, fixed_sessions);
+  const progress_data = GET_TOTAL_NUTRIENTS(dateConsumption, fixed_sessions);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -115,7 +106,7 @@ const MainScreen = ({ navigation }: { navigation: StackNavigationHelpers }) => {
         <Progresses progress_data={progress_data} />
         <RenderSessionCards
           sessions={fixed_sessions} // All the card sessions to show
-          date_data={date_data} // Current state date based data
+          date_data={dateConsumption} // Current state date based data
           navigation={navigation}
         />
       </ScrollView>

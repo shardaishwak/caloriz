@@ -1,5 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import db from "../global/db";
+import db from "../global@deprecated/db";
 import { date, field, item, item_2 } from "../__mocks__/dumb.ignore";
 
 describe("Test routeine record functions", () => {

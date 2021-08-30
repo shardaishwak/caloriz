@@ -11,8 +11,8 @@ import Carousel from "react-native-snap-carousel";
 import colors from "../../colors";
 import { LoadData } from "../../cache";
 import { State } from "../../interface";
-import { withGlobal } from "../../global/provider";
-import { NEW_DATE_LOADING } from "../../global/constraints";
+import { withGlobal } from "../../global@deprecated/provider";
+import { NEW_DATE_LOADING } from "../../global@deprecated/constraints";
 
 import {
   daysInMonth,
@@ -24,23 +24,21 @@ import {
   transform_date_to_string,
   transform_week_to_string,
 } from "../../time";
-import store from "../../store";
+import store, { RootDispatch, withRoot } from "../../store";
 import { generalSlice } from "../../store/reducers/general.reducer";
 
 /**
  * Top dates per month snapper
  */
-class Dater extends React.Component<{ dispatch: any; state: State }> {
+class Dater extends React.Component<{ dispatch: RootDispatch; state: any }> {
   carousel;
 
   // Load a new date data
   LOAD_NEW_DATE = async (date) => {
     store.dispatch(generalSlice.actions.newRecordLoading(true));
-    this.props.dispatch({ type: NEW_DATE_LOADING, payload: true });
 
-    await LoadData(date, this.props.dispatch);
+    await LoadData(date);
 
-    this.props.dispatch({ type: NEW_DATE_LOADING, payload: false });
     store.dispatch(generalSlice.actions.newRecordLoading(false));
   };
 
@@ -166,4 +164,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default withGlobal(Dater);
+export default withRoot(Dater, "general");

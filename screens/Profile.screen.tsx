@@ -6,7 +6,7 @@ import {
   Text,
   ActivityIndicator,
 } from "react-native";
-import moment, { Moment } from "moment";
+import moment from "moment";
 import Constants from "expo-constants";
 import { ScrollView } from "react-native-gesture-handler";
 
@@ -14,17 +14,17 @@ import { useNavigation } from "@react-navigation/native";
 import { StackNavigationHelpers } from "@react-navigation/stack/lib/typescript/src/types";
 
 import colors from "../colors";
-import { Gender } from "../interface";
+import { Gender, Profile } from "../interface";
 
 import Header from "../components/Header";
 
-import db from "../global/db";
-import { useGlobal } from "../global/provider";
-import { UPDATE_PROFILE } from "../global/constraints";
+import db from "../global@deprecated/db";
+
 import Input from "../widgets/ProfileScreen/Input";
 import OptionBox from "../widgets/ProfileScreen/OptionBox";
-import store from "../store";
+import { RootState, useRootDispatch } from "../store";
 import { profileSlice } from "../store/reducers/profile.reducer";
+import { useSelector } from "react-redux";
 
 const isValidDate = (date: string) => {
   const m_date = moment(date, "DDMMYYYY", true);
@@ -41,10 +41,8 @@ const Age = (date) => {
 const ProfileScreen: React.FC<{ navigation: StackNavigationHelpers }> = ({
   navigation,
 }) => {
-  const {
-    state: { profile },
-    dispatch,
-  } = useGlobal();
+  const dispatch = useRootDispatch();
+  const profile = useSelector<RootState>((state) => state.profile) as Profile;
   const router = useNavigation();
 
   const [mass, setMass] = useState<number>(profile.mass || 0);
@@ -81,8 +79,7 @@ const ProfileScreen: React.FC<{ navigation: StackNavigationHelpers }> = ({
         : {}),
     };
     await db.updateProfile(update);
-    dispatch({ type: UPDATE_PROFILE, payload: update });
-    store.dispatch(profileSlice.actions.updateProfile(update));
+    dispatch(profileSlice.actions.updateProfile(update));
     setLoading(false);
 
     if (profile.new_user !== false) return router.navigate("entry");
