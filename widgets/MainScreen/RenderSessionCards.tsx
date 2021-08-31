@@ -18,6 +18,7 @@ import { DateConsumption, CommonItem, Session } from "../../interface";
 import { RootState, useRootDispatch } from "../../store";
 import { dateConsumptionSlice } from "../../store/reducers/dateConsumption.reducer";
 import { useSelector } from "react-redux";
+import dateConsumptionAction from "../../store/actions/dateConsumption.action";
 
 /**
  * REnder the session cards
@@ -163,17 +164,9 @@ const Item = ({
   quantity: number;
 }) => {
   const dispatch = useRootDispatch();
-  const app_date = useSelector<RootState>(
-    (state) => state.general.app_date
-  ) as string;
+
   const deleteItem = async () => {
-    await db.deleteItem(app_date, session, id);
-    dispatch(
-      dateConsumptionSlice.actions.removeItemFromRecord({
-        field: session,
-        id: id as string,
-      })
-    );
+    await dispatch(dateConsumptionAction.RemoveItemFromRecord(session, id));
   };
   return (
     <View style={styles.container}>

@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Profile } from "../../interface";
 
 /**
- * @connect db.getProfile
+ * @connect db.getProfile - cache
  * @param state Profile
  * @param payload Initialdata
  */

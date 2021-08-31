@@ -6,6 +6,7 @@ import { TouchableWithoutFeedback } from "react-native";
 import db from "../global@deprecated/db";
 import { useRootDispatch, useRootState } from "../store";
 import { cacheSlice } from "../store/reducers/cache.reducer";
+import cacheAction from "../store/actions/cache.action";
 
 /**
  * componet for managing on favourite click
@@ -23,16 +24,8 @@ const FavouriteIcon = ({ food_name, calories, onClick }) => {
       : true;
 
   // Remove the item from the favourite list
-  const removeFavourite = async () => {
-    await db.removeFavourite(food_name, calories);
-
-    dispatch(
-      cacheSlice.actions.removeFavouriteItem({
-        food_name: food_name,
-        calories: calories,
-      })
-    );
-  };
+  const removeFavourite = async () =>
+    dispatch(cacheAction.RemoveFavouriteItem(food_name, calories));
   return (
     <TouchableWithoutFeedback onPress={isActive() ? removeFavourite : onClick}>
       <AntDesign name={isActive() ? "star" : "staro"} size={20} />

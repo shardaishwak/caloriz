@@ -12,6 +12,7 @@ import { setDefaultDate } from "./global@deprecated/actions";
 import { profileSlice } from "./store/reducers/profile.reducer";
 import { generalSlice } from "./store/reducers/general.reducer";
 import { cacheSlice } from "./store/reducers/cache.reducer";
+import dateConsumptionAction from "./store/actions/dateConsumption.action";
 
 // Load all the fonts
 /**

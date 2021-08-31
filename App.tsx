@@ -15,7 +15,7 @@ import LoadCache from "./cache";
 import Navigation from "./navigation";
 
 import { Provider } from "react-redux";
-import store, { useRootState } from "./store";
+import store, { RootDispatch, useRootDispatch, useRootState } from "./store";
 
 // Main navigation roots
 
@@ -36,7 +36,7 @@ const SplashScreenIcon = () => (
   </Svg>
 );
 
-class AppImpl extends React.Component<{ general }> {
+class AppImpl extends React.Component<{ general; dispatch: RootDispatch }> {
   state = {
     _cacheLoaded: false,
     _error: null,
@@ -102,7 +102,8 @@ const styles = StyleSheet.create({
 
 const App = () => {
   const general = useRootState((state) => state.general);
-  return <AppImpl general={general} />;
+  const dispatch = useRootDispatch();
+  return <AppImpl general={general} dispatch={dispatch} />;
 };
 
 const Default = () => (

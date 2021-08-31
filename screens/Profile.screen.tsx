@@ -25,6 +25,7 @@ import OptionBox from "../widgets/ProfileScreen/OptionBox";
 import { RootState, useRootDispatch } from "../store";
 import { profileSlice } from "../store/reducers/profile.reducer";
 import { useSelector } from "react-redux";
+import profileAction from "../store/actions/profile.action";
 
 const isValidDate = (date: string) => {
   const m_date = moment(date, "DDMMYYYY", true);
@@ -78,8 +79,7 @@ const ProfileScreen: React.FC<{ navigation: StackNavigationHelpers }> = ({
         ? { version: Constants.manifest.version, new_user: false }
         : {}),
     };
-    await db.updateProfile(update);
-    dispatch(profileSlice.actions.updateProfile(update));
+    await dispatch(profileAction.UpdateProfile(update));
     setLoading(false);
 
     if (profile.new_user !== false) return router.navigate("entry");

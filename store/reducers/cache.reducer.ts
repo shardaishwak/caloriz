@@ -3,7 +3,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { State } from "react-native-gesture-handler";
 
 /**
- * @connect db.getFavourites
+ * @connect db.getFavourites - cache
  * @description Load the favourites list
  * @param state
  * @param payload {data}
@@ -49,10 +49,12 @@ const removeFavouriteItem: (
   state: Cache,
   action: PayloadAction<{ food_name: string; calories: number }>
 ) => Cache = (state, { payload }) => {
-  const favourites = state.favourites;
+  const favourites = [...state.favourites];
   const index = favourites.findIndex(
     (a) => a.food_name === payload.food_name && a.calories === payload.calories
   );
+  if (index < 0) return;
+  console.log(index);
   favourites.splice(index, 1);
   return {
     ...state,

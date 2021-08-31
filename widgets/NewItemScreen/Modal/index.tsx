@@ -17,6 +17,8 @@ import { RootState, useRootDispatch } from "../../../store";
 import { dateConsumptionSlice } from "../../../store/reducers/dateConsumption.reducer";
 import { cacheSlice } from "../../../store/reducers/cache.reducer";
 import { useSelector } from "react-redux";
+import dateConsumptionAction from "../../../store/actions/dateConsumption.action";
+import cacheAction from "../../../store/actions/cache.action";
 
 /**
  * Main modal component for showing the detailed data of the searched item
@@ -25,7 +27,6 @@ import { useSelector } from "react-redux";
  */
 const ItemModal = ({ ID, visible, onDismiss, session }) => {
   const dispatch = useRootDispatch();
-  const app_date = useSelector<RootState>((state) => state.general.app_date);
 
   const [type, set_type] = useState<string>();
   const [result, set_result] = useState<any>();
@@ -77,22 +78,13 @@ const ItemModal = ({ ID, visible, onDismiss, session }) => {
   const AddNewItem = async () => {
     setSaveItemLoading(true);
 
-    // Save to the database
-    await db.addItem(app_date, session, data);
-    // Save to local state
-
-    dispatch(
-      dateConsumptionSlice.actions.addNewItemToRecord({ field: session, data })
-    );
+    await dispatch(dateConsumptionAction.AddItemToRecord(session, data));
     setSaveItemLoading(false);
     onDismiss();
   };
 
   // Add the item to the favourite list
-  const setFavourite = async () => {
-    await db.addFavourite(data);
-    dispatch(cacheSlice.actions.addFavouriteItem(data));
-  };
+  const setFavourite = async () => dispatch(cacheAction.AddFavouriteItem(data));
 
   if (loading || !data) return <></>;
 

@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { CommonItem, DateConsumption, Session } from "../../interface";
 
 /**
- * @connect db.retrieveRouteine
+ * @connect db.retrieveRouteine - cache
  * @description Load a daily routeine data
  * @param state
  * @param action {payload}
