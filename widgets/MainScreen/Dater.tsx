@@ -10,9 +10,6 @@ import Carousel from "react-native-snap-carousel";
 
 import colors from "../../colors";
 import { LoadData } from "../../cache";
-import { State } from "../../interface";
-import { withGlobal } from "../../global@deprecated/provider";
-import { NEW_DATE_LOADING } from "../../global@deprecated/constraints";
 
 import {
   daysInMonth,
@@ -26,11 +23,15 @@ import {
 } from "../../time";
 import store, { RootDispatch, withRoot } from "../../store";
 import { generalSlice } from "../../store/reducers/general.reducer";
+import HapticFeedback from "react-native-haptic-feedback";
 
 /**
  * Top dates per month snapper
  */
-class Dater extends React.Component<{ dispatch: RootDispatch; state: any }> {
+class Dater extends React.PureComponent<{
+  dispatch: RootDispatch;
+  state: any;
+}> {
   carousel;
 
   // Load a new date data
@@ -128,7 +129,12 @@ class Dater extends React.Component<{ dispatch: RootDispatch; state: any }> {
         itemWidth={50}
         renderItem={this._renderItem}
         initialNumToRender={dates.length}
-        //onSnapToItem={(index) => this.LOAD_NEW_DATE(dates[index])}
+        onSnapToItem={(index) =>
+          HapticFeedback.trigger("impactLight", {
+            enableVibrateFallback: true,
+            ignoreAndroidSystemSettings: false,
+          })
+        }
       />
     );
   }

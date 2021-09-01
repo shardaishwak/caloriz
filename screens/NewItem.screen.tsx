@@ -105,14 +105,13 @@ const NewItemScreen = (props) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header
-        goBack={true}
-        navigation={props.navigation}
-        page={session}
-        small={timing}
-      />
-
-      <ScrollView>
+      <ScrollView stickyHeaderIndices={[1]}>
+        <Header
+          goBack={true}
+          navigation={props.navigation}
+          page={session}
+          small={timing}
+        />
         <SearchInput
           placeholder="Search for a product"
           onSearch={Search}
@@ -153,6 +152,7 @@ const styles = StyleSheet.create({
     color: colors.app.dark_300,
     marginHorizontal: 20,
     textAlign: "center",
+    marginTop: -20, // Because of the linear gradient in the SearchInput
   },
   gradient_button: {
     width: 30,

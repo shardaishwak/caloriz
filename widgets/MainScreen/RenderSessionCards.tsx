@@ -28,7 +28,7 @@ import dateConsumptionAction from "../../store/actions/dateConsumption.action";
  * The <Card /> component is rendered to give design
  * For each card, the items that are consumed on that date and session are displayed using the <Item /> component
  */
-class RenderSessionCards extends React.Component<
+class RenderSessionCards extends React.PureComponent<
   { sessions: Array<Session>; date_data: DateConsumption; navigation: any },
   { activeIndex: number }
 > {
@@ -106,11 +106,11 @@ class RenderSessionCards extends React.Component<
           layout={"default"}
           ref={(ref) => (this.carousel = ref)}
           data={sessions}
-          loop
           sliderWidth={Dimensions.get("screen").width}
           itemWidth={Dimensions.get("window").width}
           renderItem={this._renderItem}
           firstItem={time_based_cards()}
+          initialNumToRender={sessions.length}
           onSnapToItem={(index) => this.setState({ activeIndex: index })}
         />
       </View>

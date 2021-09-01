@@ -82,7 +82,7 @@ const Header = (props: {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#fff",
+    backgroundColor: "rgba(255,255,255,.9)",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",

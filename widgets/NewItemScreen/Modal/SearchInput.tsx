@@ -12,6 +12,7 @@ import { TextInput } from "react-native-gesture-handler";
 import { Ionicons } from "@expo/vector-icons";
 
 import colors from "../../../colors";
+import { LinearGradient } from "expo-linear-gradient";
 
 /**
  * Design of the search input used in @NewItemScreen
@@ -24,25 +25,30 @@ const SearchInput = (props: {
   const [text, setText] = useState<string>();
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <View style={{ margin: 20 }}>
-        <View style={styles.container}>
-          <TextInput
-            placeholder={props.placeholder}
-            onEndEditing={() => props.onSearch(text)}
-            onEnded={() => props.onSearch(text)}
-            value={text}
-            onChangeText={(e) => setText(e)}
-            style={styles.input}
-          />
-          <TouchableNativeFeedback onPress={() => props.onSearch(text)}>
-            {props.loading ? (
-              <ActivityIndicator size={20} color={colors.app.dark_500} />
-            ) : (
-              <Ionicons name="md-search" size={20} />
-            )}
-          </TouchableNativeFeedback>
+      <LinearGradient
+        colors={["rgba(255,255,255,.9)", "#ffffff00"]}
+        locations={[0.5, 0.9]}
+      >
+        <View style={{ padding: 20, paddingBottom: 40 }}>
+          <View style={styles.container}>
+            <TextInput
+              placeholder={props.placeholder}
+              onEndEditing={() => props.onSearch(text)}
+              onEnded={() => props.onSearch(text)}
+              value={text}
+              onChangeText={(e) => setText(e)}
+              style={styles.input}
+            />
+            <TouchableNativeFeedback onPress={() => props.onSearch(text)}>
+              {props.loading ? (
+                <ActivityIndicator size={20} color={colors.app.dark_500} />
+              ) : (
+                <Ionicons name="md-search" size={20} />
+              )}
+            </TouchableNativeFeedback>
+          </View>
         </View>
-      </View>
+      </LinearGradient>
     </TouchableWithoutFeedback>
   );
 };

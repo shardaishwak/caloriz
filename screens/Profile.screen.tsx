@@ -87,7 +87,7 @@ const ProfileScreen: React.FC<{ navigation: StackNavigationHelpers }> = ({
 
   return (
     <View style={{ backgroundColor: "#fff", flex: 1 }}>
-      <ScrollView>
+      <ScrollView stickyHeaderIndices={[0]}>
         <Header
           goBack={profile.new_user !== false ? false : true}
           navigation={navigation}

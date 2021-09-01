@@ -6,7 +6,7 @@ import {
   TouchableWithoutFeedback,
 } from "react-native";
 
-import { Entypo } from "@expo/vector-icons";
+import { FontAwesome5 } from "@expo/vector-icons";
 
 import {
   CommonItem,
@@ -97,7 +97,7 @@ const MainScreen = ({ navigation }: { navigation: StackNavigationHelpers }) => {
             <TouchableWithoutFeedback
               onPress={() => navigation.push("settings:profile")}
             >
-              <Entypo name="cog" size={25} />
+              <FontAwesome5 name="user" size={20} />
             </TouchableWithoutFeedback>
           }
         />
