@@ -4,6 +4,7 @@ import {
   StyleSheet,
   Text,
   TouchableWithoutFeedback,
+  Vibration,
   View,
 } from "react-native";
 import Carousel from "react-native-snap-carousel";
@@ -129,12 +130,6 @@ class Dater extends React.PureComponent<{
         itemWidth={50}
         renderItem={this._renderItem}
         initialNumToRender={dates.length}
-        onSnapToItem={(index) =>
-          HapticFeedback.trigger("impactLight", {
-            enableVibrateFallback: true,
-            ignoreAndroidSystemSettings: false,
-          })
-        }
       />
     );
   }

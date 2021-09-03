@@ -24,6 +24,8 @@ import RenderSessionCards from "../widgets/MainScreen/RenderSessionCards";
 import { StackNavigationHelpers } from "@react-navigation/stack/lib/typescript/src/types";
 import { useSelector } from "react-redux";
 import store, { RootState } from "../store";
+import WaterIntake from "../widgets/MainScreen/WaterIntake";
+import Footer from "../components/Footer";
 
 /**
  * Calulcation of the total consumption of the nutrients
@@ -109,6 +111,8 @@ const MainScreen = ({ navigation }: { navigation: StackNavigationHelpers }) => {
           date_data={dateConsumption} // Current state date based data
           navigation={navigation}
         />
+        <WaterIntake />
+        <Footer />
       </ScrollView>
     </SafeAreaView>
   );

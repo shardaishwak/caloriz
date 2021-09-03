@@ -75,6 +75,19 @@ const deleteItem = async (date, field, id) => {
   );
 };
 
+/**
+ * @connect dateConsumtion.addWaterCup
+ * @description Add a water cup to the daily water consumption
+ * @param date
+ */
+const addWaterCup = async (date) => {
+  const data = await retrieveRouteine(date);
+
+  data.water.cup_qty++;
+
+  await AsyncStorage.setItem(date, JSON.stringify(data));
+};
+
 /** ================================ FAVOURITE ================================== */
 
 /**
@@ -140,6 +153,8 @@ const updateProfile = async (updates) => {
 export default {
   addItem,
   deleteItem,
+
+  addWaterCup,
 
   retrieveRouteine,
   initializeRouteine,

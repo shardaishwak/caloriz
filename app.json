@@ -26,7 +26,8 @@
         "foregroundImage": "./assets/icons/v2/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "versionCode": 1
+      "versionCode": 1,
+      "permissions": ["VIBRATE"]
     }
   }
 }

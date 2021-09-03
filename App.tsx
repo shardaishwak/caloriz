@@ -78,7 +78,11 @@ class AppImpl extends React.Component<{ general; dispatch: RootDispatch }> {
       );
     return (
       <>
-        <StatusBar backgroundColor={"#fff"} animated barStyle="dark-content" />
+        <StatusBar
+          backgroundColor={"rgba(255,255,255,.8)"}
+          animated
+          barStyle="dark-content"
+        />
         <Navigation />
       </>
     );

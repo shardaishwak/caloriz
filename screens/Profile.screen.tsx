@@ -5,6 +5,7 @@ import {
   View,
   Text,
   ActivityIndicator,
+  StyleSheet,
 } from "react-native";
 import moment from "moment";
 import Constants from "expo-constants";
@@ -86,7 +87,7 @@ const ProfileScreen: React.FC<{ navigation: StackNavigationHelpers }> = ({
   };
 
   return (
-    <View style={{ backgroundColor: "#fff", flex: 1 }}>
+    <View style={styles.container}>
       <ScrollView stickyHeaderIndices={[0]}>
         <Header
           goBack={profile.new_user !== false ? false : true}
@@ -190,29 +191,17 @@ const ProfileScreen: React.FC<{ navigation: StackNavigationHelpers }> = ({
         </View>
       </ScrollView>
       <TouchableNativeFeedback onPress={!loading && UpdateProfile}>
-        <View
-          style={{
-            padding: 10,
-            paddingVertical: 20,
-            borderTopColor: colors.tailwind.gray._200,
-            borderTopWidth: 2,
-
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
+        <View style={styles.button_container}>
           {loading && (
             <View style={{ width: 25, height: 25, marginRight: 10 }}>
               <ActivityIndicator size={25} color={colors.app.dark_400} />
             </View>
           )}
           <Text
-            style={{
-              color: loading ? colors.app.dark_400 : colors.app.dark_600,
-              fontFamily: "Inter-Medium",
-              fontSize: 17,
-            }}
+            style={[
+              styles.button_text,
+              { color: loading ? colors.app.dark_400 : colors.app.dark_600 },
+            ]}
           >
             Save Changes
           </Text>
@@ -221,5 +210,23 @@ const ProfileScreen: React.FC<{ navigation: StackNavigationHelpers }> = ({
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: { backgroundColor: "#fff", flex: 1 },
+  button_container: {
+    padding: 10,
+    paddingVertical: 20,
+    borderTopColor: colors.tailwind.gray._200,
+    borderTopWidth: 2,
+
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  button_text: {
+    fontFamily: "Inter-Medium",
+    fontSize: 17,
+  },
+});
 
 export default ProfileScreen;

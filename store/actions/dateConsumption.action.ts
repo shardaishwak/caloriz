@@ -37,7 +37,20 @@ const RemoveItemFromRecord =
     }
   };
 
+const AddWaterCup =
+  () => async (dispatch: RootDispatch, getState: () => RootState) => {
+    try {
+      const state = getState();
+
+      await db.addWaterCup(state.general.app_date);
+      dispatch(dateConsumptionSlice.actions.addWaterCup(null));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
 export default {
   AddItemToRecord,
   RemoveItemFromRecord,
+  AddWaterCup,
 };

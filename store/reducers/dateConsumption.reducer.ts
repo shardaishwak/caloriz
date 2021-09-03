@@ -58,6 +58,25 @@ const removeItemFromRecord = (
   };
 };
 
+/**
+ * @connect db.addWaterCup
+ * @description Add the water cup to the state
+ * @param state
+ * @param action
+ */
+const addWaterCup: (state: DateConsumption, action: null) => DateConsumption = (
+  state,
+  any
+) => {
+  return {
+    ...state,
+    water: {
+      cup_qty: state.water.cup_qty + 1,
+      cup_size: state.water.cup_size,
+    },
+  };
+};
+
 const initialState: DateConsumption = {
   breakfast: [],
   second_breakfast: [],
@@ -79,6 +98,8 @@ export const dateConsumptionSlice = createSlice({
     loadRecord,
     addNewItemToRecord,
     removeItemFromRecord,
+
+    addWaterCup,
   },
 });
 

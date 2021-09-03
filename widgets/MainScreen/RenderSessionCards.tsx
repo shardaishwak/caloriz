@@ -19,6 +19,7 @@ import { RootState, useRootDispatch } from "../../store";
 import { dateConsumptionSlice } from "../../store/reducers/dateConsumption.reducer";
 import { useSelector } from "react-redux";
 import dateConsumptionAction from "../../store/actions/dateConsumption.action";
+import { digitize } from "../../time";
 
 /**
  * REnder the session cards
@@ -77,6 +78,7 @@ class RenderSessionCards extends React.PureComponent<
             session={session}
             key={item.id as string}
             quantity={item.quantity}
+            consumed_at={item.consumed_at}
           />
         ))}
       </Card>
@@ -153,6 +155,7 @@ const Item = ({
   protein,
   fat,
   quantity,
+  consumed_at,
 }: {
   food_name: string;
   id: string | number | number[];
@@ -162,8 +165,10 @@ const Item = ({
   protein: number;
   fat: number;
   quantity: number;
+  consumed_at: any;
 }) => {
   const dispatch = useRootDispatch();
+  const date = new Date(consumed_at);
 
   const deleteItem = async () => {
     await dispatch(dateConsumptionAction.RemoveItemFromRecord(session, id));
@@ -171,7 +176,11 @@ const Item = ({
   return (
     <View style={styles.container}>
       <Text style={styles.food_name}>
-        {food_name} <Text style={styles.food_name_span}>({quantity})</Text>
+        {food_name}{" "}
+        <Text style={styles.food_name_span}>
+          ({quantity} piece at {digitize(date.getHours())}:
+          {digitize(date.getMinutes())})
+        </Text>
       </Text>
       <View style={styles.detail_container}>
         <View style={styles.detail_wrapper}>
