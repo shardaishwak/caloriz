@@ -7,8 +7,8 @@ const InstantSearch = async (query) => {
       {
         method: "POST",
         headers: {
-          "x-app-id": "77c2b237",
-          "x-app-key": "55674eb848929c7c92aa69e02131cb64",
+          "x-app-id": process.env.NUTR_APP_ID,
+          "x-app-key": process.env.NUTR_API_KEY,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
@@ -28,8 +28,8 @@ const NutrientSearch = async (query) => {
       await Fetch("https://trackapi.nutritionix.com/v2/natural/nutrients/", {
         method: "POST",
         headers: {
-          "x-app-id": "77c2b237",
-          "x-app-key": "55674eb848929c7c92aa69e02131cb64",
+          "x-app-id": process.env.NUTR_APP_ID,
+          "x-app-key": process.env.NUTR_API_KEY,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({

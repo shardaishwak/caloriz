@@ -12,7 +12,7 @@ export const FcdSearch = async (
 ) => {
   try {
     const data = await Fetch(
-      `https://api.nal.usda.gov/fdc/v1/foods/search?api_key=B9tl81LpnLqv5HZOG8iTTQMK49uLWeMJkeOqkNcL&query=${query}&pageSize=${size}`
+      `https://api.nal.usda.gov/fdc/v1/foods/search?api_key=${process.env.API_KEY}&query=${query}&pageSize=${size}`
     );
 
     const image = await unsplash.search(query, size);

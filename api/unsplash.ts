@@ -1,11 +1,10 @@
 import Fetch from ".";
 
-const accessKey = "WRKuTbvzfVmllgZmlH6lVD4tH6kyowy_kU39ndpjnG8";
 const UnsplashSearch = async (query, per_page = 5) => {
   try {
     const results = (
       await Fetch(
-        `https://api.unsplash.com/search/photos/?client_id=WRKuTbvzfVmllgZmlH6lVD4tH6kyowy_kU39ndpjnG8&per_page=${per_page}&query=${query}`
+        `https://api.unsplash.com/search/photos/?client_id=${process.env.UNSPLASH_KEY}&per_page=${per_page}&query=${query}`
       )
     ).results;
 
